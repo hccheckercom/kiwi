@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1779714569540,
+    "source": "kiwi-extension",
+    "type": "scan_result",
+    "title": "Scan: kiwi-production-test",
+    "content": "Checked 5 file(s): 3 CRITICAL, 2 HIGH\n\nheader.php:\n  LES-001 CRITICAL: Missing nonce check in form handler (line 45)\n  LES-012 CRITICAL: Unescaped output in echo statement (line 78)\n\nfooter.php:\n  LES-045 CRITICAL: Hardcoded database credentials (line 102)\n  LES-089 HIGH: Missing text-domain for i18n (line 67)\n\nsidebar.php:\n  LES-091 HIGH: Deprecated function usage wp_specialchars (line 34)",
+    "metadata": {},
+    "timestamp": "2026-05-25 20:09:29",
+    "read": true
+  }
+]

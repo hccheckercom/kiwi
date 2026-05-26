@@ -1,0 +1,33 @@
+{
+  "wp_theme": {
+    "backup": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'cp -r {wp_path}/wp-content/themes/{theme_name} {wp_path}/wp-content/themes/.backup-{theme_name}-$(date +%s) 2>/dev/null || true'",
+    "deploy": "rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no -p {port} -i {key_path}' --exclude='node_modules' --exclude='.git' {local_path}/ {user}@{host}:{wp_path}/wp-content/themes/{theme_name}/",
+    "build": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'cd {wp_path}/wp-content/themes/{theme_name} && npm install && npm run build:css'",
+    "network_enable": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'cd {wp_path} && wp theme enable {theme_name} --network --allow-root'",
+    "verify": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'wp theme list --path={wp_path}'"
+  },
+  "wp_plugin": {
+    "backup": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'cp -r {wp_path}/wp-content/mu-plugins/wezone-plugins {wp_path}/wp-content/mu-plugins/.backup-wezone-plugins-$(date +%s) 2>/dev/null || true'",
+    "check": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'ls -la {wp_path}/wp-content/mu-plugins/ | grep wezone-plugins'",
+    "deploy": "rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no -p {port} -i {key_path}' --exclude='node_modules' --exclude='.git' {local_path}/ {user}@{host}:{wp_path}/wp-content/mu-plugins/wezone-plugins/",
+    "post_deploy": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'cd {wp_path}/wp-content/mu-plugins/wezone-plugins && composer install --no-dev && systemctl reload php8.2-fpm'",
+    "verify": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'wp plugin list --path={wp_path}'"
+  },
+  "nextjs_deploy": {
+    "check": "ssh -o StrictHostKeyChecking=no -p {port} {user}@{host} 'pm2 list | grep {pm2_name}'",
+    "deploy": "rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no -p {port}' --exclude='node_modules' --exclude='.git' --exclude='.next' {local_path}/ {user}@{host}:{remote_path}/",
+    "build": "ssh -o StrictHostKeyChecking=no -p {port} {user}@{host} 'cd {remote_path} && npm install && npm run build'",
+    "restart": "ssh -o StrictHostKeyChecking=no -p {port} {user}@{host} 'pm2 restart {pm2_name}'",
+    "verify": "curl -f {health_url}"
+  },
+  "demo_html": {
+    "check": "ssh -o StrictHostKeyChecking=no -i {key_path} -p {port} {user}@{host} \"test -d {remote_path} && echo exists || echo missing\"",
+    "deploy": "rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no -i {key_path} -p {port}' {local_path}/ {user}@{host}:{remote_path}/",
+    "verify": "ssh -o StrictHostKeyChecking=no -i {key_path} -p {port} {user}@{host} \"ls -lh {remote_path}\""
+  },
+  "rollback": {
+    "nextjs": "ssh -o StrictHostKeyChecking=no -p {port} {user}@{host} 'rsync -a --delete {backup_path}/ {remote_path}/ && pm2 restart {pm2_name}'",
+    "wp_theme": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'rsync -a --delete {backup_path}/ {wp_path}/wp-content/themes/{theme_name}/ && wp cache flush --allow-root'",
+    "wp_plugin": "ssh -o StrictHostKeyChecking=no -p {port} -i {key_path} {user}@{host} 'rsync -a --delete {backup_path}/ {wp_path}/wp-content/mu-plugins/wezone-plugins/ && systemctl reload php8.2-fpm && wp cache flush --allow-root'"
+  }
+}

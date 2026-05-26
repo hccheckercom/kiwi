@@ -1,0 +1,94 @@
+============================================================
+  PROACTIVE COVERAGE SCANNER
+============================================================
+  Path: D:\projects\wezone\wezone-plugins\packages\wezone-zalo
+  Files: 31
+  Platform: wp
+  Min coverage: 80%
+============================================================
+
+COVERAGE SUMMARY:
+  Total patterns: 304
+  Covered: 0 (0.0%)
+  Gaps: 304
+    CRITICAL: 23
+    HIGH: 32
+    SUGGEST: 249
+
+[FAIL] Coverage 0.0% is below threshold 80%
+
+GAPS DETECTED (304):
+
+CRITICAL GAPS (23):
+1. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:64
+   Code: $phone = sanitize_text_field( $request->get_param( 'phone' ) ?? '' );
+   Confidence: 100%
+
+2. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:92
+   Code: $code  = sanitize_text_field( $request->get_param( 'code' ) ?? '' );
+   Confidence: 100%
+
+3. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:93
+   Code: $state = sanitize_text_field( $request->get_param( 'state' ) ?? '' );
+   Confidence: 100%
+
+4. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:33
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+5. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:99
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+6. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:168
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+7. Missing error handling for wp_remote_get
+   File: wezone-zalo\src\Api\ZaloApiClient.php:207
+   Code: $response = wp_remote_get(
+   Confidence: 100%
+
+8. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Auth\ZaloLogin.php:74
+   Code: $ip         = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) )
+   Confidence: 100%
+
+9. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Auth\ZaloLogin.php:83
+   Code: $code  = sanitize_text_field( wp_unslash( $_GET['code'] ?? '' ) );
+   Confidence: 100%
+
+10. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Auth\ZaloLogin.php:84
+   Code: $state = sanitize_text_field( wp_unslash( $_GET['state'] ?? '' ) );
+   Confidence: 100%
+
+   ... and 13 more CRITICAL gaps
+
+HIGH GAPS (32):
+1. Uncovered pattern: $wpdb->prepare
+   File: wezone-zalo\uninstall.php:15
+
+2. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:11
+
+3. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:15
+
+4. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:21
+
+5. Uncovered pattern: $wpdb->prepare
+   File: wezone-zalo\src\Api\LogController.php:36
+
+   ... and 27 more HIGH gaps
+
+SUGGEST GAPS: 249 (use --show-covered to see all)
+

@@ -1,0 +1,16 @@
+
+[agent]
+anthropic>=0.40.0
+
+[all]
+anthropic>=0.40.0
+paramiko>=3.0
+requests>=2.31
+tree-sitter>=0.20
+
+[ast]
+tree-sitter>=0.20
+
+[deploy]
+paramiko>=3.0
+requests>=2.31

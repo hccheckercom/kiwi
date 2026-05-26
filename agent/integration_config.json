@@ -1,0 +1,23 @@
+{
+  "auto_tune": {
+    "min_hits": 10,
+    "enabled": true
+  },
+  "decay": {
+    "min_days": 30,
+    "enabled": true
+  },
+  "correlation": {
+    "min_correlation": 0.80,
+    "min_co_occurrences": 5,
+    "enabled": true
+  },
+  "feedback": {
+    "min_dismissals": 10,
+    "enabled": true
+  },
+  "ab_testing": {
+    "auto_finalize": true,
+    "enabled": true
+  }
+}

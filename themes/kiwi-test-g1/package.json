@@ -1,0 +1,16 @@
+{
+  "name": "kiwi-test-g1",
+  "version": "1.0.0",
+  "description": "WordPress theme powered by Wezone Core + Tailwind CSS",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/main.css -o ./assets/css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/main.css -o ./assets/css/tailwind.css --watch",
+    "dev": "npm run watch:css"
+  },
+  "keywords": ["wordpress", "theme", "wezone", "tailwind"],
+  "author": "Wezone",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

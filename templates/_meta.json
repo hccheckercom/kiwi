@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "next_id": 58,
+  "last_updated": "2026-05-27",
+  "sections": {
+    "header": {
+      "count": 1,
+      "desc": "Header + navigation patterns"
+    },
+    "hero": {
+      "count": 4,
+      "desc": "Hero banner / slider / featured products / full-bleed"
+    },
+    "categories": {
+      "count": 1,
+      "desc": "Category grid / tabs"
+    },
+    "product-grid": {
+      "count": 1,
+      "desc": "Product listing grid"
+    },
+    "product-card": {
+      "count": 1,
+      "desc": "Single product card component"
+    },
+    "flash-sale": {
+      "count": 2,
+      "desc": "Flash sale + countdown"
+    },
+    "trust-badges": {
+      "count": 1,
+      "desc": "Trust indicators bar"
+    },
+    "footer": {
+      "count": 1,
+      "desc": "Footer + newsletter"
+    },
+    "filter-bar": {
+      "count": 1,
+      "desc": "Archive filters"
+    },
+    "account": {
+      "count": 5,
+      "desc": "Account pages"
+    },
+    "checkout": {
+      "count": 3,
+      "desc": "Checkout flow"
+    },
+    "sidebar": {
+      "count": 1,
+      "desc": "Sidebar widgets"
+    },
+    "breadcrumb": {
+      "count": 1,
+      "desc": "Breadcrumb navigation"
+    },
+    "wp-plugin": {
+      "count": 1,
+      "desc": "WordPress plugin patterns — inject, hooks, transient cache"
+    },
+    "admin": {
+      "count": 1,
+      "desc": "Admin panel patterns — color sync, design tokens, CSS variables"
+    },
+    "order-summary": {
+      "count": 1,
+      "desc": "Order summary widget — cart/checkout"
+    },
+    "shipping-form": {
+      "count": 1,
+      "desc": "Shipping address form"
+    },
+    "payment-methods": {
+      "count": 1,
+      "desc": "Payment method selection"
+    },
+    "order-tracking": {
+      "count": 1,
+      "desc": "Order tracking form + result"
+    },
+    "address-form": {
+      "count": 1,
+      "desc": "Address management form"
+    },
+    "notification-list": {
+      "count": 1,
+      "desc": "Notification list widget"
+    },
+    "coupon-widget": {
+      "count": 1,
+      "desc": "Coupon/voucher input widget"
+    },
+    "wishlist-grid": {
+      "count": 1,
+      "desc": "Wishlist product grid"
+    },
+    "compare-table": {
+      "count": 1,
+      "desc": "Product comparison table"
+    },
+    "faq-accordion": {
+      "count": 1,
+      "desc": "FAQ accordion widget"
+    },
+    "policy-content": {
+      "count": 1,
+      "desc": "Policy page content template"
+    },
+    "contact-form": {
+      "count": 1,
+      "desc": "Contact form widget"
+    },
+    "blog-grid": {
+      "count": 1,
+      "desc": "Blog post grid/archive"
+    },
+    "blog-post": {
+      "count": 1,
+      "desc": "Single blog post template"
+    },
+    "brand-grid": {
+      "count": 1,
+      "desc": "Brand/manufacturer grid"
+    },
+    "product-detail": {
+      "count": 4,
+      "desc": "Product detail page sections"
+    },
+    "search": {
+      "count": 1,
+      "desc": "Search results and filters"
+    },
+    "wallet-balance": {
+      "count": 1,
+      "desc": "Wallet balance widget"
+    },
+    "loyalty-points": {
+      "count": 1,
+      "desc": "Loyalty points widget"
+    },
+    "review-list": {
+      "count": 1,
+      "desc": "Review list widget"
+    },
+    "review-form": {
+      "count": 1,
+      "desc": "Review submission form"
+    },
+    "flash-sale-countdown": {
+      "count": 1,
+      "desc": "Flash sale countdown timer"
+    },
+    "landing-hero": {
+      "count": 1,
+      "desc": "Landing page hero section"
+    },
+    "search-filters": {
+      "count": 1,
+      "desc": "Search filter sidebar"
+    },
+    "search-results": {
+      "count": 1,
+      "desc": "Search results grid"
+    },
+    "cart-summary": {
+      "count": 1,
+      "desc": "Cart summary widget"
+    },
+    "empty-state": {
+      "count": 1,
+      "desc": "Empty state placeholder"
+    },
+    "error-page": {
+      "count": 1,
+      "desc": "Error page template"
+    },
+    "maintenance-page": {
+      "count": 1,
+      "desc": "Maintenance mode page"
+    }
+  },
+  "stats": {
+    "total": 57
+  }
+}

@@ -1,0 +1,474 @@
+  Auto-resolved theme root: themes\wezone-luongkho
+{
+  "theme": "..\\..\\wezone-plugins\\themes\\wezone-luongkho",
+  "version": 3,
+  "summary": {
+    "critical": 0,
+    "high": 26,
+    "suggest": 25,
+    "total": 51,
+    "patterns_checked": 314,
+    "files_scanned": 703
+  },
+  "violations": [
+    {
+      "id": "LES-222",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing Privacy Policy disclosure for tracking pixels — GA4/Meta Pixel",
+      "file": "[NO FILES MATCHING: **/privacy*]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-223",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing business identity — no tax ID, registration number, or legal entity name",
+      "file": "[NO FILES MATCHING: **/themes/**/footer*.php|**/themes/**/about*.php|**/themes/**/contact*.php|**/src/**/footer*.tsx|**/src/**/about*.tsx|**/src/**/contact*.tsx]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-227",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing refund/cancellation policy — required for paid service ads",
+      "file": "[NO FILES MATCHING: **/refund*|**/terms*|**/footer*]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-229",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing data retention period in privacy policy — GDPR requirement",
+      "file": "[NO FILES MATCHING: **/privacy*]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-294",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing dataLayer initialization — GA4/GTM events will not fire",
+      "file": "[NOT FOUND IN: **/header*.php|**/inc/seo.php|**/inc/tracking.php|**/inc/analytics.php|**/functions.php]",
+      "line": 0,
+      "match": "Missing: window\\.dataLayer"
+    },
+    {
+      "id": "LES-295",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing view_item event — product page visits not tracked in GA4",
+      "file": "[NO FILES MATCHING: **/single*.php|**/inc/seo.php|**/inc/tracking.php|**/inc/analytics.php|**/*.js]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-296",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing add_to_cart event tracking — cart interactions invisible to GA4",
+      "file": "[NO FILES MATCHING: **/*.js|**/inc/tracking.php|**/inc/analytics.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-297",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing Facebook Pixel implementation — Meta Ads cannot track conversions",
+      "file": "[NO FILES MATCHING: **/header*.php|**/inc/seo.php|**/inc/tracking.php|**/inc/analytics.php|**/inc/facebook*.php|**/*.js]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-298",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing purchase event dedup — thank-you page reload causes duplicate conversions",
+      "file": "[NO FILES MATCHING: **/thankyou*.php|**/thank-you*.php|**/thank_you*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-299",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing cookie consent UI — tracking fires without user consent (GDPR/Consent Mode v2)",
+      "file": "[NOT FOUND IN: **/footer*.php|**/header*.php|**/inc/*.php|**/template-parts/**/*.php]",
+      "line": 0,
+      "match": "Missing: cookie.?consent|consent.?cookie|wz_consent|cookie.?banner|consent.?banner"
+    },
+    {
+      "id": "LES-061",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "Breadcrumb `<ol>` hiển thị số thứ tự (1. 2. 3.) vì thiếu list-style reset",
+      "file": "[NO FILES MATCHING: src/main.css|src/*.css|assets/css/*.css]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-292",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "Missing --text-5xl token — incomplete typography scale per blueprint",
+      "file": "[NO FILES MATCHING: **/_tokens.css]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "[NO FILES MATCHING: template-parts/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-270",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Thiếu .line-clamp-4 CSS utility — cần cho review text preview (4 dòng)",
+      "file": "[NO FILES MATCHING: assets/css/**/*.css]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-271",
+      "severity": "SUGGEST",
+      "category": "edge-cases",
+      "description": "Empty state dùng Material icon thay vì illustration SVG theo blueprint",
+      "file": "[NO FILES MATCHING: template-parts/components/empty-state.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-273",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Cart badge thiếu overflow cap — >99 phải hiển thị 99+",
+      "file": "[NO FILES MATCHING: template-parts/header*.php|header.php|assets/js/*.js]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-001",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Realtime AJAX Filter — Bộ lọc sản phẩm không reload trang",
+      "file": "[NO FILES MATCHING: assets/js/*.js|assets/js/**/*.js|inc/filter.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-002",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Dynamic Product Attributes Filter — Bộ lọc thuộc tính từ DB",
+      "file": "[NO FILES MATCHING: template-parts/archive/sidebar-filters.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-005",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Voucher Collect System — Thẻ mã giảm giá có thể thu thập",
+      "file": "[NOT FOUND IN: inc/*.php|assets/js/*.js]",
+      "line": 0,
+      "match": "Missing: wz_collect_voucher|wz_user_vouchers|wz-collect-btn"
+    },
+    {
+      "id": "FEA-009",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Dark Mode Toggle — data-theme switch + localStorage persistence",
+      "file": "[NO FILES MATCHING: header.php|assets/js/*.js]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-010",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Dark Mode No-Flash Script — Inline theme detection in <head>",
+      "file": "[NO FILES MATCHING: header.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-011",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Skip-to-Content Link — Accessibility keyboard navigation",
+      "file": "[NO FILES MATCHING: header.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-012",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Focus Indicators — :focus-visible outline cho interactive elements",
+      "file": "[NO FILES MATCHING: assets/css/**/*.css]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-013",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Performance Images — fetchpriority + srcset/sizes responsive",
+      "file": "[NO FILES MATCHING: header.php|template-parts/home/*.php|front-page.php|inc/performance.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-014",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Critical CSS Inline + font-display:swap — Render-blocking optimization",
+      "file": "[NOT FOUND IN: assets/css/**/*.css|header.php|inc/performance.php|inc/*.php]",
+      "line": 0,
+      "match": "Missing: font-display:\\s*swap"
+    },
+    {
+      "id": "FEA-015",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Fluid Typography — clamp() responsive font sizes",
+      "file": "[NO FILES MATCHING: assets/css/**/*.css]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-016",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "JSON-LD Schema Markup — Product, BreadcrumbList, Organization",
+      "file": "[NOT FOUND IN: inc/seo.php|header.php|functions.php]",
+      "line": 0,
+      "match": "Missing: application/ld\\+json|schema\\.org"
+    },
+    {
+      "id": "FEA-017",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Open Graph Meta Tags — Social sharing preview",
+      "file": "[NO FILES MATCHING: header.php|inc/seo.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-018",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Empty States — Friendly UI khi không có data",
+      "file": "[NO FILES MATCHING: template-parts/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-019",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Skeleton Loading — Placeholder animation trước khi data load",
+      "file": "[NO FILES MATCHING: assets/css/**/*.css|template-parts/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-020",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "ARIA Labels + Touch Targets — Accessible interactive elements",
+      "file": "[NO FILES MATCHING: template-parts/**/*.php|header.php|footer.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-021",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "CLS Prevention — width/height + aspect-ratio on all images",
+      "file": "[NO FILES MATCHING: template-parts/**/*.php|front-page.php|header.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-022",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Canonical URL + Robots Noindex — SEO duplicate prevention",
+      "file": "[NO FILES MATCHING: header.php|inc/seo.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-024",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Image Fallback — onerror placeholder + broken image handling",
+      "file": "[NO FILES MATCHING: template-parts/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-025",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Thiếu helper wz_abbreviate_number() cho overflow display (999+, 9.9K+, 1.2 tỷ)",
+      "file": "[NOT FOUND IN: inc/helpers.php|inc/wz-shims.php]",
+      "line": 0,
+      "match": "Missing: abbreviate_number|format_short_number|wz_abbreviate"
+    },
+    {
+      "id": "FEA-026",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Thiếu skeleton loading component cho product grids",
+      "file": "[NO FILES MATCHING: template-parts/home/best-sellers.php|template-parts/home/featured-products.php|template-parts/archive/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-027",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Thiếu error state component (network offline, timeout, 500)",
+      "file": "[NO FILES MATCHING: template-parts/components/*.php|assets/js/*.js]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-028",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Theme thiếu demo data package (onboarding requirement)",
+      "file": "[NO FILES MATCHING: theme-demo-data/products.json]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "FEA-029",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Theme thiếu setup wizard (onboarding requirement)",
+      "file": "[NOT FOUND IN: **/*.php]",
+      "line": 0,
+      "match": "Missing: setup.wizard|setup_wizard|SetupWizard|Wezone_Setup_Wizard"
+    },
+    {
+      "id": "FEA-030",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Theme thiếu import-demo REST API endpoint (onboarding requirement)",
+      "file": "[NOT FOUND IN: **/*.php]",
+      "line": 0,
+      "match": "Missing: import.demo|import_demo|wezone/v1/import"
+    },
+    {
+      "id": "LES-300",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Missing exit-intent popup — losing 70% cart abandoners without recovery attempt",
+      "file": "[NOT FOUND IN: **/assets/js/*.js|**/inc/*.php|**/template-parts/**/*.php]",
+      "line": 0,
+      "match": "Missing: exit.?intent|wz.?exit.?popup|clientY\\s*<\\s*0|exit.?popup\\.classList"
+    },
+    {
+      "id": "LES-301",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Missing out-of-stock waitlist form — dead-end UX loses potential buyers",
+      "file": "[NOT FOUND IN: template-parts/**/*.php|single*.php|inc/*.php]",
+      "line": 0,
+      "match": "Missing: wz.?waitlist|waitlist.?form|waitlist.?subscribe|thông báo khi có hàng|notify.*back.in.stock"
+    },
+    {
+      "id": "LES-302",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Missing cart recovery dataLayer events — abandonment funnel unmeasurable",
+      "file": "[NO FILES MATCHING: **/assets/js/*.js|**/inc/tracking*.php|**/template-parts/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-303",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Cart page thiếu threshold bar — mất 8-12% conversion đạt free ship",
+      "file": "[NO FILES MATCHING: **/page-cart.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-304",
+      "severity": "HIGH",
+      "category": "feature-suggest",
+      "description": "Product page thiếu bundle offer — mất 5-10% AOV từ frequently bought together",
+      "file": "[NO FILES MATCHING: **/single-product.php|**/page-single-product.php|**/wezone-templates/product/single.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-036",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "SEO meta thiếu Open Graph tags",
+      "file": "[NO FILES MATCHING: themes/**/inc/seo.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "[NO FILES MATCHING: themes/**/template-parts/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-446",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "get_page_by_path() in loop — each call is a DB query",
+      "file": "inc/wz-shims.php",
+      "line": 9,
+      "match": "$p = get_page_by_path( 'my-account' ) ?? get_page_by_path( 'tai-khoan' );"
+    },
+    {
+      "id": "LES-338",
+      "severity": "SUGGEST",
+      "category": "wezone-api",
+      "description": "Adapter class missing interface contract — breaks Liskov substitution",
+      "file": "[NO FILES MATCHING: **/WZ_Coupon.php|**/WZ_ProductRelations.php|**/WZ_ProductWriter.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-339",
+      "severity": "SUGGEST",
+      "category": "wezone-api",
+      "description": "AdapterManager missing lazy accessors for Email, ProductRelations, ProductWriter",
+      "file": "[NO FILES MATCHING: **/AdapterManager.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-494",
+      "severity": "HIGH",
+      "category": "wezone-api",
+      "description": "Plugin boot() must call wezone_is_active() guard before initialization",
+      "file": "[NO FILES MATCHING: src/Plugin.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    }
+  ]
+}

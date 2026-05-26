@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php wp_head(); ?>
+</head>
+
+<body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+		<?php
+		// Redirect if cart is empty
+		if ( function_exists( 'wz_cart' ) && wz_cart()->isEmpty() ) {
+			wp_redirect( wz_get_cart_url() );
+			exit;
+		}
+
+		// Breadcrumb
+		echo '<nav class="breadcrumb mb-6 text-sm">';
+		echo '<a href="' . esc_url( home_url() ) . '" class="text-gray-600 hover:text-primary">Trang chủ</a>';
+		echo ' <span class="mx-2">/</span> ';
+		echo '<a href="' . esc_url( wz_get_cart_url() ) . '" class="text-gray-600 hover:text-primary">Giỏ hàng</a>';
+		echo ' <span class="mx-2">/</span> ';
+		echo '<span class="text-gray-900">Thanh toán</span>';
+		echo '</nav>';
+
+		// Progress steps
+		get_template_part( 'template-parts/checkout/progress-steps', null, [ 'current_step' => 2 ] );
+		?>
+
+		<form method="POST" action="" class="checkout-form">
+			<?php wp_nonce_field( 'wz_checkout_nonce' ); ?>
+
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+				<!-- Left column: Form -->
+				<div class="lg:col-span-8">
+					<!-- Address section -->
+					<section class="bg-white rounded-lg shadow-sm p-6 mb-6">
+						<h2 class="text-xl font-bold mb-4">Thông tin nhận hàng</h2>
+
+						<div class="space-y-4">
+							<div>
+								<label for="billing_name" class="block text-sm font-medium mb-1">Họ và tên <span class="text-red-500">*</span></label>
+								<input type="text" id="billing_name" name="billing_name" required
+								       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+								       value="<?php echo esc_attr( wp_get_current_user()->display_name ?? '' ); ?>">
+							</div>
+
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div>
+									<label for="billing_phone" class="block text-sm font-medium mb-1">Số điện thoại <span class="text-red-500">*</span></label>
+									<input type="tel" id="billing_phone" name="billing_phone" required pattern="0[0-9]{9,10}"
+									       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+								</div>
+
+								<div>
+									<label for="billing_email" class="block text-sm font-medium mb-1">Email <span class="text-red-500">*</span></label>
+									<input type="email" id="billing_email" name="billing_email" required
+									       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+									       value="<?php echo esc_attr( wp_get_current_user()->user_email ?? '' ); ?>">
+								</div>
+							</div>
+
+							<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+								<div>
+									<label for="billing_province" class="block text-sm font-medium mb-1">Tỉnh/Thành phố <span class="text-red-500">*</span></label>
+									<select id="billing_province" name="billing_province" required
+									        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+										<option value="">Chọn tỉnh/thành</option>
+									</select>
+								</div>
+
+								<div>
+									<label for="billing_district" class="block text-sm font-medium mb-1">Quận/Huyện <span class="text-red-500">*</span></label>
+									<select id="billing_district" name="billing_district" required disabled
+									        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+										<option value="">Chọn quận/huyện</option>
+									</select>
+								</div>
+
+								<div>
+									<label for="billing_ward" class="block text-sm font-medium mb-1">Phường/Xã <span class="text-red-500">*</span></label>
+									<select id="billing_ward" name="billing_ward" required disabled
+									        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+										<option value="">Chọn phường/xã</option>
+									</select>
+								</div>
+							</div>
+
+							<div>
+								<label for="billing_address" class="block text-sm font-medium mb-1">Địa chỉ <span class="text-red-500">*</span></label>
+								<input type="text" id="billing_address" name="billing_address" required
+								       placeholder="Số nhà, tên đường..."
+								       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+							</div>
+
+							<div>
+								<label for="order_note" class="block text-sm font-medium mb-1">Ghi chú đơn hàng</label>
+								<textarea id="order_note" name="order_note" rows="3"
+								          placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn"
+								          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+							</div>
+						</div>
+					</section>
+
+					<!-- Shipping section -->
+					<section class="bg-white rounded-lg shadow-sm p-6 mb-6">
+						<h2 class="text-xl font-bold mb-4">Phương thức vận chuyển</h2>
+
+						<div class="space-y-3">
+							<label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+								<input type="radio" name="shipping_method" value="standard" checked class="mr-3">
+								<div class="flex-1">
+									<div class="font-medium">Giao hàng tiêu chuẩn</div>
+									<div class="text-sm text-gray-600">3-5 ngày</div>
+								</div>
+								<div class="font-bold text-primary">
+									<?php echo function_exists( 'wz_format_price' ) ? wz_format_price( wz_config( 'shipping.fees.default' ) ?? 30000 ) : '30.000đ'; ?>
+								</div>
+							</label>
+
+							<label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+								<input type="radio" name="shipping_method" value="express" class="mr-3">
+								<div class="flex-1">
+									<div class="font-medium">Giao hàng nhanh</div>
+									<div class="text-sm text-gray-600">1-2 ngày</div>
+								</div>
+								<div class="font-bold text-primary">
+									<?php echo function_exists( 'wz_format_price' ) ? wz_format_price( wz_config( 'shipping.fees.express' ) ?? 50000 ) : '50.000đ'; ?>
+								</div>
+							</label>
+						</div>
+					</section>
+
+					<!-- Payment section -->
+					<section class="bg-white rounded-lg shadow-sm p-6">
+						<h2 class="text-xl font-bold mb-4">Phương thức thanh toán</h2>
+
+						<div class="space-y-3">
+							<label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+								<input type="radio" name="payment_method" value="cod" checked class="mr-3">
+								<div class="flex-1">
+									<div class="font-medium">Thanh toán khi nhận hàng (COD)</div>
+									<div class="text-sm text-gray-600">Thanh toán bằng tiền mặt khi nhận hàng</div>
+								</div>
+							</label>
+
+							<label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+								<input type="radio" name="payment_method" value="bank_transfer" class="mr-3">
+								<div class="flex-1">
+									<div class="font-medium">Chuyển khoản ngân hàng</div>
+									<div class="text-sm text-gray-600">Chuyển khoản trước, giao hàng sau khi xác nhận</div>
+								</div>
+							</label>
+						</div>
+
+						<div id="bank-info" class="mt-4 p-4 bg-blue-50 rounded-lg hidden">
+							<h3 class="font-medium mb-2">Thông tin chuyển khoản</h3>
+							<div class="text-sm space-y-1">
+								<p><strong>Ngân hàng:</strong> <?php echo esc_html( wz_config( 'bank_info.bank_name' ) ?? 'Vietcombank' ); ?></p>
+								<p><strong>Số tài khoản:</strong> <?php echo esc_html( wz_config( 'bank_info.account_number' ) ?? '1234567890' ); ?></p>
+								<p><strong>Chủ tài khoản:</strong> <?php echo esc_html( wz_config( 'bank_info.account_name' ) ?? 'Kiwi Phase3 Complete' ); ?></p>
+								<p><strong>Nội dung:</strong> <span class="font-mono">DH [Số điện thoại]</span></p>
+							</div>
+						</div>
+					</section>
+				</div>
+
+				<!-- Right column: Order summary -->
+				<div class="lg:col-span-4">
+					<div class="bg-white rounded-lg shadow-sm p-6 lg:sticky lg:top-4">
+						<h2 class="text-xl font-bold mb-4">Đơn hàng</h2>
+
+						<?php
+						if ( function_exists( 'wz_cart' ) ) {
+							$cart = wz_cart();
+							$items = $cart->getItems();
+							$subtotal = $cart->getSubtotal();
+							$shipping_fee = 30000; // Default
+							$total = $subtotal + $shipping_fee;
+							?>
+
+							<div class="space-y-3 mb-4 max-h-48 overflow-y-auto">
+								<?php foreach ( array_slice( $items, 0, 3 ) as $item ) : ?>
+									<div class="flex gap-3">
+										<img src="<?php echo esc_url( $item['image'] ?? '' ); ?>"
+										     alt="<?php echo esc_attr( $item['name'] ?? '' ); ?>"
+										     class="w-16 h-16 object-cover rounded">
+										<div class="flex-1 min-w-0">
+											<div class="text-sm font-medium truncate"><?php echo esc_html( $item['name'] ?? '' ); ?></div>
+											<div class="text-xs text-gray-600">SL: <?php echo esc_html( $item['quantity'] ?? 1 ); ?></div>
+										</div>
+										<div class="text-sm font-medium">
+											<?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $item['price'] ?? 0 ) : '0đ'; ?>
+										</div>
+									</div>
+								<?php endforeach; ?>
+
+								<?php if ( count( $items ) > 3 ) : ?>
+									<div class="text-sm text-gray-600">+<?php echo count( $items ) - 3; ?> sản phẩm khác</div>
+								<?php endif; ?>
+							</div>
+
+							<div class="border-t pt-4 space-y-2">
+								<div class="flex justify-between text-sm">
+									<span>Tạm tính</span>
+									<span><?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $subtotal ) : '0đ'; ?></span>
+								</div>
+								<div class="flex justify-between text-sm">
+									<span>Phí vận chuyển</span>
+									<span class="shipping-fee"><?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $shipping_fee ) : '30.000đ'; ?></span>
+								</div>
+								<div class="flex justify-between text-lg font-bold border-t pt-2">
+									<span>Tổng cộng</span>
+									<span class="text-primary total-amount"><?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $total ) : '0đ'; ?></span>
+								</div>
+							</div>
+
+							<button type="submit" class="w-full mt-6 bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark transition-colors">
+								Đặt hàng
+							</button>
+
+							<div class="mt-4 text-xs text-gray-600 text-center">
+								Bằng việc đặt hàng, bạn đồng ý với
+								<a href="<?php echo esc_url( home_url( '/dieu-khoan' ) ); ?>" class="text-primary hover:underline">Điều khoản</a> và
+								<a href="<?php echo esc_url( home_url( '/bao-mat' ) ); ?>" class="text-primary hover:underline">Chính sách bảo mật</a>
+							</div>
+
+							<div class="mt-4 text-sm text-center">
+								<span class="text-gray-600">Cần hỗ trợ?</span>
+								<a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ?? '1900xxxx' ); ?>" class="text-primary font-medium ml-1">
+									<?php echo esc_html( wz_config( 'phone' ) ?? '1900xxxx' ); ?>
+								</a>
+							</div>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</main>
+
+<?php get_footer(); ?>
+
+<script>
+// Toggle bank info
+document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+	radio.addEventListener('change', function() {
+		const bankInfo = document.getElementById('bank-info');
+		if (this.value === 'bank_transfer') {
+			bankInfo.classList.remove('hidden');
+		} else {
+			bankInfo.classList.add('hidden');
+		}
+	});
+});
+
+// Update shipping fee
+document.querySelectorAll('input[name="shipping_method"]').forEach(radio => {
+	radio.addEventListener('change', function() {
+		const fees = {
+			'standard': 30000,
+			'express': 50000
+		};
+		const fee = fees[this.value] || 30000;
+		// Update UI (simplified - real implementation would recalculate total)
+		document.querySelector('.shipping-fee').textContent = fee.toLocaleString('vi-VN') + 'đ';
+	});
+});
+</script>
+
+</body>
+</html>

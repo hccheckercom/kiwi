@@ -1,0 +1,238 @@
+<?php
+/**
+ * Mock Data Layer
+ *
+ * Provides stub functions for standalone theme testing without Wezone Core.
+ * Enables UI/UX preview with sample products, cart, and config data.
+ *
+ * @package kiwi-with-mock-data
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Mock wz_config() - Shop configuration
+ */
+if ( ! function_exists( 'wz_config' ) ) {
+	function wz_config( $key = null ) {
+		$config = [
+			'name'    => 'Kiwi Shop Demo',
+			'tagline' => 'Chất lượng - Uy tín - Giá tốt',
+			'phone'   => '1900 xxxx',
+			'email'   => 'contact@example.com',
+			'logo'    => '',
+			'theme'   => [
+				'primary'   => '#3b82f6',
+				'secondary' => '#8b5cf6',
+				'font'      => 'Inter, sans-serif',
+			],
+			'shipping' => [
+				'fees' => [
+					'default' => 30000,
+					'express' => 50000,
+				],
+			],
+			'bank_info' => [
+				'bank_name'      => 'Vietcombank',
+				'account_number' => '1234567890',
+				'account_name'   => 'Kiwi Shop Demo',
+			],
+			'social' => [
+				'facebook_url' => 'https://facebook.com',
+				'zalo_url'     => 'https://zalo.me',
+			],
+			'footer' => [
+				'copyright'  => '© 2026 Kiwi Shop Demo. All rights reserved.',
+				'powered_by' => 'Powered by Wezone',
+			],
+		];
+
+		if ( $key === null ) {
+			return $config;
+		}
+
+		// Support dot notation (e.g., 'theme.primary')
+		$keys = explode( '.', $key );
+		$value = $config;
+		foreach ( $keys as $k ) {
+			if ( isset( $value[ $k ] ) ) {
+				$value = $value[ $k ];
+			} else {
+				return null;
+			}
+		}
+
+		return $value;
+	}
+}
+
+/**
+ * Mock wz_cart() - Shopping cart
+ */
+if ( ! function_exists( 'wz_cart' ) ) {
+	function wz_cart() {
+		return (object) [
+			'items' => [
+				[
+					'id'       => 1,
+					'name'     => 'Sản phẩm mẫu 1',
+					'price'    => 299000,
+					'quantity' => 2,
+					'image'    => 'https://via.placeholder.com/300x300?text=Product+1',
+				],
+				[
+					'id'       => 2,
+					'name'     => 'Sản phẩm mẫu 2',
+					'price'    => 499000,
+					'quantity' => 1,
+					'image'    => 'https://via.placeholder.com/300x300?text=Product+2',
+				],
+			],
+		];
+	}
+}
+
+/**
+ * Mock wz_get_products() - Product list
+ */
+if ( ! function_exists( 'wz_get_products' ) ) {
+	function wz_get_products( $args = [] ) {
+		$limit = $args['limit'] ?? 8;
+		$products = [];
+
+		for ( $i = 1; $i <= $limit; $i++ ) {
+			$products[] = [
+				'id'            => $i,
+				'name'          => "Sản phẩm mẫu $i",
+				'price'         => rand( 100, 900 ) * 1000,
+				'regular_price' => rand( 150, 1000 ) * 1000,
+				'sale_price'    => rand( 100, 900 ) * 1000,
+				'images'        => [
+					"https://via.placeholder.com/600x600?text=Product+$i",
+				],
+				'url'           => home_url( "/product/sample-product-$i" ),
+				'description'   => 'Mô tả sản phẩm mẫu. Chất lượng cao, giá cả phải chăng.',
+			];
+		}
+
+		return $products;
+	}
+}
+
+/**
+ * Mock wz_get_product_categories() - Category list
+ */
+if ( ! function_exists( 'wz_get_product_categories' ) ) {
+	function wz_get_product_categories( $args = [] ) {
+		$limit = $args['limit'] ?? 8;
+		$categories = [
+			[ 'id' => 1, 'name' => 'Thời trang', 'image' => 'https://via.placeholder.com/300x300?text=Fashion', 'url' => home_url( '/category/fashion' ) ],
+			[ 'id' => 2, 'name' => 'Điện tử', 'image' => 'https://via.placeholder.com/300x300?text=Electronics', 'url' => home_url( '/category/electronics' ) ],
+			[ 'id' => 3, 'name' => 'Gia dụng', 'image' => 'https://via.placeholder.com/300x300?text=Home', 'url' => home_url( '/category/home' ) ],
+			[ 'id' => 4, 'name' => 'Làm đẹp', 'image' => 'https://via.placeholder.com/300x300?text=Beauty', 'url' => home_url( '/category/beauty' ) ],
+			[ 'id' => 5, 'name' => 'Thể thao', 'image' => 'https://via.placeholder.com/300x300?text=Sports', 'url' => home_url( '/category/sports' ) ],
+			[ 'id' => 6, 'name' => 'Sách', 'image' => 'https://via.placeholder.com/300x300?text=Books', 'url' => home_url( '/category/books' ) ],
+			[ 'id' => 7, 'name' => 'Đồ chơi', 'image' => 'https://via.placeholder.com/300x300?text=Toys', 'url' => home_url( '/category/toys' ) ],
+			[ 'id' => 8, 'name' => 'Thực phẩm', 'image' => 'https://via.placeholder.com/300x300?text=Food', 'url' => home_url( '/category/food' ) ],
+		];
+
+		return array_slice( $categories, 0, $limit );
+	}
+}
+
+/**
+ * Mock wz_get_flash_sale_products() - Flash sale products
+ */
+if ( ! function_exists( 'wz_get_flash_sale_products' ) ) {
+	function wz_get_flash_sale_products( $args = [] ) {
+		$products = wz_get_products( $args );
+		// Add flash sale discount
+		foreach ( $products as &$product ) {
+			$product['sale_price'] = (int) ( $product['price'] * 0.7 ); // 30% off
+		}
+		return $products;
+	}
+}
+
+/**
+ * Mock wz_component() - Render component
+ */
+if ( ! function_exists( 'wz_component' ) ) {
+	function wz_component( $name, $args = [] ) {
+		$template_parts = [
+			'hero'          => 'hero/default',
+			'category-card' => 'categories/grid',
+			'product-card'  => 'product/card',
+		];
+
+		$template = $template_parts[ $name ] ?? $name;
+		get_template_part( 'template-parts/' . $template, null, $args );
+	}
+}
+
+/**
+ * Mock wz_format_price() - Format price
+ */
+if ( ! function_exists( 'wz_format_price' ) ) {
+	function wz_format_price( $price ) {
+		return number_format( $price, 0, ',', '.' ) . 'đ';
+	}
+}
+
+/**
+ * Mock wz_get_cart_url() - Cart URL
+ */
+if ( ! function_exists( 'wz_get_cart_url' ) ) {
+	function wz_get_cart_url() {
+		return home_url( '/cart' );
+	}
+}
+
+/**
+ * Mock wz_get_myaccount_url() - Account URL
+ */
+if ( ! function_exists( 'wz_get_myaccount_url' ) ) {
+	function wz_get_myaccount_url() {
+		return home_url( '/account' );
+	}
+}
+
+/**
+ * Mock wz_get_login_url() - Login URL
+ */
+if ( ! function_exists( 'wz_get_login_url' ) ) {
+	function wz_get_login_url() {
+		return home_url( '/login' );
+	}
+}
+
+/**
+ * Register mock menus
+ */
+add_action( 'after_setup_theme', 'kiwi_with_mock_data_register_mock_menus' );
+function kiwi_with_mock_data_register_mock_menus() {
+	register_nav_menus( [
+		'primary' => 'Primary Menu',
+		'footer'  => 'Footer Menu',
+	] );
+}
+
+/**
+ * Create mock menu items if menus are empty
+ */
+add_action( 'wp_nav_menu_args', 'kiwi_with_mock_data_mock_menu_fallback' );
+function kiwi_with_mock_data_mock_menu_fallback( $args ) {
+	if ( ! has_nav_menu( $args['theme_location'] ) ) {
+		$args['fallback_cb'] = function() {
+			echo '<ul class="menu">';
+			echo '<li><a href="' . home_url() . '">Trang chủ</a></li>';
+			echo '<li><a href="' . home_url( '/shop' ) . '">Sản phẩm</a></li>';
+			echo '<li><a href="' . home_url( '/about' ) . '">Giới thiệu</a></li>';
+			echo '<li><a href="' . home_url( '/contact' ) . '">Liên hệ</a></li>';
+			echo '</ul>';
+		};
+	}
+	return $args;
+}

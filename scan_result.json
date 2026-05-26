@@ -1,0 +1,2650 @@
+﻿{
+  "theme": "D:\\projects\\wezone\\themes\\fashion-apparel\\wezone-trunganh-v2",
+  "summary": {
+    "critical": 7,
+    "high": 279,
+    "suggest": 7,
+    "total": 293,
+    "patterns_checked": 181,
+    "files_scanned": 8003
+  },
+  "violations": [
+    {
+      "id": "LES-223",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing business identity — no tax ID, registration number, or legal entity name",
+      "file": "template-parts/sections/footer.php",
+      "line": 0,
+      "match": "Missing: (?:MST|mã số thuế|tax.?id|ĐKKD|đăng ký kinh doanh|GPKD|giấy phép|business.*registration)"
+    },
+    {
+      "id": "LES-224",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Hidden recurring costs — hosting/domain/maintenance not disclosed on pricing page",
+      "file": "[NO FILES MATCHING: **/pricing*]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-227",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing refund/cancellation policy — required for paid service ads",
+      "file": "template-parts/sections/footer.php",
+      "line": 0,
+      "match": "Missing: (?:hoàn tiền|refund|đổi trả|cancellation|hủy đơn|chính sách hoàn)"
+    },
+    {
+      "id": "LES-228",
+      "severity": "HIGH",
+      "category": "ads-compliance",
+      "description": "Missing cookie consent mechanism — GDPR/tracking compliance",
+      "file": "[NO FILES MATCHING: **/components/**|**/app/layout*]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 68,
+      "match": ".bg-\\[#F5F5F5\\] { background-color: #F5F5F5; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 70,
+      "match": ".shadow-\\[0_4px_12px_rgba\\(0\\,0\\,0\\,0\\.06\\)\\] { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 81,
+      "match": ".bg-\\[\\#EFF6FF\\] { background-color: #EFF6FF; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 82,
+      "match": ".bg-\\[\\#0F2FA8\\] { background-color: #0F2FA8; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 83,
+      "match": ".bg-\\[\\#1A4FD8\\] { background-color: #1A4FD8; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 84,
+      "match": ".bg-\\[\\#92400E\\] { background-color: #92400E; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 85,
+      "match": ".bg-\\[\\#064E3B\\] { background-color: #064E3B; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 86,
+      "match": ".bg-\\[\\#059669\\] { background-color: #059669; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 87,
+      "match": ".bg-\\[\\#374151\\] { background-color: #374151; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 88,
+      "match": ".bg-\\[\\#1F2937\\] { background-color: #1F2937; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 89,
+      "match": ".bg-\\[\\#111827\\] { background-color: #111827; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 90,
+      "match": ".bg-\\[\\#1C1917\\] { background-color: #1C1917; }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 93,
+      "match": ".from-\\[\\#0F2FA8\\] { --tw-gradient-from: #0F2FA8 var(--tw-gradient-from-position); --tw-gradient-to: rgb(15 47 168 / 0) "
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 94,
+      "match": ".from-\\[\\#92400E\\] { --tw-gradient-from: #92400E var(--tw-gradient-from-position); --tw-gradient-to: rgb(146 64 14 / 0) "
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 95,
+      "match": ".from-\\[\\#064E3B\\] { --tw-gradient-from: #064E3B var(--tw-gradient-from-position); --tw-gradient-to: rgb(6 78 59 / 0) va"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 96,
+      "match": ".from-\\[\\#94A3B8\\] { --tw-gradient-from: #94A3B8 var(--tw-gradient-from-position); --tw-gradient-to: rgb(148 163 184 / 0"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 97,
+      "match": ".from-\\[\\#374151\\] { --tw-gradient-from: #374151 var(--tw-gradient-from-position); --tw-gradient-to: rgb(55 65 81 / 0) v"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 98,
+      "match": ".to-\\[\\#1A4FD8\\]  { --tw-gradient-to: #1A4FD8 var(--tw-gradient-to-position); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 99,
+      "match": ".to-\\[\\#F97316\\]  { --tw-gradient-to: #F97316 var(--tw-gradient-to-position); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 100,
+      "match": ".to-\\[\\#059669\\]  { --tw-gradient-to: #059669 var(--tw-gradient-to-position); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 101,
+      "match": ".to-\\[\\#64748B\\]  { --tw-gradient-to: #64748B var(--tw-gradient-to-position); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 102,
+      "match": ".to-\\[\\#1F2937\\]  { --tw-gradient-to: #1F2937 var(--tw-gradient-to-position); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 108,
+      "match": ".text-white\\/70 { color: rgb(255 255 255 / 0.7); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 109,
+      "match": ".text-white\\/60 { color: rgb(255 255 255 / 0.6); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 110,
+      "match": ".text-white\\/40 { color: rgb(255 255 255 / 0.4); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 111,
+      "match": ".bg-white\\/10  { background-color: rgb(255 255 255 / 0.1); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 112,
+      "match": ".bg-white\\/15  { background-color: rgb(255 255 255 / 0.15); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 113,
+      "match": ".bg-white\\/20  { background-color: rgb(255 255 255 / 0.2); }"
+    },
+    {
+      "id": "LES-006",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "rgba() hardcode trong partial CSS thay vì var(--token)",
+      "file": "src/main.css",
+      "line": 114,
+      "match": ".border-white\\/15 { border-color: rgb(255 255 255 / 0.15); }"
+    },
+    {
+      "id": "LES-027",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "Product images trong loop thiếu alt text (empty alt=\"\")",
+      "file": "template-parts/account/return-js.php",
+      "line": 75,
+      "match": "(it.image ? '<img src=\"' + escAttr(it.image) + '\" class=\"rounded-lg object-cover w-12 h-12 bg-gray-100\" alt=\"\" width=\"48"
+    },
+    {
+      "id": "LES-027",
+      "severity": "HIGH",
+      "category": "css-tokens",
+      "description": "Product images trong loop thiếu alt text (empty alt=\"\")",
+      "file": "template-parts/account/tracking-js.php",
+      "line": 162,
+      "match": "(imgSrc ? '<img src=\"' + escAttr(imgSrc) + '\" class=\"rounded-lg object-cover w-12 h-12 bg-gray-100\" alt=\"\" width=\"48\" he"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/hero/default.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/account/sidebar.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/sections/flash-sale.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/sections/best-sellers.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/home/flash-sale.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/auth/login-form.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/components/spec-comparison.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/checkout/order-items.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/thankyou/recommended.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/order-failed/recommended.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/archive/hero-banner.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/account/return-js.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/checkout/checkout-js.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/cart/recommended.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/maintenance.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/order-failed/product-list.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/auth/register-js.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/auth/register-sidebar.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/home/hero.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/single-product/related-products.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/thankyou/product-list.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/components/unboxing-preview.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/auth/register-form.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/account/tracking-js.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/cart/product-list.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/home/best-sellers.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-268",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Image tag thiếu onerror fallback — ảnh lỗi sẽ hiện broken icon",
+      "file": "template-parts/reset-password/sidebar.php",
+      "line": 0,
+      "match": "Missing: onerror"
+    },
+    {
+      "id": "LES-269",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Sold count hiển thị raw number — thiếu abbreviation (>9999 phải = 10K+)",
+      "file": "template-parts/product/card.php",
+      "line": 174,
+      "match": "<?php printf( esc_html__( 'Đã bán %s', 'wezone-trunganh-v2' ), number_format( $sold_count ) ); ?>"
+    },
+    {
+      "id": "LES-270",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Thiếu .line-clamp-4 CSS utility — cần cho review text preview (4 dòng)",
+      "file": "[NOT FOUND IN: assets/css/**/*.css]",
+      "line": 0,
+      "match": "Missing: \\.line-clamp-4"
+    },
+    {
+      "id": "LES-271",
+      "severity": "SUGGEST",
+      "category": "edge-cases",
+      "description": "Empty state dùng Material icon thay vì illustration SVG theo blueprint",
+      "file": "[NOT FOUND IN: template-parts/components/empty-state.php]",
+      "line": 0,
+      "match": "Missing: empty.*\\.svg|/img/empty/|/images/empty"
+    },
+    {
+      "id": "LES-272",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Review count hiển thị raw — thiếu abbreviation (>9999 phải = 9.9K+)",
+      "file": "inc/helpers.php",
+      "line": 45,
+      "match": "echo '<span class=\"text-on-surface-variant text-[12px] ml-1\">(' . esc_html( (string) $count ) . ')</span>';"
+    },
+    {
+      "id": "LES-273",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Cart badge thiếu overflow cap — >99 phải hiển thị 99+",
+      "file": "[NOT FOUND IN: template-parts/header*.php|header.php|assets/js/*.js]",
+      "line": 0,
+      "match": "Missing: 99\\+|> 99|>99|Math\\.min.*99"
+    },
+    {
+      "id": "LES-274",
+      "severity": "SUGGEST",
+      "category": "edge-cases",
+      "description": "Placeholder image helper trả về .jpg — blueprint yêu cầu .svg",
+      "file": "inc/helpers.php",
+      "line": 63,
+      "match": "return esc_url( get_stylesheet_directory_uri() . '/assets/images/placeholder.jpg' );"
+    },
+    {
+      "id": "LES-276",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Related products thiếu slider/carousel khi > 4 items",
+      "file": "template-parts/search/related-keywords.php",
+      "line": 0,
+      "match": "Missing: swiper|slider|carousel|splide|scroll-snap|overflow-x.*scroll|overflow-x.*auto"
+    },
+    {
+      "id": "LES-276",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Related products thiếu slider/carousel khi > 4 items",
+      "file": "template-parts/single-product/related-products.php",
+      "line": 0,
+      "match": "Missing: swiper|slider|carousel|splide|scroll-snap|overflow-x.*scroll|overflow-x.*auto"
+    },
+    {
+      "id": "LES-277",
+      "severity": "HIGH",
+      "category": "edge-cases",
+      "description": "Reviews thiếu load-more pagination (5 per batch theo blueprint)",
+      "file": "template-parts/single-product/reviews.php",
+      "line": 0,
+      "match": "Missing: load.more|loadMore|load_more|pagination|per_page.*5|offset|xem-them|btn.*more"
+    },
+    {
+      "id": "FEA-007",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "5 Voucher Card Templates — Shopee/Gift/Sale/Luxury/Minimal designs",
+      "file": "template-parts/voucher/card.php",
+      "line": 0,
+      "match": "Missing: template === 4|template === 5|preview_luxury|preview_minimal"
+    },
+    {
+      "id": "FEA-008",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Voucher Color Customizer — Tùy chỉnh màu sắc thẻ giảm giá trong admin",
+      "file": "template-parts/voucher/card.php",
+      "line": 0,
+      "match": "Missing: wz_voucher_colors|voucher-colors|get_voucher_colors"
+    },
+    {
+      "id": "FEA-025",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Thiếu helper wz_abbreviate_number() cho overflow display (999+, 9.9K+, 1.2 tỷ)",
+      "file": "[NOT FOUND IN: inc/helpers.php|inc/wz-shims.php]",
+      "line": 0,
+      "match": "Missing: abbreviate_number|format_short_number|wz_abbreviate"
+    },
+    {
+      "id": "FEA-026",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Thiếu skeleton loading component cho product grids",
+      "file": "[NOT FOUND IN: template-parts/home/best-sellers.php|template-parts/home/featured-products.php|template-parts/archive/*.php]",
+      "line": 0,
+      "match": "Missing: skeleton|loading-placeholder|data-skeleton|pulse.*animate"
+    },
+    {
+      "id": "FEA-027",
+      "severity": "SUGGEST",
+      "category": "feature-suggest",
+      "description": "Thiếu error state component (network offline, timeout, 500)",
+      "file": "[NOT FOUND IN: template-parts/components/*.php|assets/js/*.js]",
+      "line": 0,
+      "match": "Missing: error-state|error_state|ErrorState|network.*offline|is-offline|navigator\\.onLine"
+    },
+    {
+      "id": "LES-087",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Namespaced PHP file thiếu declare(strict_types=1) — silent type coercion bugs",
+      "file": "[NO FILES MATCHING: packages/wezone-core/src/**/*.php|packages/wezone-shipping/src/**/*.php|packages/wezone-quotation/src/**/*.php|shared/src/**/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/stats-card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/description.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/return-history.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/filter-chips.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/payment-section.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/top-bar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/breadcrumb.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cookie-consent.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/reset-password/reset-form.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/notification-realtime.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/trust-strip.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/sidebar-filters.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/notification.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/hero/default.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/toolbar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/sidebar-filters.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/panel-login.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/sidebar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/policy/sidebar-contact.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/html-block.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/summary.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/order-detail-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/panel-register.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/compatibility-checker.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/category-shortcuts.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/product/card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/empty-state.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/personalized.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/tabs.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/flash-sale.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/addresses-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/gallery.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/payment-summary.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/footer/mobile-nav.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/bank-transfer-info.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/best-sellers.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/voucher.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/flash-sale.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/categories.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/order-detail.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/hero-banners.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/tracking-form.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/trust-strip.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/trust-bar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/category-tabs.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/trust-bar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/related-keywords.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/success-card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/empty-state.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/trust-strip.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/login-form.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/recently-viewed.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/skeleton.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/sticky-cta.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/spec-comparison.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/login-sidebar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/policy-card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/order-items.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/notifications-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/recommended.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/recommended.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/filter-bar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/voucher/card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/hero-banner.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/tracking-result.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/address-section.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/reviews.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/return-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/order-summary.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/return-form.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/specs-table.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/checkout-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/shipping-section.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/toolbar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/voucher-section.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/theme-toggle.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/recommended.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/product/grid.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/recent-orders.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/maintenance.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/archive/pagination.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/order-summary.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/empty-state.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/product-list.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/checkout/breadcrumb.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/register-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/register-sidebar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/order-summary.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/trust-strip.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/action-bar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/side-card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/hero.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/reasons.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/featured-products.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/related-products.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/thankyou/product-list.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/support-card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/unboxing-preview.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/main-section.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/text-block.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/trust-badges.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/quick-links.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/register-form.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/components/trust-signals.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/trust-badges.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/tracking-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/product-list.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/best-sellers.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/reset-password/reset-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/order-failed/actions.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/recently-viewed.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/reset-password/sidebar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/auth/login-js.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/sections/footer.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/policy/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/account/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/search/index.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/categories.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/voucher/section.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/single-product/info.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/home/top-bar.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-257",
+      "severity": "HIGH",
+      "category": "file-structure",
+      "description": "Theme code sai hướng blueprint — BEM thay Tailwind, thiếu wz_component, thiếu guards",
+      "file": "template-parts/cart/support-card.php",
+      "line": 0,
+      "match": "Missing: wz_component\\(|wezone_is_active\\("
+    },
+    {
+      "id": "LES-014",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "wzTheme object thiếu property mà JS đang dùng",
+      "file": "assets/js/review.js",
+      "line": 65,
+      "match": "fetch( window.ajaxurl || ( window.wzTheme && window.wzTheme.ajaxurl ) || '/wp-admin/admin-ajax.php', {"
+    },
+    {
+      "id": "LES-014",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "wzTheme object thiếu property mà JS đang dùng",
+      "file": "assets/js/main.js",
+      "line": 5,
+      "match": "var ajaxurl = (window.wzTheme && window.wzTheme.ajaxurl) || '/wp-admin/admin-ajax.php';"
+    },
+    {
+      "id": "LES-014",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "wzTheme object thiếu property mà JS đang dùng",
+      "file": "assets/js/main.js",
+      "line": 157,
+      "match": "var ajaxurl = ( window.wzTheme && window.wzTheme.ajaxurl ) || '/wp-admin/admin-ajax.php';"
+    },
+    {
+      "id": "LES-014",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "wzTheme object thiếu property mà JS đang dùng",
+      "file": "assets/js/main.js",
+      "line": 160,
+      "match": "return ( window.wzTheme && window.wzTheme.nonce ) || form.dataset.nonce || '';"
+    },
+    {
+      "id": "LES-014",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "wzTheme object thiếu property mà JS đang dùng",
+      "file": "assets/js/main.js",
+      "line": 340,
+      "match": "var themeUrl = (window.wzTheme && window.wzTheme.themeUrl) ? window.wzTheme.themeUrl : '';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/review.js",
+      "line": 84,
+      "match": "msg.textContent = res.data || 'Đánh giá của bạn đã được gửi, chờ duyệt.';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/review.js",
+      "line": 89,
+      "match": "msg.textContent = res.data || 'Gửi thất bại, vui lòng thử lại.';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/review.js",
+      "line": 97,
+      "match": "msg.textContent = 'Lỗi kết nối, vui lòng thử lại.';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/main.js",
+      "line": 174,
+      "match": "popupLabel.textContent = action === 'buy-now' ? 'Mua ngay' : 'Thêm vào giỏ hàng';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/main.js",
+      "line": 246,
+      "match": "if ( popupLabel ) { popupLabel.textContent = 'Đang xử lý...'; }"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/main.js",
+      "line": 348,
+      "match": "img.alt = img.alt || 'Hình ảnh không khả dụng';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/main.js",
+      "line": 402,
+      "match": "live.textContent = count ? 'Giỏ hàng: ' + count + ' sản phẩm' : 'Giỏ hàng trống';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 58,
+      "match": "showError( 'Vui lòng nhập đủ 6 chữ số.' );"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 65,
+      "match": "btn.innerHTML = '<span class=\"material-symbols-outlined icon--md\" data-wz-icon=\"progress_activity\" aria-hidden=\"true\">pr"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 79,
+      "match": "showError( res.data && res.data.message ? res.data.message : 'Mã xác thực không đúng. Vui lòng thử lại.' );"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 81,
+      "match": "btn.innerHTML = '<span class=\"material-symbols-outlined icon--md\" data-wz-icon=\"verified_user\" aria-hidden=\"true\">verifi"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 88,
+      "match": "showError( 'Có lỗi xảy ra. Vui lòng thử lại.' );"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 90,
+      "match": "btn.innerHTML = '<span class=\"material-symbols-outlined\">verified_user</span> Xác thực email';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 102,
+      "match": "resendBtn.textContent = 'Gửi lại mã';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 108,
+      "match": "resendBtn.innerHTML = 'Gửi lại mã (<span id=\"wz-countdown\">60</span> giây)';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 135,
+      "match": "showError( res.data && res.data.message ? res.data.message : 'Không thể gửi lại mã. Vui lòng thử lại.' );"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/verify-email.js",
+      "line": 140,
+      "match": "showError( 'Có lỗi xảy ra. Vui lòng thử lại.' );"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/search-autocomplete.js",
+      "line": 2,
+      "match": "* Search autocomplete — gợi ý sản phẩm khi gõ từ khóa."
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/search-autocomplete.js",
+      "line": 29,
+      "match": "el.setAttribute('aria-label', 'Gợi ý sản phẩm');"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/search-autocomplete.js",
+      "line": 105,
+      "match": "empty.textContent = 'Không tìm thấy sản phẩm phù hợp.';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/search-autocomplete.js",
+      "line": 168,
+      "match": "badge.textContent = 'Hết hàng';"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/search-autocomplete.js",
+      "line": 195,
+      "match": "footer.innerHTML = '<span class=\"material-symbols-outlined icon--xs\" data-wz-icon=\"search\" aria-hidden=\"true\">search</sp"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/login.js",
+      "line": 54,
+      "match": "this.setAttribute('aria-label', 'Ẩn mật khẩu');"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/login.js",
+      "line": 58,
+      "match": "this.setAttribute('aria-label', 'Hiện mật khẩu');"
+    },
+    {
+      "id": "LES-051",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Hardcoded Vietnamese in JS — cannot rebrand when cloning theme",
+      "file": "assets/js/login.js",
+      "line": 72,
+      "match": "regPassConfirm.setCustomValidity(mismatch ? 'Mật khẩu không khớp' : '');"
+    },
+    {
+      "id": "LES-056",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Missing JS handler cho CRUD buttons trong account template",
+      "file": "wezone-templates/account/addresses.php",
+      "line": 100,
+      "match": "class=\"wz-edit-address text-xs text-on-surface hover:text-primary\""
+    },
+    {
+      "id": "LES-056",
+      "severity": "HIGH",
+      "category": "js-contract",
+      "description": "Missing JS handler cho CRUD buttons trong account template",
+      "file": "wezone-templates/account/addresses.php",
+      "line": 110,
+      "match": "class=\"wz-delete-address text-xs text-error hover:text-red-700\""
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 6,
+      "match": "@import 'partials/_reset.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 7,
+      "match": "@import 'partials/_tokens.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 8,
+      "match": "@import 'partials/_typography.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 11,
+      "match": "@import 'partials/_layout.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 14,
+      "match": "@import 'partials/_buttons.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 15,
+      "match": "@import 'partials/_forms.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 16,
+      "match": "@import 'partials/_header.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 17,
+      "match": "@import 'partials/_bottom-nav.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 18,
+      "match": "@import 'partials/_mobile-menu.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 19,
+      "match": "@import 'partials/_footer.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 22,
+      "match": "@import 'partials/_hero.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 23,
+      "match": "@import 'partials/_categories.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 24,
+      "match": "@import 'partials/_flash-sale.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 25,
+      "match": "@import 'partials/_product-grid.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 26,
+      "match": "@import 'partials/_filter.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 27,
+      "match": "@import 'partials/_trust.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 30,
+      "match": "@import 'partials/_single-product.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 31,
+      "match": "@import 'partials/_single-product-2.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 32,
+      "match": "@import 'partials/_single-product-extra.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 33,
+      "match": "@import 'partials/_product-extras.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 34,
+      "match": "@import 'partials/_product-extras-2.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 35,
+      "match": "@import 'partials/_extras.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 36,
+      "match": "@import 'partials/_extras-2.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 39,
+      "match": "@import 'partials/_cart-items.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 40,
+      "match": "@import 'partials/_cart-item-card.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 41,
+      "match": "@import 'partials/_cart-summary.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 42,
+      "match": "@import 'partials/_checkout.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 43,
+      "match": "@import 'partials/_checkout-mobile.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 46,
+      "match": "@import 'partials/_account.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 47,
+      "match": "@import 'partials/_account-mobile.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 48,
+      "match": "@import 'partials/_account-desktop.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 49,
+      "match": "@import 'partials/_login.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 52,
+      "match": "@import 'partials/_archive.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 53,
+      "match": "@import 'partials/_archive-desktop.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 56,
+      "match": "@import 'partials/_desktop-layout.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 57,
+      "match": "@import 'partials/_desktop-single-cart.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 60,
+      "match": "@import 'partials/_pages.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 61,
+      "match": "@import 'partials/_price-table.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 62,
+      "match": "@import 'partials/_responsive.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 63,
+      "match": "@import 'partials/_utilities.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 66,
+      "match": "@import 'partials/_empty-states.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 69,
+      "match": "@import 'partials/_dark-mode.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 72,
+      "match": "@import 'partials/_animations.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 75,
+      "match": "@import 'partials/_conversion.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 78,
+      "match": "@import 'partials/_compatibility.css';"
+    },
+    {
+      "id": "LES-265",
+      "severity": "HIGH",
+      "category": "performance",
+      "description": "@import in CSS file — render-blocking chain",
+      "file": "assets/css/main.css",
+      "line": 79,
+      "match": "@import 'partials/_unboxing.css';"
+    },
+    {
+      "id": "LES-031",
+      "severity": "HIGH",
+      "category": "php-security",
+      "description": "wp_mail() hardcoded subject/body không dùng wz_config()",
+      "file": "inc/error-monitoring.php",
+      "line": 26,
+      "match": "wp_mail("
+    },
+    {
+      "id": "LES-031",
+      "severity": "HIGH",
+      "category": "php-security",
+      "description": "wp_mail() hardcoded subject/body không dùng wz_config()",
+      "file": "inc/product.php",
+      "line": 139,
+      "match": "wp_mail( $admin_email, $subject, $body );"
+    },
+    {
+      "id": "LES-072",
+      "severity": "HIGH",
+      "category": "php-security",
+      "description": "Public REST endpoint thiếu rate limit — DDoS/brute-force risk",
+      "file": "[NO FILES MATCHING: packages/wezone-core/src/**/*Controller.php|packages/wezone-shipping/src/**/*Controller.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-215",
+      "severity": "HIGH",
+      "category": "php-security",
+      "description": "AJAX handler without nonce verification — CSRF attack vector",
+      "file": "[NO FILES MATCHING: packages/**/*Controller.php|packages/**/*Handler.php|packages/**/*Ajax.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/account/stats-card.php",
+      "line": 20,
+      "match": "$total_orders = (int) $wpdb->get_var("
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/account/stats-card.php",
+      "line": 23,
+      "match": "$processing_orders = (int) $wpdb->get_var("
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/account/stats-card.php",
+      "line": 26,
+      "match": "$completed_orders = (int) $wpdb->get_var("
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/account/return-history.php",
+      "line": 19,
+      "match": "if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) === $table ) {"
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/account/return-history.php",
+      "line": 20,
+      "match": "$requests = $wpdb->get_results("
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/account/recent-orders.php",
+      "line": 19,
+      "match": "$orders = $wpdb->get_results("
+    },
+    {
+      "id": "LES-127",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Deploy thiếu DB migration — template silently returns empty, tưởng code cũ",
+      "file": "template-parts/single-product/info.php",
+      "line": 31,
+      "match": "$variations  = function_exists( 'wz_get_variations' ) ? wz_get_variations( $product_id ) : [];"
+    }
+  ]
+}

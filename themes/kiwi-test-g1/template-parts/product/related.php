@@ -1,0 +1,23 @@
+<?php
+/**
+ * Related Products Template
+ *
+ * @package kiwi-test-g1
+ */
+
+$products = $args['products'] ?? [];
+$title = $args['title'] ?? 'Sản phẩm liên quan';
+?>
+
+<?php if ( ! empty( $products ) ) : ?>
+	<section class="related-products mt-12">
+		<h2 class="text-2xl font-bold mb-6"><?php echo esc_html( $title ); ?></h2>
+		<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+			<?php foreach ( $products as $product ) : ?>
+				<?php if ( function_exists( 'wz_component' ) ) : ?>
+					<?php wz_component( 'product-card', [ 'product' => $product ] ); ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+	</section>
+<?php endif; ?>

@@ -1,0 +1,222 @@
+"""GitHub Actions CI/CD integration."""
+
+from dataclasses import dataclass
+from typing import Dict, List, Optional
+import subprocess
+import json
+
+
+@dataclass
+class CIReport:
+    """CI/CD report for Kiwi scan."""
+    status: str  # pass, fail, warning
+    total_violations: int
+    critical_count: int
+    high_count: int
+    suggest_count: int
+    summary: str
+    details_url: Optional[str] = None
+
+
+class GitHubActionsAdapter:
+    """Integrate Kiwi with GitHub Actions CI/CD."""
+
+    def __init__(self, repo_path: str):
+        """Initialize GitHub Actions adapter."""
+        self.repo_path = repo_path
+
+    def generate_workflow(
+        self,
+        severity: str = "CRITICAL",
+        on_events: Optional[List[str]] = None
+    ) -> str:
+        """
+        Generate GitHub Actions workflow YAML.
+
+        Args:
+            severity: Severity level to check
+            on_events: Events to trigger on (default: push, pull_request)
+
+        Returns:
+            YAML workflow content
+        """
+        events = on_events or ["push", "pull_request"]
+
+        workflow = f"""name: Kiwi Code Quality Check
+
+on:
+  {chr(10).join(f'  {event}:' for event in events)}
+
+jobs:
+  kiwi-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Kiwi
+        run: |
+          pip install -r .claude/kiwi/requirements.txt
+
+      - name: Run Kiwi Scan
+        id: kiwi
+        run: |
+          cd .claude/kiwi
+          python -m scanner.cli --theme ${{{{ github.workspace }}}} --severity {severity} --json > scan_result.json
+          echo "result=$(cat scan_result.json)" >> $GITHUB_OUTPUT
+
+      - name: Check Results
+        run: |
+          CRITICAL=$(jq '.critical_count' .claude/kiwi/scan_result.json)
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "❌ CRITICAL violations found: $CRITICAL"
+            exit 1
+          fi
+          echo "✅ No CRITICAL violations"
+
+      - name: Upload Scan Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiwi-scan-results
+          path: .claude/kiwi/scan_result.json
+"""
+
+        return workflow
+
+    def create_ci_report(self, scan_result: Dict) -> CIReport:
+        """
+        Create CI report from scan result.
+
+        Args:
+            scan_result: Scan result dict
+
+        Returns:
+            CI report
+        """
+        critical = scan_result.get('critical_count', 0)
+        high = scan_result.get('high_count', 0)
+        suggest = scan_result.get('suggest_count', 0)
+        total = critical + high + suggest
+
+        if critical > 0:
+            status = "fail"
+            summary = f"❌ CRITICAL: {critical} violations must be fixed"
+        elif high > 0:
+            status = "warning"
+            summary = f"⚠️ HIGH: {high} violations should be reviewed"
+        else:
+            status = "pass"
+            summary = f"✅ PASS: No critical violations"
+
+        return CIReport(
+            status=status,
+            total_violations=total,
+            critical_count=critical,
+            high_count=high,
+            suggest_count=suggest,
+            summary=summary
+        )
+
+    def post_pr_comment(
+        self,
+        pr_number: int,
+        report: CIReport,
+        repo: str
+    ) -> bool:
+        """
+        Post Kiwi scan results as PR comment.
+
+        Args:
+            pr_number: Pull request number
+            report: CI report
+            repo: Repository (owner/name)
+
+        Returns:
+            True if successful
+        """
+        comment = self._format_pr_comment(report)
+
+        try:
+            # Use gh CLI to post comment
+            result = subprocess.run(
+                [
+                    "gh", "pr", "comment", str(pr_number),
+                    "--repo", repo,
+                    "--body", comment
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=30,
+            )
+            return True
+        except subprocess.CalledProcessError:
+            return False
+
+    def _format_pr_comment(self, report: CIReport) -> str:
+        """Format CI report as PR comment."""
+        icon = "✅" if report.status == "pass" else "⚠️" if report.status == "warning" else "❌"
+
+        comment = f"""## {icon} Kiwi Code Quality Report
+
+**Status:** {report.status.upper()}
+
+**Summary:** {report.summary}
+
+**Violations:**
+- 🔴 CRITICAL: {report.critical_count}
+- 🟡 HIGH: {report.high_count}
+- 🔵 SUGGEST: {report.suggest_count}
+- **Total:** {report.total_violations}
+
+"""
+
+        if report.status == "fail":
+            comment += "\n⚠️ **This PR cannot be merged until CRITICAL violations are fixed.**\n"
+
+        comment += "\n---\n*Generated by [Kiwi Agent](https://github.com/wezone/kiwi)*"
+
+        return comment
+
+    def set_commit_status(
+        self,
+        commit_sha: str,
+        report: CIReport,
+        repo: str
+    ) -> bool:
+        """
+        Set commit status check.
+
+        Args:
+            commit_sha: Commit SHA
+            report: CI report
+            repo: Repository (owner/name)
+
+        Returns:
+            True if successful
+        """
+        state = "success" if report.status == "pass" else "failure"
+
+        try:
+            # Use gh CLI to set status
+            result = subprocess.run(
+                [
+                    "gh", "api",
+                    f"/repos/{repo}/statuses/{commit_sha}",
+                    "-f", f"state={state}",
+                    "-f", "context=Kiwi Code Quality",
+                    "-f", f"description={report.summary}"
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=30,
+            )
+            return True
+        except subprocess.CalledProcessError:
+            return False

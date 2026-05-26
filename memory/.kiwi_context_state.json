@@ -1,0 +1,5 @@
+{
+  "conversations": {},
+  "schema_version": "1.0",
+  "description": "Tracks kiwi_context calls per conversation to enforce pre-edit hook"
+}

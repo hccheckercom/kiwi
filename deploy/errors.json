@@ -1,0 +1,81 @@
+{
+  "patterns": [
+    {
+      "id": "EADDRINUSE",
+      "regex": "EADDRINUSE.*:(3000|3002)",
+      "severity": "CRITICAL",
+      "root_cause": "Port already in use — previous process not killed",
+      "fix": "ssh -p {port} {user}@{host} 'fuser -k {port}/tcp && sleep 3 && pm2 restart {pm2_name}'"
+    },
+    {
+      "id": "SUPABASE_CLIENT",
+      "regex": "createClient.*undefined|Supabase.*not defined",
+      "severity": "CRITICAL",
+      "root_cause": "Missing .env.local or NEXT_PUBLIC_SUPABASE_* vars",
+      "fix": "Verify .env.local exists and contains NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY"
+    },
+    {
+      "id": "MODULE_NOT_FOUND",
+      "regex": "Cannot find module|Module not found",
+      "severity": "HIGH",
+      "root_cause": "Missing npm install or stale node_modules",
+      "fix": "ssh -p {port} {user}@{host} 'cd {remote_path} && rm -rf node_modules && npm install'"
+    },
+    {
+      "id": "TYPE_ERROR",
+      "regex": "TypeError.*undefined|Cannot read property.*undefined",
+      "severity": "HIGH",
+      "root_cause": "Runtime type error — likely missing null check",
+      "fix": "Check code for missing optional chaining (?.) or null guards"
+    },
+    {
+      "id": "BUILD_FAILED",
+      "regex": "Build failed|npm ERR!",
+      "severity": "CRITICAL",
+      "root_cause": "Build error — check npm build logs",
+      "fix": "ssh -p {port} {user}@{host} 'cd {remote_path} && npm run build 2>&1 | tail -50'"
+    },
+    {
+      "id": "PM2_NOT_RUNNING",
+      "regex": "pm2.*not running|process.*not found",
+      "severity": "HIGH",
+      "root_cause": "PM2 process crashed or not started",
+      "fix": "ssh -p {port} {user}@{host} 'pm2 start ecosystem.config.js'"
+    },
+    {
+      "id": "DISK_FULL",
+      "regex": "ENOSPC|No space left",
+      "severity": "CRITICAL",
+      "root_cause": "Disk full — need cleanup",
+      "fix": "ssh -p {port} {user}@{host} 'df -h && du -sh /opt/* && pm2 flush'"
+    },
+    {
+      "id": "PERMISSION_DENIED",
+      "regex": "EACCES|Permission denied",
+      "severity": "HIGH",
+      "root_cause": "File permission issue",
+      "fix": "ssh -p {port} {user}@{host} 'chown -R {user}:{user} {remote_path}'"
+    },
+    {
+      "id": "CONNECTION_REFUSED",
+      "regex": "ECONNREFUSED|Connection refused",
+      "severity": "HIGH",
+      "root_cause": "Service not listening on expected port",
+      "fix": "ssh -p {port} {user}@{host} 'netstat -tulpn | grep {port}'"
+    },
+    {
+      "id": "UNCOMMITTED_CHANGES",
+      "regex": "Uncommitted changes detected|working tree.*not clean",
+      "severity": "HIGH",
+      "root_cause": "Git working tree has uncommitted changes — deploy requires clean state",
+      "fix": "Commit changes first: git add . && git commit -m 'feat: ...' OR stash: git stash"
+    },
+    {
+      "id": "RSYNC_NOT_FOUND",
+      "regex": "WinError 2.*system cannot find.*rsync|rsync.*not found|rsync.*not recognized",
+      "severity": "CRITICAL",
+      "root_cause": "rsync not available on Windows — need WSL or alternative",
+      "fix": "Install rsync: 1) Enable WSL: wsl --install, OR 2) Install via Cygwin, OR 3) Use Git Bash (includes rsync)"
+    }
+  ]
+}

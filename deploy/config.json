@@ -1,0 +1,46 @@
+{
+  "vps": {
+    "wp": {
+      "host": "103.90.227.103",
+      "port": 2222,
+      "user": "root",
+      "key_path": "C:/Users/Windows/.ssh/id_rsa",
+      "wp_path": "/var/www/wp.wezone.vn"
+    },
+    "nextjs": {
+      "host": "103.90.227.103",
+      "port": 2222,
+      "user": "root",
+      "key_path": "/home/yuu/.ssh/id_rsa_wezone",
+      "paths": {
+        "main": "/opt/wezone",
+        "demo": "/opt/wz-demo",
+        "staging": "/opt/wezone-staging",
+        "backup": "/opt/wezone-backup",
+        "env": "/opt/wezone-env"
+      },
+      "pm2": {
+        "main": {
+          "name": "wezone",
+          "port": 3000
+        },
+        "demo": {
+          "name": "wz-demo",
+          "port": 3002
+        }
+      }
+    }
+  },
+  "health_checks": {
+    "wp": [
+      "https://wp.wezone.vn/wp-admin/",
+      "https://wp.wezone.vn/wp-json/wezone/v1/health"
+    ],
+    "nextjs": [
+      "http://127.0.0.1:3000/api/health",
+      "http://127.0.0.1:3002/api/health",
+      "https://wezone.vn/api/health",
+      "https://demo.wezone.vn/api/health"
+    ]
+  }
+}

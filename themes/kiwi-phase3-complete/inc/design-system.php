@@ -1,0 +1,147 @@
+<?php
+/**
+ * Design System Integration
+ *
+ * Provides CSS variables and design tokens for theme styling.
+ * Fixes "giao diện xấu" by injecting proper colors, spacing, typography.
+ *
+ * @package kiwi-phase3-complete
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Inject design tokens as CSS variables.
+ */
+add_action( 'wp_head', 'kiwi_phase3_complete_inject_design_tokens', 5 );
+function kiwi_phase3_complete_inject_design_tokens() {
+	$primary = '#3b82f6';
+	$secondary = '#8b5cf6';
+	$font_family = 'Inter, sans-serif';
+
+	?>
+	<style id="design-tokens">
+		:root {
+			/* Colors */
+			--wz-primary: <?php echo esc_attr( $primary ); ?>;
+			--wz-secondary: <?php echo esc_attr( $secondary ); ?>;
+			--wz-surface: #ffffff;
+			--wz-surface-dim: #f5f5f5;
+			--wz-on-surface: #1a1a1a;
+			--wz-on-surface-variant: #666666;
+			--wz-outline: #e0e0e0;
+			--wz-error: #dc2626;
+			--wz-success: #16a34a;
+
+			/* Typography */
+			--wz-font-family: <?php echo esc_attr( $font_family ); ?>;
+			--wz-font-size-xs: 0.75rem;
+			--wz-font-size-sm: 0.875rem;
+			--wz-font-size-base: 1rem;
+			--wz-font-size-lg: 1.125rem;
+			--wz-font-size-xl: 1.25rem;
+			--wz-font-size-2xl: 1.5rem;
+			--wz-font-size-3xl: 1.875rem;
+
+			/* Spacing */
+			--wz-spacing-xs: 0.25rem;
+			--wz-spacing-sm: 0.5rem;
+			--wz-spacing-md: 1rem;
+			--wz-spacing-lg: 1.5rem;
+			--wz-spacing-xl: 2rem;
+			--wz-spacing-2xl: 3rem;
+
+			/* Border Radius */
+			--wz-radius-sm: 0.25rem;
+			--wz-radius-md: 0.5rem;
+			--wz-radius-lg: 0.75rem;
+			--wz-radius-full: 9999px;
+
+			/* Shadows */
+			--wz-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+			--wz-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+			--wz-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+			/* Transitions */
+			--wz-transition-fast: 150ms ease;
+			--wz-transition-base: 200ms ease;
+			--wz-transition-slow: 300ms ease;
+		}
+
+		/* Base styles */
+		body {
+			font-family: var(--wz-font-family);
+			color: var(--wz-on-surface);
+			background-color: var(--wz-surface-dim);
+		}
+
+		/* Tailwind utility overrides */
+		.text-primary { color: var(--wz-primary) !important; }
+		.bg-primary { background-color: var(--wz-primary) !important; }
+		.border-primary { border-color: var(--wz-primary) !important; }
+		.text-secondary { color: var(--wz-secondary) !important; }
+		.bg-secondary { background-color: var(--wz-secondary) !important; }
+
+		/* Component enhancements */
+		.product-card {
+			transition: transform var(--wz-transition-base), box-shadow var(--wz-transition-base);
+		}
+		.product-card:hover {
+			transform: translateY(-4px);
+			box-shadow: var(--wz-shadow-lg);
+		}
+
+		.btn-primary {
+			background-color: var(--wz-primary);
+			color: white;
+			padding: var(--wz-spacing-md) var(--wz-spacing-xl);
+			border-radius: var(--wz-radius-md);
+			font-weight: 600;
+			transition: all var(--wz-transition-base);
+		}
+		.btn-primary:hover {
+			opacity: 0.9;
+			transform: translateY(-1px);
+			box-shadow: var(--wz-shadow-md);
+		}
+
+		/* Header enhancement */
+		.site-header {
+			background-color: var(--wz-surface);
+			box-shadow: var(--wz-shadow-sm);
+		}
+
+		/* Footer enhancement */
+		.site-footer {
+			background-color: var(--wz-on-surface);
+			color: rgba(255, 255, 255, 0.9);
+		}
+		.site-footer a {
+			color: rgba(255, 255, 255, 0.7);
+			transition: color var(--wz-transition-fast);
+		}
+		.site-footer a:hover {
+			color: var(--wz-primary);
+		}
+	</style>
+	<?php
+}
+
+/**
+ * Enqueue Google Fonts.
+ */
+add_action( 'wp_enqueue_scripts', 'kiwi_phase3_complete_enqueue_fonts', 1 );
+function kiwi_phase3_complete_enqueue_fonts() {
+	$font_family = 'Inter, sans-serif';
+
+	// Extract font name (e.g., "Inter, sans-serif" -> "Inter")
+	$font_name = explode( ',', $font_family )[0];
+	$font_name = trim( $font_name );
+
+	if ( $font_name && $font_name !== 'sans-serif' && $font_name !== 'serif' ) {
+		$font_url = 'https://fonts.googleapis.com/css2?family=' . urlencode( $font_name ) . ':wght@400;500;600;700&display=swap';
+		wp_enqueue_style( 'kiwi-phase3-complete-google-fonts', $font_url, [], null );
+	}
+}

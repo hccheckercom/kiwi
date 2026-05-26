@@ -1,0 +1,52 @@
+<?php
+/**
+ * Theme Setup
+ *
+ * Theme activation and setup hooks for {{ shop_name }} theme.
+ *
+ * @package {{ theme_slug }}
+ * @generated {{ timestamp }}
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Theme setup.
+ */
+add_action( 'after_setup_theme', '{{ theme_slug_underscore }}_setup' );
+function {{ theme_slug_underscore }}_setup() {
+	// Add theme support
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'html5', [ 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ] );
+	add_theme_support( 'custom-logo' );
+
+	// Register navigation menus
+	register_nav_menus( [
+		'primary' => __( 'Primary Menu', '{{ theme_slug }}' ),
+		'footer'  => __( 'Footer Menu', '{{ theme_slug }}' ),
+	] );
+
+	// Set content width
+	if ( ! isset( $GLOBALS['content_width'] ) ) {
+		$GLOBALS['content_width'] = 1280;
+	}
+}
+
+/**
+ * Register widget areas.
+ */
+add_action( 'widgets_init', '{{ theme_slug_underscore }}_widgets_init' );
+function {{ theme_slug_underscore }}_widgets_init() {
+	register_sidebar( [
+		'name'          => __( 'Sidebar', '{{ theme_slug }}' ),
+		'id'            => 'sidebar-1',
+		'description'   => __( 'Add widgets here.', '{{ theme_slug }}' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => '</h2>',
+	] );
+}

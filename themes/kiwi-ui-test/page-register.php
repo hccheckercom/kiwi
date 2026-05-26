@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php wp_head(); ?>
+</head>
+
+<body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
+
+<?php
+// Redirect if already logged in
+if ( is_user_logged_in() && function_exists( 'wz_get_myaccount_url' ) ) {
+	wp_redirect( wz_get_myaccount_url() );
+	exit;
+}
+
+get_header();
+?>
+
+<main id="main" class="site-main min-h-screen flex items-center justify-center py-12 px-4">
+	<div class="w-full max-w-md">
+		<!-- Logo + Heading -->
+		<div class="text-center mb-8">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="inline-block mb-6">
+				<?php
+				$logo = function_exists( 'wz_config' ) ? wz_config( 'logo' ) : '';
+				if ( $logo ) {
+					echo '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="h-12">';
+				} else {
+					echo '<span class="text-2xl font-bold text-primary">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+				}
+				?>
+			</a>
+
+			<h1 class="text-3xl font-bold mb-2">Tạo tài khoản</h1>
+			<p class="text-gray-600">Đăng ký để mua sắm và theo dõi đơn hàng</p>
+		</div>
+
+		<!-- Register Form -->
+		<div class="bg-white rounded-lg shadow-lg p-8">
+			<?php
+			// Display error messages
+			if ( isset( $_GET['error'] ) ) {
+				$error_messages = [
+					'email_exists' => 'Email này đã được đăng ký.',
+					'invalid_email' => 'Email không hợp lệ.',
+					'invalid_phone' => 'Số điện thoại không hợp lệ.',
+					'password_mismatch' => 'Mật khẩu xác nhận không khớp.',
+					'password_short' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+					'terms_required' => 'Bạn phải đồng ý với điều khoản sử dụng.',
+					'registration_failed' => 'Đăng ký thất bại. Vui lòng thử lại.',
+				];
+				$error_code = sanitize_text_field( $_GET['error'] );
+				$error_message = $error_messages[ $error_code ] ?? 'Có lỗi xảy ra. Vui lòng thử lại.';
+				?>
+				<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+					<?php echo esc_html( $error_message ); ?>
+				</div>
+			<?php } ?>
+
+			<form method="POST" action="" class="space-y-4">
+				<?php wp_nonce_field( 'wz_register_nonce' ); ?>
+
+				<div>
+					<label for="display_name" class="block text-sm font-medium mb-1">
+						Họ và tên <span class="text-red-500">*</span>
+					</label>
+					<input type="text" id="display_name" name="display_name" required
+					       value="<?php echo esc_attr( $_POST['display_name'] ?? '' ); ?>"
+					       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+				</div>
+
+				<div>
+					<label for="email" class="block text-sm font-medium mb-1">
+						Email <span class="text-red-500">*</span>
+					</label>
+					<input type="email" id="email" name="email" required
+					       value="<?php echo esc_attr( $_POST['email'] ?? '' ); ?>"
+					       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+				</div>
+
+				<div>
+					<label for="phone" class="block text-sm font-medium mb-1">
+						Số điện thoại <span class="text-red-500">*</span>
+					</label>
+					<input type="tel" id="phone" name="phone" required pattern="0[0-9]{9}"
+					       placeholder="0xxxxxxxxx"
+					       value="<?php echo esc_attr( $_POST['phone'] ?? '' ); ?>"
+					       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+					<p class="text-xs text-gray-500 mt-1">Định dạng: 10 số, bắt đầu bằng 0</p>
+				</div>
+
+				<div>
+					<label for="password" class="block text-sm font-medium mb-1">
+						Mật khẩu <span class="text-red-500">*</span>
+					</label>
+					<input type="password" id="password" name="password" required minlength="8"
+					       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+					<p class="text-xs text-gray-500 mt-1">Tối thiểu 8 ký tự</p>
+				</div>
+
+				<div>
+					<label for="password_confirm" class="block text-sm font-medium mb-1">
+						Xác nhận mật khẩu <span class="text-red-500">*</span>
+					</label>
+					<input type="password" id="password_confirm" name="password_confirm" required minlength="8"
+					       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+				</div>
+
+				<div class="flex items-start">
+					<input type="checkbox" id="terms_agreed" name="terms_agreed" value="1" required
+					       class="mt-1 mr-2">
+					<label for="terms_agreed" class="text-sm text-gray-700">
+						Tôi đồng ý với
+						<a href="<?php echo esc_url( home_url( '/dieu-khoan' ) ); ?>" class="text-primary hover:underline" target="_blank">Điều khoản sử dụng</a>
+						và
+						<a href="<?php echo esc_url( home_url( '/bao-mat' ) ); ?>" class="text-primary hover:underline" target="_blank">Chính sách bảo mật</a>
+					</label>
+				</div>
+
+				<button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary-dark transition-colors">
+					Đăng ký
+				</button>
+			</form>
+
+			<?php
+			// Social login (optional)
+			if ( function_exists( 'wz_has_social_login' ) && wz_has_social_login() ) :
+			?>
+				<div class="mt-6">
+					<div class="relative">
+						<div class="absolute inset-0 flex items-center">
+							<div class="w-full border-t border-gray-300"></div>
+						</div>
+						<div class="relative flex justify-center text-sm">
+							<span class="px-2 bg-white text-gray-500">hoặc</span>
+						</div>
+					</div>
+
+					<div class="mt-6 space-y-3">
+						<?php if ( function_exists( 'wz_google_login_button' ) ) : ?>
+							<?php wz_google_login_button(); ?>
+						<?php endif; ?>
+
+						<?php if ( function_exists( 'wz_zalo_login_button' ) ) : ?>
+							<?php wz_zalo_login_button(); ?>
+						<?php endif; ?>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<!-- Footer Links -->
+		<div class="mt-6 text-center text-sm">
+			<span class="text-gray-600">Đã có tài khoản?</span>
+			<a href="<?php echo esc_url( function_exists( 'wz_get_login_url' ) ? wz_get_login_url() : wp_login_url() ); ?>"
+			   class="text-primary font-medium hover:underline ml-1">
+				Đăng nhập
+			</a>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>
+
+</body>
+</html>

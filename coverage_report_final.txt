@@ -1,0 +1,94 @@
+============================================================
+  PROACTIVE COVERAGE SCANNER
+============================================================
+  Path: D:\projects\wezone\wezone-plugins\packages\wezone-zalo
+  Files: 31
+  Platform: wp
+  Min coverage: 80%
+============================================================
+
+COVERAGE SUMMARY:
+  Total patterns: 297
+  Covered: 0 (0.0%)
+  Gaps: 297
+    CRITICAL: 16
+    HIGH: 32
+    SUGGEST: 249
+
+[FAIL] Coverage 0.0% is below threshold 80%
+
+GAPS DETECTED (297):
+
+CRITICAL GAPS (16):
+1. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:64
+   Code: $phone = sanitize_text_field( $request->get_param( 'phone' ) ?? '' );
+   Confidence: 100%
+
+2. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:92
+   Code: $code  = sanitize_text_field( $request->get_param( 'code' ) ?? '' );
+   Confidence: 100%
+
+3. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:93
+   Code: $state = sanitize_text_field( $request->get_param( 'state' ) ?? '' );
+   Confidence: 100%
+
+4. Missing validation for wp_verify_nonce
+   File: wezone-zalo\src\Auth\ZaloLogin.php:86
+   Code: if ( empty( $code ) || ! wp_verify_nonce( $state, 'wezone_zalo_login' ) ) {
+   Confidence: 100%
+
+5. Missing validation for esc_url
+   File: wezone-zalo\src\Auth\ZaloLogin.php:47
+   Code: esc_url( $auth_url ),
+   Confidence: 100%
+
+6. Missing validation for esc_url
+   File: wezone-zalo\src\Auth\ZaloLogin.php:48
+   Code: esc_url( WEZONE_ZALO_URL . 'assets/img/zalo-icon.svg' ),
+   Confidence: 100%
+
+7. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Auth\ZaloLogin.php:74
+   Code: $ip         = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) )
+   Confidence: 100%
+
+8. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Auth\ZaloLogin.php:83
+   Code: $code  = sanitize_text_field( wp_unslash( $_GET['code'] ?? '' ) );
+   Confidence: 100%
+
+9. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Auth\ZaloLogin.php:84
+   Code: $state = sanitize_text_field( wp_unslash( $_GET['state'] ?? '' ) );
+   Confidence: 100%
+
+10. Missing validation for esc_html
+   File: wezone-zalo\src\MiniApp\MiniApp.php:117
+   Code: esc_html( $atts['text'] )
+   Confidence: 100%
+
+   ... and 6 more CRITICAL gaps
+
+HIGH GAPS (32):
+1. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:11
+
+2. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:15
+
+3. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:21
+
+4. Uncovered pattern: $wpdb->prepare
+   File: wezone-zalo\uninstall.php:15
+
+5. Unprepared database query in $wpdb->get_results
+   File: wezone-zalo\src\Api\LogController.php:34
+
+   ... and 27 more HIGH gaps
+
+SUGGEST GAPS: 249 (use --show-covered to see all)
+

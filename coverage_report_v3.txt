@@ -1,0 +1,94 @@
+============================================================
+  PROACTIVE COVERAGE SCANNER
+============================================================
+  Path: D:\projects\wezone\wezone-plugins\packages\wezone-zalo
+  Files: 31
+  Platform: wp
+  Min coverage: 80%
+============================================================
+
+COVERAGE SUMMARY:
+  Total patterns: 308
+  Covered: 0 (0.0%)
+  Gaps: 308
+    CRITICAL: 27
+    HIGH: 32
+    SUGGEST: 249
+
+[FAIL] Coverage 0.0% is below threshold 80%
+
+GAPS DETECTED (308):
+
+CRITICAL GAPS (27):
+1. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:64
+   Code: $phone = sanitize_text_field( $request->get_param( 'phone' ) ?? '' );
+   Confidence: 100%
+
+2. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:92
+   Code: $code  = sanitize_text_field( $request->get_param( 'code' ) ?? '' );
+   Confidence: 100%
+
+3. Missing validation for sanitize_text_field
+   File: wezone-zalo\src\Api\LogController.php:93
+   Code: $state = sanitize_text_field( $request->get_param( 'state' ) ?? '' );
+   Confidence: 100%
+
+4. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:33
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+5. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:99
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+6. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:168
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+7. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:33
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+8. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:99
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+9. Missing error handling for wp_remote_post
+   File: wezone-zalo\src\Api\ZaloApiClient.php:168
+   Code: $response = wp_remote_post(
+   Confidence: 100%
+
+10. Missing error handling for wp_remote_get
+   File: wezone-zalo\src\Api\ZaloApiClient.php:207
+   Code: $response = wp_remote_get(
+   Confidence: 100%
+
+   ... and 17 more CRITICAL gaps
+
+HIGH GAPS (32):
+1. Uncovered pattern: $wpdb->prepare
+   File: wezone-zalo\uninstall.php:15
+
+2. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:11
+
+3. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:15
+
+4. Unprepared database query in $wpdb->query
+   File: wezone-zalo\uninstall.php:21
+
+5. Unprepared database query in $wpdb->get_results
+   File: wezone-zalo\src\Api\LogController.php:34
+
+   ... and 27 more HIGH gaps
+
+SUGGEST GAPS: 249 (use --show-covered to see all)
+
