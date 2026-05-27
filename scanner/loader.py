@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 
 
-_VALID_SCAN_TYPES = {"presence", "absence", "cross_check", "cross-check", "ast", "pattern", "block", "manual", "bom-check", "none", "pattern_presence", "responsive_coverage", "dark_coverage", "sibling_consistency", "class_conflict"}
+_VALID_SCAN_TYPES = {"presence", "absence", "cross_check", "cross-check", "ast", "pattern", "block", "manual", "bom-check", "none", "pattern_presence", "responsive_coverage", "dark_coverage", "sibling_consistency", "class_conflict", "semgrep"}
 _VALID_SEVERITIES = {"CRITICAL", "HIGH", "SUGGEST", "MEDIUM", "INFO"}
 _VALID_FIX_TYPES = {"replace", "template", "llm", "wrap", "delete"}
 

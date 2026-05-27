@@ -1,0 +1,56 @@
+﻿Scanning kiwi-production-test...
+Checking 211 patterns...
+python : [WARN] Semgrep failed for LES-217: Semgrep exit code 2
+At line:1 char:56
++ ... THONUTF8=1; python -m scanner.cli --theme ..\..\themes\kiwi-productio ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WARN] Semgrep ...rep exit code 2:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[WARN] Semgrep failed for LES-218: Semgrep exit code 2
+[WARN] Semgrep failed for LES-219: Semgrep exit code 2
+[WARN] Semgrep failed for LES-220: Semgrep exit code 2
+[WARN] Semgrep failed for LES-233: Semgrep exit code 2
+[WARN] Semgrep failed for LES-293: Semgrep exit code 2
+  [10/211] Checked 10 patterns, 1 violations found
+[WARN] Semgrep failed for LES-278: Semgrep exit code 2
+[WARN] Semgrep failed for LES-010: Semgrep exit code 2
+[WARN] Semgrep failed for LES-053: Semgrep exit code 2
+[WARN] Semgrep failed for LES-260: Semgrep exit code 2
+  [20/211] Checked 20 patterns, 4 violations found
+[WARN] Semgrep failed for LES-016: Semgrep exit code 2
+[WARN] Semgrep failed for LES-030: Semgrep exit code 2
+Traceback (most recent call last):
+  File "D:\projects\wezone\.claude\kiwi\scanner\checkers\semgrep.py", line 56, in check
+    violations = self._run_semgrep(rule, files, theme_path, pattern_def)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\wezone\.claude\kiwi\scanner\checkers\semgrep.py", line 102, in _run_semgrep
+    raise RuntimeError(f"Semgrep exit code {result.returncode}")
+RuntimeError: Semgrep exit code 2
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\projects\wezone\.claude\kiwi\scanner\cli.py", line 813, in <module>
+    main()
+  File "D:\projects\wezone\.claude\kiwi\scanner\cli.py", line 704, in main
+    report = scan_theme(
+             ^^^^^^^^^^^
+  File "D:\projects\wezone\.claude\kiwi\scanner\cli.py", line 357, in scan_theme
+    report.violations.extend(checker.check(pattern_def, files, theme_path))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\wezone\.claude\kiwi\scanner\checkers\semgrep.py", line 62, in check
+    return self._fallback_to_regex(pattern_def, files, theme_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\wezone\.claude\kiwi\scanner\checkers\semgrep.py", line 180, in _fallback_to_regex
+    return PresenceChecker().check(normalized, files, theme_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\wezone\.claude\kiwi\scanner\checkers\presence.py", line 33, in check
+    compiled_regex = _compile(regex)
+                     ^^^^^^^^^^^^^^^
+  File "D:\projects\wezone\.claude\kiwi\scanner\checkers\presence.py", line 13, in _compile
+    if pattern not in _regex_cache:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'

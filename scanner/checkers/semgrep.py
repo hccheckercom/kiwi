@@ -147,13 +147,22 @@ class SemgrepChecker:
         normalized = pattern_def.copy()
         scan = pattern_def.get("scan", {})
 
-        # Extract pattern from scan if present
-        if "pattern" in scan and "pattern" not in normalized:
-            normalized["pattern"] = scan["pattern"]
-
-        # Extract regex_fallback if present
+        # Extract regex_fallback if present (priority over pattern)
         if "regex_fallback" in scan:
             normalized["pattern"] = scan["regex_fallback"]
+        # Otherwise extract pattern from scan if present
+        elif "pattern" in scan:
+            pattern = scan["pattern"]
+            # If pattern is Semgrep syntax (list/dict), we can't use it as regex
+            # This should not happen if regex_fallback is present, but handle it
+            if isinstance(pattern, (list, dict)):
+                # No valid regex fallback available
+                return []
+            normalized["pattern"] = pattern
+
+        # Final safety check: pattern must be string for regex checkers
+        if "pattern" not in normalized or not isinstance(normalized["pattern"], str):
+            return []
 
         scan_type = normalized.get("type", "presence")
 
