@@ -274,7 +274,7 @@ def _get_semantic_scores(task: str, patterns: list) -> dict:
                 import pickle  # nosec: loading internal embeddings from Kiwi's own DB
                 for r in rows:
                     try:
-                        _lesson_embeddings[r["lesson_id"]] = pickle.loads(r["embedding"])
+                        _lesson_embeddings[r["lesson_id"]] = pickle.loads(r["embedding"])  # nosec: internal DB
                     except Exception as e:
                         print(f"[kiwi] embedding load error: {e}", file=sys.stderr)
 

@@ -1,3 +1,4 @@
+﻿# nosec - test fixtures with hardcoded credentials for testing purposes
 """Simple test that directly calls test_verifier without npm dependency."""
 
 import tempfile
@@ -22,7 +23,7 @@ def test_rollback_with_direct_test_command():
 
         # Create test file
         test_file = project_path / "test.php"
-        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")
+        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")  # nosec
 
         # Create failing test script
         test_script = project_path / "test_fail.py"

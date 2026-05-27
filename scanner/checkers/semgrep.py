@@ -138,20 +138,35 @@ class SemgrepChecker:
         files: list,
         theme_path: str
     ) -> list:
-        """Fallback to regex checker."""
+        """Fallback to regex checker.
+
+        Normalizes pattern_def structure to match what regex checkers expect.
+        Regex checkers expect pattern at top level, not nested in scan.
+        """
+        # Normalize structure: extract scan fields to top level
+        normalized = pattern_def.copy()
         scan = pattern_def.get("scan", {})
-        scan_type = scan.get("type", "presence")
+
+        # Extract pattern from scan if present
+        if "pattern" in scan and "pattern" not in normalized:
+            normalized["pattern"] = scan["pattern"]
+
+        # Extract regex_fallback if present
+        if "regex_fallback" in scan:
+            normalized["pattern"] = scan["regex_fallback"]
+
+        scan_type = normalized.get("type", "presence")
 
         # Get appropriate checker based on scan type
         if scan_type == "bom-check":
             from .bom import BOMChecker
-            return BOMChecker().check(pattern_def, files, theme_path)
+            return BOMChecker().check(normalized, files, theme_path)
         elif scan_type in ("cross-check", "cross_check"):
             from .cross_check import CrossCheckChecker
-            return CrossCheckChecker().check(pattern_def, files, theme_path)
+            return CrossCheckChecker().check(normalized, files, theme_path)
         elif scan_type == "absence":
             from .absence import AbsenceChecker
-            return AbsenceChecker().check(pattern_def, files, theme_path)
+            return AbsenceChecker().check(normalized, files, theme_path)
         else:
             from .presence import PresenceChecker
-            return PresenceChecker().check(pattern_def, files, theme_path)
+            return PresenceChecker().check(normalized, files, theme_path)

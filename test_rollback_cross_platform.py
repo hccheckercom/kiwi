@@ -1,3 +1,4 @@
+﻿# nosec - test fixtures with hardcoded credentials for testing purposes
 """Simple cross-platform test to verify rollback integration."""
 
 import tempfile
@@ -21,7 +22,7 @@ def test_rollback_on_test_failure():
 
         # Create test file
         test_file = project_path / "test.php"
-        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")
+        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")  # nosec
 
         # Create failing test (Python script - cross-platform)
         test_script = project_path / "test.py"
@@ -81,7 +82,7 @@ def test_no_rollback_on_test_pass():
 
         # Create test file
         test_file = project_path / "test.php"
-        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")
+        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")  # nosec
 
         # Create passing test
         test_script = project_path / "test.py"

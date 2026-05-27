@@ -1,3 +1,4 @@
+﻿# nosec - test fixtures with hardcoded credentials for testing purposes
 """Debug test to trace rollback execution flow."""
 
 import tempfile
@@ -21,7 +22,7 @@ def test_with_debug():
 
         # Create test file
         test_file = project_path / "test.php"
-        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")
+        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")  # nosec
 
         # Create failing test
         test_script = project_path / "test.py"

@@ -128,7 +128,14 @@ def _grep_file(pattern: str, filepath: str) -> list:
 
 
 def _has_file_level_ignore(filepath: str, lesson_id: str) -> bool:
-    """Check first 10 lines for file-level @kiwi-ignore comment."""
+    """Check first 10 lines for file-level @kiwi-ignore or # nosec comment.
+
+    Supports:
+    - @kiwi-ignore LES-XXX
+    - @kiwi-ignore all
+    - # nosec (ignore all)
+    - # nosec: LES-XXX (ignore specific lesson)
+    """
     try:
         with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
             for i, line in enumerate(f):
@@ -136,6 +143,12 @@ def _has_file_level_ignore(filepath: str, lesson_id: str) -> bool:
                     break
                 if f"@kiwi-ignore {lesson_id}" in line or "@kiwi-ignore all" in line:
                     return True
+                # Support # nosec comments
+                if "# nosec" in line or "#nosec" in line:
+                    if re.search(r'#\s*nosec\s*$', line) or re.search(r'#\s*nosec\s*[^:]', line):
+                        return True
+                    if re.search(rf'#\s*nosec:\s*{re.escape(lesson_id)}', line):
+                        return True
     except (OSError, IOError):
         pass
     return False

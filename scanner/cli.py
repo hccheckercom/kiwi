@@ -204,6 +204,7 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
                rewrite_scopes: bool = False,
                skip_empty_scope: bool = False,
                use_cache: bool = False,
+               use_semgrep: bool = False,
                progress_callback=None) -> Report:
     """Run all patterns against theme."""
     report = Report(theme_path=theme_path)
@@ -307,7 +308,7 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
 
         report.files_scanned += len(files)
         ptype = pattern_def.get("type", "presence")
-        checker = get_checker(ptype)
+        checker = get_checker(ptype, use_semgrep=use_semgrep)
 
         if checker:
             # Use pre-loaded cache (already queried once at start)
@@ -380,7 +381,7 @@ def _is_root_level_pattern(pattern_def: dict) -> bool:
 
 def scan_monorepo(root_path: str, severity_filter: str = "ALL",
                   diff_only: bool = False, lessons_dir: str = None,
-                  platform: str = None) -> Report:
+                  platform: str = None, use_semgrep: bool = False) -> Report:
     """Scan a monorepo by scanning each sub-project independently.
 
     Root-level patterns (scope starts with packages/, shared/) are run
@@ -394,7 +395,7 @@ def scan_monorepo(root_path: str, severity_filter: str = "ALL",
     sub_reports = []
 
     # Pass 1: Root-level patterns (scope references packages/*, shared/*, etc.)
-    root_report = _scan_root_level(root_path, severity_filter, diff_only, lessons_dir, platform)
+    root_report = _scan_root_level(root_path, severity_filter, diff_only, lessons_dir, platform, use_semgrep)
     merged.files_scanned += root_report.files_scanned
     merged.violations.extend(root_report.violations)
 
@@ -408,6 +409,7 @@ def scan_monorepo(root_path: str, severity_filter: str = "ALL",
             platform=platform,
             scope_type=scope_type,
             skip_root_patterns=True,
+            use_semgrep=use_semgrep,
         )
         # Prefix violation paths with sub-project label
         for v in sub.violations:
@@ -423,7 +425,7 @@ def scan_monorepo(root_path: str, severity_filter: str = "ALL",
 
 
 def _scan_root_level(root_path: str, severity_filter: str, diff_only: bool,
-                     lessons_dir: str, platform: str) -> Report:
+                     lessons_dir: str, platform: str, use_semgrep: bool = False) -> Report:
     """Run only root-level patterns against the full monorepo."""
     report = Report(theme_path=root_path)
     patterns = load_patterns(lessons_dir, platform=platform)
@@ -448,7 +450,7 @@ def _scan_root_level(root_path: str, severity_filter: str, diff_only: bool,
 
         report.files_scanned += len(files)
         ptype = pattern_def.get("type", "presence")
-        checker = get_checker(ptype)
+        checker = get_checker(ptype, use_semgrep=use_semgrep)
 
         if checker:
             report.violations.extend(checker.check(pattern_def, files, root_path))
@@ -520,6 +522,8 @@ def main():
     parser.add_argument("--auto-scan", action="store_true", help="Auto-scan affected files (use with --impact)")
     parser.add_argument("--learn", action="store_true", help="Auto-detect patterns and suggest lessons")
     parser.add_argument("--strict", action="store_true", help="Exit with code 1 if AST warnings present (for CI/CD)")
+    parser.add_argument("--use-semgrep", action="store_true", help="Use Semgrep for AST-based pattern matching (experimental)")
+    parser.add_argument("--use-regex", action="store_true", help="Force regex-based matching (disable Semgrep)")
 
     args = parser.parse_args()
 
@@ -592,10 +596,11 @@ def main():
         if args.auto_scan and (high_risk or medium_risk):
             print()
             print(f"[auto_scan] Running scans (severity={args.severity})...")
+            use_semgrep = args.use_semgrep and not args.use_regex
 
             for af in high_risk + medium_risk:
                 try:
-                    scan_report = scan_theme(af.path, severity_filter=args.severity, skip_empty_scope=True)
+                    scan_report = scan_theme(af.path, severity_filter=args.severity, skip_empty_scope=True, use_semgrep=use_semgrep)
                     rel_path = os.path.relpath(af.path, project_root)
 
                     if scan_report.critical_count > 0:
@@ -655,6 +660,7 @@ def main():
             sys.exit(2)
         merged = Report(theme_path=target_path)
         sub_reports = []
+        use_semgrep = args.use_semgrep and not args.use_regex
         for sub_path, scope_type, label in themes:
             sub = scan_theme(
                 sub_path,
@@ -665,6 +671,7 @@ def main():
                 scope_type=scope_type,
                 skip_root_patterns=True,
                 rewrite_scopes=True,
+                use_semgrep=use_semgrep,
             )
             for v in sub.violations:
                 v.file = f"{label}/{v.file}" if not v.file.startswith("[") else f"[{label}] {v.file}"
@@ -675,12 +682,14 @@ def main():
         merged._sub_reports = sub_reports
         report = merged
     elif is_monorepo:
+        use_semgrep = args.use_semgrep and not args.use_regex
         report = scan_monorepo(
             target_path,
             severity_filter=args.severity,
             diff_only=args.diff_only,
             lessons_dir=args.lessons,
             platform=args.platform,
+            use_semgrep=use_semgrep,
         )
     else:
         # Enable skip_empty_scope for plugin/unknown — these are often subfolders
@@ -688,6 +697,10 @@ def main():
         # Only themes need strict absence checks (missing templates = real bugs).
         # --compact flag also enables skip_empty_scope.
         should_skip_empty = project_type in ("unknown", "plugin") or args.compact
+
+        # Determine use_semgrep flag
+        use_semgrep = args.use_semgrep and not args.use_regex
+
         report = scan_theme(
             target_path,
             severity_filter=args.severity,
@@ -697,6 +710,7 @@ def main():
             scope_type=effective_scope,
             skip_empty_scope=should_skip_empty,
             rewrite_scopes=(project_type == "theme"),
+            use_semgrep=use_semgrep,
         )
 
     # Apply --max-per-lesson cap

@@ -119,7 +119,7 @@ def get_cached_violations_batch(file_paths: list[str], patterns_version: str = N
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
 
-    # Batch query with IN clause - placeholders count is safe (derived from list length, not user input)
+    # Batch query with IN clause - placeholders count is safe (derived from list length, not user input)  # nosec: LES-641
     placeholders = ",".join("?" * len(file_paths))
     query = "SELECT file_path, file_hash, git_commit, patterns_version, violations_json FROM scan_cache WHERE file_path IN (" + placeholders + ")"
     rows = conn.execute(query, file_paths).fetchall()

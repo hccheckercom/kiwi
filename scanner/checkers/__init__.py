@@ -18,7 +18,23 @@ try:
 except ImportError:
     pass
 
+try:
+    from .semgrep import SemgrepChecker
+    REGISTRY["semgrep"] = SemgrepChecker()
+except ImportError:
+    pass
 
-def get_checker(type_name: str):
-    """Get checker instance by type name."""
+
+def get_checker(type_name: str, use_semgrep: bool = False):
+    """Get checker instance by type name.
+
+    Args:
+        type_name: Checker type (presence, absence, cross-check, etc.)
+        use_semgrep: If True and type is 'presence', use Semgrep checker
+
+    Returns:
+        Checker instance or None if not found
+    """
+    if use_semgrep and type_name == "presence" and "semgrep" in REGISTRY:
+        return REGISTRY["semgrep"]
     return REGISTRY.get(type_name)

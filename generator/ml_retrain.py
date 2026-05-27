@@ -21,7 +21,7 @@ class MLRetrainer:
         """
         Extract advanced features from HTML.
 
-        Returns 15-dimensional feature vector.
+        Returns 25-dimensional feature vector (expanded from 15).
         """
         import re
 
@@ -50,7 +50,8 @@ class MLRetrainer:
 
         # Tailwind classes
         tailwind_classes = re.findall(r'class="([^"]*)"', html)
-        avg_classes_per_element = len(' '.join(tailwind_classes).split()) / max(tag_count, 1)
+        all_classes = ' '.join(tailwind_classes).split()
+        avg_classes_per_element = len(all_classes) / max(tag_count, 1)
 
         # Component-specific features
         has_heading = 1 if re.search(r'<h[1-6]', html) else 0
@@ -60,8 +61,44 @@ class MLRetrainer:
         # Nesting depth (approximate)
         max_depth = html.count('<div') + html.count('<section')
 
+        # NEW: Structural features
+        # Parent tag detection (first opening tag)
+        parent_match = re.search(r'<(\w+)', html)
+        parent_tag = parent_match.group(1) if parent_match else ''
+        is_semantic_parent = 1 if parent_tag in semantic_tags else 0
+
+        # Sibling count (approximate by counting top-level children)
+        sibling_count = len(re.findall(r'>\s*<', html))
+
+        # NEW: CSS features
+        # Responsive classes
+        responsive_classes = [c for c in all_classes if any(c.startswith(bp) for bp in ['sm:', 'md:', 'lg:', 'xl:', '2xl:'])]
+        has_responsive = 1 if responsive_classes else 0
+        responsive_ratio = len(responsive_classes) / max(len(all_classes), 1)
+
+        # Color tokens
+        color_classes = [c for c in all_classes if any(color in c for color in ['bg-', 'text-', 'border-'])]
+        has_color = 1 if color_classes else 0
+
+        # Spacing tokens
+        spacing_classes = [c for c in all_classes if any(sp in c for sp in ['p-', 'px-', 'py-', 'm-', 'mx-', 'my-', 'gap-', 'space-'])]
+        has_spacing = 1 if spacing_classes else 0
+
+        # NEW: Position features
+        # Full-width detection
+        has_fullwidth = 1 if any(c in all_classes for c in ['w-full', 'w-screen', 'min-w-full']) else 0
+
+        # Vertical position heuristic (header/footer tags suggest top/bottom)
+        is_top_component = 1 if parent_tag in ['header', 'nav'] else 0
+        is_bottom_component = 1 if parent_tag == 'footer' else 0
+
+        # NEW: Content density
+        # Interactive element density
+        interactive_density = interactive_count / max(tag_count, 1)
+
         return [
-            html_length / 1000,  # Normalize
+            # Original 15 features
+            html_length / 1000,
             tag_count,
             class_count,
             semantic_count,
@@ -75,7 +112,18 @@ class MLRetrainer:
             has_image,
             has_list,
             max_depth,
-            len(component_type)  # Component type name length
+            len(component_type),
+            # NEW: 10 additional features (total 25)
+            is_semantic_parent,
+            sibling_count / 10.0,  # Normalize
+            has_responsive,
+            responsive_ratio,
+            has_color,
+            has_spacing,
+            has_fullwidth,
+            is_top_component,
+            is_bottom_component,
+            interactive_density
         ]
 
     def should_retrain(self) -> Tuple[bool, str]:

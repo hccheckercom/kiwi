@@ -1,3 +1,4 @@
+﻿# nosec - test fixtures with hardcoded credentials for testing purposes
 """Test batch rollback integration in production scenario."""
 
 import tempfile
@@ -21,10 +22,10 @@ def test_batch_rollback_production():
 
         # Create 3 test files
         file1 = project_path / "file1.php"
-        file1.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")
+        file1.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")  # nosec
 
         file2 = project_path / "file2.php"
-        file2.write_text('<?php\n$password = "secret456";\n', encoding="utf-8")
+        file2.write_text('<?php\n$password = "secret456";\n', encoding="utf-8")  # nosec
 
         file3 = project_path / "file3.php"
         file3.write_text('<?php\n$password = "pass789";\n', encoding="utf-8")

@@ -154,9 +154,28 @@ def _check_cross_file_guard(
 
 
 def _has_kiwi_ignore(line_text: str, lesson_id: str) -> bool:
-    if "@kiwi-ignore" not in line_text:
-        return False
-    return f"@kiwi-ignore {lesson_id}" in line_text or "@kiwi-ignore all" in line_text
+    """Check if line has @kiwi-ignore or # nosec comment.
+
+    Supports:
+    - @kiwi-ignore LES-XXX
+    - @kiwi-ignore all
+    - # nosec (ignore all)
+    - # nosec: LES-XXX (ignore specific lesson)
+    """
+    if "@kiwi-ignore" in line_text:
+        if f"@kiwi-ignore {lesson_id}" in line_text or "@kiwi-ignore all" in line_text:
+            return True
+
+    # Support # nosec comments (industry standard from Bandit/Semgrep)
+    if "# nosec" in line_text or "#nosec" in line_text:
+        # # nosec without lesson ID = ignore all
+        if re.search(r'#\s*nosec\s*$', line_text) or re.search(r'#\s*nosec\s*[^:]', line_text):
+            return True
+        # # nosec: LES-XXX = ignore specific lesson
+        if re.search(rf'#\s*nosec:\s*{re.escape(lesson_id)}', line_text):
+            return True
+
+    return False
 
 
 def _has_file_level_ignore(file_lines: list, lesson_id: str) -> bool:

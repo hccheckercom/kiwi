@@ -214,7 +214,7 @@ class TestCachingBehavior(unittest.TestCase):
         try:
             from ..performance import TokenCache
             TokenCache().clear()
-        except:
+        except (ImportError, AttributeError):
             pass
 
     def create_demo_files(self):

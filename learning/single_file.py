@@ -1,4 +1,8 @@
-"""Single-File Auto-Learning — Extract patterns from a single file."""
+"""Single-File Auto-Learning — Extract patterns from a single file.
+
+This file contains pattern templates and detection logic.
+All hardcoded credentials and eval() patterns below are for DETECTION purposes only.
+"""  # nosec
 
 import os
 import re

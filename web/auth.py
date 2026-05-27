@@ -49,7 +49,12 @@ USERS = {
 def _ensure_admin_password():
     """Lazy-initialize admin password hash."""
     if USERS["admin"]["hashed_password"] is None:
-        password = os.environ.get("KIWI_ADMIN_PASSWORD", "admin123")
+        password = os.environ.get("KIWI_ADMIN_PASSWORD")
+        if not password:
+            raise ValueError(
+                "KIWI_ADMIN_PASSWORD environment variable not set. "
+                "Set it before starting the web server: export KIWI_ADMIN_PASSWORD=your_secure_password"
+            )
         if len(password) > 72:
             password = password[:72]
         password_bytes = password.encode('utf-8')

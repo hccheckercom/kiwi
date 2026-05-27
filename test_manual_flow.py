@@ -1,3 +1,4 @@
+﻿# nosec - test fixtures with hardcoded credentials for testing purposes
 """Test to capture the actual exception."""
 
 import tempfile
@@ -22,7 +23,7 @@ def test_capture_exception():
 
         # Create test file
         test_file = project_path / "test.php"
-        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")
+        test_file.write_text('<?php\n$password = "admin123";\n', encoding="utf-8")  # nosec
 
         # Create failing test
         test_script = project_path / "test.py"

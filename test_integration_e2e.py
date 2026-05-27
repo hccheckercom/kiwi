@@ -1,3 +1,4 @@
+﻿# nosec - test fixtures with hardcoded credentials for testing purposes
 """End-to-end test: agent loop → fix → test verification → rollback."""
 
 import os
@@ -26,7 +27,7 @@ def test_e2e_rollback_on_test_failure():
         test_file = project_path / "test.php"
         test_file.write_text("""<?php
 // Hardcoded credentials - LES-001 violation
-$password = "admin123";
+$password = "admin123";  # nosec
 echo $password;
 """, encoding="utf-8")
 
@@ -93,7 +94,7 @@ def test_e2e_no_rollback_on_test_pass():
         # Create a simple PHP file
         test_file = project_path / "test.php"
         test_file.write_text("""<?php
-$password = "admin123";
+$password = "admin123";  # nosec
 """, encoding="utf-8")
 
         # Create a passing test script
@@ -155,7 +156,7 @@ def test_e2e_agent_lite_with_rollback():
         # Create test file
         test_file = project_path / "test.php"
         test_file.write_text("""<?php
-$password = "admin123";
+$password = "admin123";  # nosec
 """, encoding="utf-8")
 
         # Initialize git
