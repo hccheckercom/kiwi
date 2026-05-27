@@ -203,7 +203,7 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
                skip_root_patterns: bool = False,
                rewrite_scopes: bool = False,
                skip_empty_scope: bool = False,
-               use_cache: bool = True,
+               use_cache: bool = False,
                progress_callback=None) -> Report:
     """Run all patterns against theme."""
     report = Report(theme_path=theme_path)
@@ -214,12 +214,16 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
 
     # Initialize cache if enabled
     git_commit = None
+    patterns_version = None
     cache_available = False
+    cache_is_empty = True
     if use_cache:
         try:
             from . import cache as cache_module
             cache_module.init_cache_db()
             git_commit = cache_module._get_git_commit_hash(theme_path)
+            patterns_version = cache_module._get_patterns_version(lessons_dir)
+            cache_is_empty = cache_module.is_cache_empty()
             cache_available = True
         except (ImportError, Exception):
             cache_available = False
@@ -227,6 +231,10 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
     total_patterns = len(patterns)
     print(f"Scanning {os.path.basename(theme_path)}...", flush=True)
     print(f"Checking {total_patterns} patterns...", flush=True)
+
+    # Track violations to cache after scan
+    files_to_cache = {}  # file_path -> list of violations
+    all_files_cache = {}  # Lazy-loaded cache results
 
     patterns_processed = 0
     for pattern_def in patterns:
@@ -266,20 +274,27 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
         checker = get_checker(ptype)
 
         if checker:
-            # Check cache for each file if enabled
-            if cache_available:
+            # Lazy-load cache for files in this pattern's scope
+            if cache_available and not cache_is_empty:
+                from .models import Violation
                 from . import cache as cache_module
+
+                # Check which files need cache lookup
+                files_needing_cache = [f for f in files if f not in all_files_cache]
+
+                if files_needing_cache:
+                    # Batch query only for new files
+                    batch_cache = cache_module.get_cached_violations_batch(files_needing_cache, patterns_version)
+                    all_files_cache.update(batch_cache)
 
                 cached_violations = []
                 files_to_scan = []
 
                 for file_path in files:
-                    file_hash = cache_module._get_file_hash(file_path)
-                    cached = cache_module.get_cached_violations(file_path, file_hash)
+                    cached = all_files_cache.get(file_path)
 
                     if cached is not None:
                         # Cache hit - use cached violations
-                        from .models import Violation
                         for v_dict in cached:
                             cached_violations.append(Violation(
                                 lesson_id=v_dict["lesson_id"],
@@ -298,11 +313,12 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
                 if files_to_scan:
                     new_violations = checker.check(pattern_def, files_to_scan, theme_path)
 
-                    # Cache new results per file
-                    for file_path in files_to_scan:
-                        file_hash = cache_module._get_file_hash(file_path)
-                        file_violations = [v for v in new_violations if v.file == file_path or os.path.join(theme_path, v.file) == file_path]
-                        cache_module.cache_violations(file_path, file_hash, file_violations, git_commit)
+                    # Track violations for batch caching
+                    for v in new_violations:
+                        file_key = v.file if os.path.isabs(v.file) else os.path.join(theme_path, v.file)
+                        if file_key not in files_to_cache:
+                            files_to_cache[file_key] = []
+                        files_to_cache[file_key].append(v)
 
                     report.violations.extend(new_violations)
 
@@ -317,6 +333,11 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
                 report.warnings.extend(checker.warnings)
                 report.ast_skipped_files += len(checker.warnings)
                 checker.warnings = []  # Reset for next pattern
+
+    # Batch cache write AFTER all patterns scanned
+    if cache_available and files_to_cache:
+        from . import cache as cache_module
+        cache_module.cache_violations_batch(files_to_cache, git_commit, patterns_version)
 
     return report
 
