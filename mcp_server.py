@@ -2358,7 +2358,7 @@ TOOL_DEFS = [
     },
     {
         "name": "kiwi_generate_theme",
-        "description": "Generate WordPress theme with G0 (Foundation) and G1 (Pages). G0: 16 files (config, tokens, Tailwind, WP bootstrap). G1: 11 files (3 page templates + 8 template-parts). 0 CRITICAL violations guaranteed.",
+        "description": "Generate WordPress theme with G0 (Foundation) and G1 (Pages). G0: 16 files (config, tokens, Tailwind, WP bootstrap). G1: 11 files (3 page templates + 8 template-parts). 0 CRITICAL violations guaranteed. Auto-suggests colors/fonts from knowledge base if industry provided.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -2373,6 +2373,11 @@ TOOL_DEFS = [
                         "font_family": {"type": "string", "description": "Font stack (e.g., 'Inter, sans-serif')"}
                     },
                     "required": ["shop_name", "primary_color", "secondary_color", "font_family"]
+                },
+                "industry": {
+                    "type": "string",
+                    "enum": ["beauty", "tech", "fashion", "food", "furniture", "pharma", "mom-baby", "pet", "b2b", "luxury", "unknown"],
+                    "description": "Optional: Target industry for auto-suggestions from knowledge base"
                 },
                 "phases": {
                     "type": "array",
@@ -2498,6 +2503,7 @@ def _handle_generate_theme(args: dict) -> str:
     Args:
         theme_name: Theme name (e.g., 'My Shop')
         input_spec: Dict with shop_name, primary_color, secondary_color, font_family, etc.
+        industry: Optional industry for auto-suggestions from knowledge base
         phases: List of phases to generate (default: ['G0', 'G1'])
         dry_run: Preview without writing files (default: False)
 
@@ -2513,6 +2519,7 @@ def _handle_generate_theme(args: dict) -> str:
                 "secondary_color": "#8b5cf6",
                 "font_family": "Inter, sans-serif"
             },
+            industry="tech",
             phases=["G0", "G1"]
         )
     """
@@ -2521,6 +2528,7 @@ def _handle_generate_theme(args: dict) -> str:
 
     theme_name = args.get("theme_name", "")
     input_spec = args.get("input_spec", {})
+    industry = args.get("industry")
     phases = args.get("phases", ["G0", "G1"])
     dry_run = args.get("dry_run", False)
 
@@ -2529,6 +2537,27 @@ def _handle_generate_theme(args: dict) -> str:
 
     if not input_spec:
         return "ERROR: input_spec is required"
+
+    # Auto-suggest from knowledge base if industry provided
+    suggestions_note = ""
+    if industry:
+        suggestion_result = _handle_suggest_base({"industry": industry})
+        try:
+            suggestions = json.loads(suggestion_result)
+            suggestions_note = f"\n[Knowledge Base Suggestions for {industry}]\n"
+            suggestions_note += f"  Base theme: {suggestions.get('base_theme', 'None')}\n"
+            suggestions_note += f"  Match score: {suggestions.get('match_score', 0)}\n"
+            suggestions_note += f"  Reasoning: {suggestions.get('reasoning', 'N/A')}\n"
+
+            # Apply suggestions if user didn't provide colors/fonts
+            if not input_spec.get("primary_color") and suggestions.get("suggested_colors"):
+                input_spec["primary_color"] = suggestions["suggested_colors"].get("primary", "#105dad")
+            if not input_spec.get("secondary_color") and suggestions.get("suggested_colors"):
+                input_spec["secondary_color"] = suggestions["suggested_colors"].get("secondary", "#1e40af")
+            if not input_spec.get("font_family") and suggestions.get("suggested_fonts"):
+                input_spec["font_family"] = suggestions["suggested_fonts"].get("primary", "Inter, sans-serif")
+        except (json.JSONDecodeError, KeyError):
+            pass
 
     # Required fields
     required = ["shop_name", "primary_color", "secondary_color", "font_family"]
@@ -2545,7 +2574,32 @@ def _handle_generate_theme(args: dict) -> str:
         )
 
         report = generator.generate(phases=phases)
-        return format_generation_report(report)
+        formatted_report = format_generation_report(report)
+
+        # Auto-populate knowledge base after successful generation
+        if not dry_run and report.get("success") and industry:
+            try:
+                from learning.theme_analyzer import analyze_theme, save_theme_profile
+
+                # Determine theme path
+                theme_slug = theme_name.lower().replace(" ", "-")
+                theme_path = os.path.join(os.getcwd(), "themes", theme_slug)
+
+                # Analyze and save
+                profile = analyze_theme(theme_path, theme_slug, industry)
+                if "error" not in profile:
+                    db_path = os.path.join(KIWI_DIR, "memory", "theme_knowledge.db")
+                    if save_theme_profile(profile, db_path):
+                        formatted_report += f"\n\n[Knowledge Base] Theme profile saved for future suggestions"
+            except Exception as kb_error:
+                # Don't fail generation if KB save fails
+                formatted_report += f"\n\n[Knowledge Base] Warning: Could not save profile: {kb_error}"
+
+        # Prepend suggestions note if available
+        if suggestions_note:
+            formatted_report = suggestions_note + "\n" + formatted_report
+
+        return formatted_report
 
     except Exception as e:
         return f"ERROR: Generation failed: {e}"
