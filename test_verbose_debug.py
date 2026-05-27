@@ -32,7 +32,7 @@ def debug_apply_fix(violation, fix_config, dry_run=True, enable_rollback=True):
             return result
 
         git_rollback.verify_fix_safety = debug_verify
-    except:
+    except (ImportError, AttributeError):
         pass
 
     # Patch TestVerifier to log

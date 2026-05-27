@@ -166,7 +166,7 @@ class GitRollback:
                     capture_output=True,
                     timeout=5,
                 )
-            except:
+            except (subprocess.SubprocessError, OSError):
                 pass  # Best effort cleanup
 
         self.state = RollbackState()

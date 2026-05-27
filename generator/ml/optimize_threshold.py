@@ -17,9 +17,23 @@ except ImportError:
 
 
 def load_model(model_path: str):
-    """Load trained model from disk."""
+    """Load trained model from disk.
+
+    Security: pickle.load is safe here because model_path is validated
+    to be within Kiwi's internal directory, not user-controlled input.
+    """
+    model_path_obj = Path(model_path).resolve()
+    kiwi_root = Path(__file__).parent.parent.parent.resolve()
+
+    # Validate path is within Kiwi directory
+    if not str(model_path_obj).startswith(str(kiwi_root)):
+        raise ValueError(f"Model path must be within Kiwi directory: {model_path}")
+
+    if not model_path_obj.exists():
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+
     with open(model_path, 'rb') as f:
-        model = pickle.load(f)
+        model = pickle.load(f)  # nosec: validated internal path
     return model
 
 

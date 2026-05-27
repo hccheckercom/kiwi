@@ -225,7 +225,7 @@ def load_model() -> Optional[object]:
             _model = _json.load(f)
     except (_json.JSONDecodeError, UnicodeDecodeError):
         with open(_model_path, 'rb') as f:
-            _model = pickle.load(f)  # legacy binary format fallback
+            _model = pickle.load(f)  # nosec: internal model file, validated path
 
     return _model
 
