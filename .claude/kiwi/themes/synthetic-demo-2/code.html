@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script id="tailwind-config">
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#1e40af",
+                    secondary: "#10b981"
+                },
+                fontFamily: {
+                    sans: ["Roboto", "sans-serif"]
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body>
+    <header class="header bg-white shadow">
+        <nav class="navbar container mx-auto">
+            <a href="/" class="logo text-2xl font-bold">Tech Store</a>
+        </nav>
+    </header>
+    <section class="hero bg-primary text-white py-20">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-4">Welcome</h1>
+            <button class="btn bg-secondary px-6 py-3 rounded">Shop Now</button>
+        </div>
+    </section>
+    <footer class="footer bg-gray-900 text-white py-12">
+        <div class="container mx-auto"><p>2026 Tech Store</p></div>
+    </footer>
+</body>
+</html>

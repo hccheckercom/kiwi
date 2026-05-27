@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 
 
-_VALID_SCAN_TYPES = {"presence", "absence", "cross_check", "cross-check", "ast", "pattern", "block", "manual", "bom-check", "none"}
+_VALID_SCAN_TYPES = {"presence", "absence", "cross_check", "cross-check", "ast", "pattern", "block", "manual", "bom-check", "none", "pattern_presence", "responsive_coverage", "dark_coverage", "sibling_consistency", "class_conflict"}
 _VALID_SEVERITIES = {"CRITICAL", "HIGH", "SUGGEST", "MEDIUM", "INFO"}
 _VALID_FIX_TYPES = {"replace", "template", "llm", "wrap", "delete"}
 
@@ -21,162 +21,148 @@ _CACHE_TTL = 300              # 5 minutes
 
 
 def invalidate_cache():
-    """Force reload on next call."""
+    """Clear all caches. Call after adding/removing lessons."""
     global _patterns_cache, _lesson_index, _lesson_fm_cache, _cache_mtime
-    _patterns_cache.clear()
-    _lesson_index.clear()
-    _lesson_fm_cache.clear()
+    _patterns_cache = {}
+    _lesson_index = {}
+    _lesson_fm_cache = {}
     _cache_mtime = 0
 
 
-def get_lesson_path(lesson_id: str, lessons_dir: str = None) -> str:
-    """Fast O(1) lookup: lesson_id -> absolute file path."""
-    if not _lesson_index:
-        _build_index(lessons_dir)
-    return _lesson_index.get(lesson_id, "")
-
-
-def get_lesson_frontmatter(lesson_id: str, lessons_dir: str = None) -> tuple:
-    """Fast O(1) lookup: lesson_id -> (frontmatter_dict, body_str)."""
-    if lesson_id in _lesson_fm_cache:
-        return _lesson_fm_cache[lesson_id]
-    path = get_lesson_path(lesson_id, lessons_dir)
-    if not path:
-        return None, None
-    try:
-        content = Path(path).read_text(encoding="utf-8")
-    except (OSError, IOError):
-        return None, None
-    fm = _parse_frontmatter(content)
-    body = ""
-    if content.startswith("---"):
-        end = content.find("\n---", 3)
-        if end != -1:
-            body = content[end + 4:].strip()
-        else:
-            body = content
-    else:
-        body = content
-    _lesson_fm_cache[lesson_id] = (fm, body)
-    return fm, body
-
-
-def _build_index(lessons_dir: str = None):
-    """Build lesson_id -> file path index (one-time scan)."""
-    global _lesson_index, _cache_mtime
-    if lessons_dir is None:
-        lessons_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "lessons")
-    lessons_path = Path(lessons_dir)
-    if not lessons_path.exists():
-        return
-    for md_file in lessons_path.rglob("*.md"):
-        _lesson_index[md_file.stem] = str(md_file)
-    _cache_mtime = time.time()
-
-
-def _validate_pattern(fm: dict, scan: dict, filepath: str) -> list:
-    """Validate lesson config, return list of warning strings."""
-    warnings = []
-    lesson_id = fm.get("id", Path(filepath).stem)
-
-    cg = scan.get("context_guard")
-    if cg is not None and not isinstance(cg, dict):
-        warnings.append(f"{lesson_id}: context_guard must be dict (got {type(cg).__name__}), use {{pattern: ...}}")
-
-    if cg and isinstance(cg, dict) and "pattern" not in cg:
-        warnings.append(f"{lesson_id}: context_guard missing 'pattern' key")
-
-    stype = scan.get("type", "presence")
-    if stype not in _VALID_SCAN_TYPES:
-        warnings.append(f"{lesson_id}: unknown scan type '{stype}'")
-
-    sev = fm.get("severity", "HIGH")
-    if sev not in _VALID_SEVERITIES:
-        warnings.append(f"{lesson_id}: unknown severity '{sev}'")
-
-    for key in ("exclude_path", "exclude_line", "pre_check", "scope"):
-        val = scan.get(key)
-        if val is not None and not isinstance(val, str):
-            warnings.append(f"{lesson_id}: {key} must be string (got {type(val).__name__})")
-
-    # exclude can be string or list
-    exclude_val = scan.get("exclude")
-    if exclude_val is not None and not isinstance(exclude_val, (str, list)):
-        warnings.append(f"{lesson_id}: exclude must be string or list (got {type(exclude_val).__name__})")
-
-    fix = fm.get("fix")
-    if fix and isinstance(fix, dict):
-        ft = fix.get("type")
-        if ft and ft not in _VALID_FIX_TYPES:
-            warnings.append(f"{lesson_id}: unknown fix type '{ft}'")
-
-    return warnings
-
-
 def _parse_frontmatter(content: str) -> dict:
-    """Parse YAML frontmatter from markdown file using PyYAML."""
+    """Extract YAML frontmatter from markdown content."""
     if not content.startswith("---"):
         return {}
 
-    end = content.find("\n---", 3)
-    if end == -1:
+    parts = content.split("---", 2)
+    if len(parts) < 3:
         return {}
 
-    yaml_block = content[4:end]
     try:
-        return yaml.safe_load(yaml_block) or {}
+        return yaml.safe_load(parts[1]) or {}
     except yaml.YAMLError:
         return {}
 
 
-_WP_CATEGORIES = {"php-security", "wezone-api", "css-tokens", "js-contract",
-                  "file-structure", "performance", "placeholder", "ads-compliance",
-                  "feature-suggest", "edge-cases", "db-schema",
-                  "php-db", "php-performance", "php-i18n", "php-architecture", "loyalty"}
-_NEXTJS_CATEGORIES = {"nextjs-react", "supabase"}
-_PYTHON_CATEGORIES = {"python", "python-windows", "fastapi", "websocket",
-                      "error-handling", "resource-management"}
-_WEBSTORE_TAGS = {"webstore"}
-_WP_TAGS = {"theme", "plugin", "wp"}
-_PYTHON_TAGS = {"python", "fastapi", "flask", "django"}
+def _validate_pattern(fm: dict, scan: dict, file_path: str) -> list:
+    """Validate pattern configuration and return warnings."""
+    warnings = []
+
+    # Check scan type
+    scan_type = scan.get("type", "presence")
+    if scan_type not in _VALID_SCAN_TYPES:
+        warnings.append(f"{fm.get('id', '?')}: unknown scan type '{scan_type}'")
+
+    # Check severity
+    severity = fm.get("severity", "HIGH")
+    if severity not in _VALID_SEVERITIES:
+        warnings.append(f"{fm.get('id', '?')}: unknown severity '{severity}'")
+
+    # Check fix type if present
+    if "fix" in scan and "type" in scan["fix"]:
+        fix_type = scan["fix"]["type"]
+        if fix_type not in _VALID_FIX_TYPES:
+            warnings.append(f"{fm.get('id', '?')}: unknown fix type '{fix_type}'")
+
+    return warnings
+
 
 def _matches_platform(fm: dict, category: str, platform: str) -> bool:
-    """Return True if this lesson should be included for the given platform."""
-    lesson_platform = fm.get("platform")
-    if lesson_platform:
-        if lesson_platform == "both":
-            return True
-        return lesson_platform == platform
+    """Check if lesson matches platform filter."""
+    lesson_platform = fm.get("platform", "")
 
-    # Infer from tags when platform field is absent
-    tags = set(fm.get("tags", []))
-    if "both" in tags:
+    # "both" matches everything
+    if lesson_platform == "both":
         return True
-    if tags & _PYTHON_TAGS and not (tags & _WP_TAGS) and not (tags & _WEBSTORE_TAGS):
-        return platform in ("python", "both")
-    if tags & _WEBSTORE_TAGS and not (tags & _WP_TAGS):
-        return platform in ("nextjs", "both")
-    if tags & _WP_TAGS and not (tags & _WEBSTORE_TAGS):
-        return platform in ("wp", "both")
 
-    # Infer from category when platform field and tags are absent
-    if category in _PYTHON_CATEGORIES:
-        return platform in ("python", "both")
-    if category in _NEXTJS_CATEGORIES:
-        return platform in ("nextjs", "both")
-    if category in _WP_CATEGORIES:
-        return platform in ("wp", "both")
-    return platform != "python"  # unknown category — include for wp/nextjs, exclude for python
+    # Exact match
+    if lesson_platform == platform:
+        return True
+
+    # Category-based platform inference
+    platform_categories = {
+        "wp": ["php-security", "wezone-api", "db-schema"],
+        "nextjs": ["nextjs-react", "ai-safety"]
+    }
+
+    if category in platform_categories.get(platform, []):
+        return True
+
+    return False
 
 
 def _matches_scope_type(fm: dict, scope_type: str) -> bool:
-    """Return True if this lesson applies to the given scope_type (theme|plugin|both)."""
-    lesson_scope = fm.get("scope_type")
-    if not lesson_scope:
-        return True  # no scope_type declared — applies everywhere
-    if lesson_scope == "both":
+    """Check if lesson matches scope_type filter (theme/plugin)."""
+    tags = fm.get("tags", [])
+
+    # "both" matches everything
+    if "both" in tags:
         return True
-    return lesson_scope == scope_type
+
+    # Exact match
+    if scope_type in tags:
+        return True
+
+    return False
+
+
+def get_lesson_path(lesson_id: str) -> str:
+    """Get absolute path for a lesson ID. Returns empty string if not found."""
+    if not _lesson_index:
+        # Build index if empty
+        load_patterns()
+
+    return _lesson_index.get(lesson_id, "")
+
+
+def get_lesson_content(lesson_id: str) -> tuple:
+    """Get (frontmatter_dict, body_str) for a lesson ID.
+
+    Returns (None, None) if lesson not found.
+    Caches results for performance.
+    """
+    if lesson_id in _lesson_fm_cache:
+        return _lesson_fm_cache[lesson_id]
+
+    lesson_path = get_lesson_path(lesson_id)
+    if not lesson_path:
+        return (None, None)
+
+    try:
+        with open(lesson_path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return (None, None)
+
+    fm = _parse_frontmatter(content)
+    if not fm:
+        return (None, None)
+
+    # Extract body (everything after second ---)
+    parts = content.split("---", 2)
+    body = parts[2].strip() if len(parts) >= 3 else ""
+
+    result = (fm, body)
+    _lesson_fm_cache[lesson_id] = result
+    return result
+
+
+def get_lesson_body(lesson_id: str) -> str:
+    """Get lesson body (markdown content after frontmatter).
+
+    Returns empty string if lesson not found.
+    """
+    _, body = get_lesson_content(lesson_id)
+    return body or ""
+
+
+def get_lesson_frontmatter(lesson_id: str) -> dict:
+    """Get lesson frontmatter as dict.
+
+    Returns empty dict if lesson not found.
+    """
+    fm, _ = get_lesson_content(lesson_id)
+    return fm or {}
 
 
 def load_patterns(lessons_dir: str = None, platform: str = None, scope_type: str = None, include_disabled: bool = False) -> list:
@@ -282,7 +268,6 @@ def load_patterns(lessons_dir: str = None, platform: str = None, scope_type: str
     if not include_disabled:
         try:
             # Import here to avoid circular dependency
-            import sys
             sys.path.insert(0, str(Path(__file__).parent.parent))
             from memory.confidence import get_disabled_lessons
             disabled = set(get_disabled_lessons())

@@ -1,0 +1,64 @@
+[
+  {
+    "scenario": "cold_cache",
+    "severity": "CRITICAL",
+    "time_seconds": 4.35,
+    "files_scanned": 262,
+    "patterns_checked": 138,
+    "violations": 0,
+    "cache_hits": 0,
+    "cache_misses": 262
+  },
+  {
+    "scenario": "warm_cache",
+    "severity": "CRITICAL",
+    "time_seconds": 2.67,
+    "files_scanned": 262,
+    "patterns_checked": 138,
+    "violations": 0,
+    "cache_hits": 262,
+    "cache_misses": 0
+  },
+  {
+    "scenario": "no_cache",
+    "severity": "CRITICAL",
+    "time_seconds": 0.42,
+    "files_scanned": 262,
+    "patterns_checked": 138,
+    "violations": 15,
+    "cache_hits": 0,
+    "cache_misses": 0
+  },
+  {
+    "scenario": "severity_comparison",
+    "severity": "CRITICAL",
+    "time_seconds": 0.2,
+    "files_scanned": 262,
+    "patterns_checked": 138,
+    "violations": 15
+  },
+  {
+    "scenario": "severity_comparison",
+    "severity": "HIGH",
+    "time_seconds": 0.55,
+    "files_scanned": 554,
+    "patterns_checked": 331,
+    "violations": 64
+  },
+  {
+    "scenario": "severity_comparison",
+    "severity": "SUGGEST",
+    "time_seconds": 0.1,
+    "files_scanned": 49,
+    "patterns_checked": 71,
+    "violations": 27
+  },
+  {
+    "scenario": "severity_comparison",
+    "severity": "ALL",
+    "time_seconds": 0.67,
+    "files_scanned": 865,
+    "patterns_checked": 543,
+    "violations": 109
+  }
+]

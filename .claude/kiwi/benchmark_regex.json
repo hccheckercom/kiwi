@@ -1,0 +1,199 @@
+Scanning kiwi-generator...
+Checking 504 patterns...
+  [10/504] Checked 10 patterns, 3 violations found
+  [20/504] Checked 20 patterns, 9 violations found
+  [30/504] Checked 30 patterns, 12 violations found
+  [40/504] Checked 40 patterns, 12 violations found
+  [50/504] Checked 50 patterns, 14 violations found
+  [60/504] Checked 60 patterns, 14 violations found
+  [70/504] Checked 70 patterns, 14 violations found
+  [80/504] Checked 80 patterns, 16 violations found
+  [90/504] Checked 90 patterns, 16 violations found
+  [100/504] Checked 100 patterns, 16 violations found
+  [110/504] Checked 110 patterns, 18 violations found
+  [120/504] Checked 120 patterns, 19 violations found
+{
+  "theme": "../../themes/kiwi-generator",
+  "version": 3,
+  "summary": {
+    "critical": 19,
+    "high": 0,
+    "suggest": 0,
+    "total": 19,
+    "patterns_checked": 124,
+    "files_scanned": 341
+  },
+  "violations": [
+    {
+      "id": "LES-611",
+      "severity": "CRITICAL",
+      "category": "ads-compliance",
+      "description": "Missing cookie consent banner — GDPR/CCPA violation, Google Ads account suspension risk",
+      "file": "[NOT FOUND IN: **/header*.php|**/footer*.php|**/assets/js/*.js|**/src/**/*.{ts,tsx,js,jsx}]",
+      "line": 0,
+      "match": "Missing: (?:cookie.?consent|gdpr.?banner|consent.?banner|wz_consent|cookieConsent)"
+    },
+    {
+      "id": "LES-195",
+      "severity": "CRITICAL",
+      "category": "ai-safety",
+      "description": "AI API call without cost control — unbounded spend on user action",
+      "file": "[NO FILES MATCHING: app/api/ai/**/*.ts|lib/ai/**/*.ts|app/api/**/generate*/**/*.ts]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-200",
+      "severity": "CRITICAL",
+      "category": "ai-safety",
+      "description": "AI image generation without content moderation — inappropriate output served to users",
+      "file": "[NO FILES MATCHING: app/api/ai/**/route.ts|app/api/design-studio/**/route.ts]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-184",
+      "severity": "CRITICAL",
+      "category": "concurrency",
+      "description": "Payment webhook handler not idempotent — double charge on retry",
+      "file": "[NO FILES MATCHING: app/api/**/webhook*/route.ts|app/api/**/webhook*.handler*.ts|app/api/**/ipn*/route.ts|app/api/**/callback*/route.ts|app/api/**/callback*.handler*.ts]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-020",
+      "severity": "CRITICAL",
+      "category": "css-tokens",
+      "description": "Tailwind CSS compiled file stale — missing responsive utilities",
+      "file": "footer.php",
+      "line": 5,
+      "match": "<div class=\"grid grid-cols-1 md:grid-cols-4 gap-8\">"
+    },
+    {
+      "id": "LES-020",
+      "severity": "CRITICAL",
+      "category": "css-tokens",
+      "description": "Tailwind CSS compiled file stale — missing responsive utilities",
+      "file": "footer.php",
+      "line": 75,
+      "match": "<nav class=\"fixed bottom-0 left-0 right-0 bg-surface border-t border-outline z-fixed md:hidden\">"
+    },
+    {
+      "id": "LES-020",
+      "severity": "CRITICAL",
+      "category": "css-tokens",
+      "description": "Tailwind CSS compiled file stale — missing responsive utilities",
+      "file": "index.php",
+      "line": 18,
+      "match": "<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">"
+    },
+    {
+      "id": "LES-020",
+      "severity": "CRITICAL",
+      "category": "css-tokens",
+      "description": "Tailwind CSS compiled file stale — missing responsive utilities",
+      "file": "header.php",
+      "line": 28,
+      "match": "<nav id=\"site-navigation\" class=\"main-navigation hidden md:block\">"
+    },
+    {
+      "id": "LES-020",
+      "severity": "CRITICAL",
+      "category": "css-tokens",
+      "description": "Tailwind CSS compiled file stale — missing responsive utilities",
+      "file": "header.php",
+      "line": 66,
+      "match": "<button id=\"mobile-menu-toggle\" class=\"md:hidden\">"
+    },
+    {
+      "id": "LES-524",
+      "severity": "CRITICAL",
+      "category": "fastapi",
+      "description": "Missing CORS Configuration in FastAPI",
+      "file": "[NO FILES MATCHING: **/*.py]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-527",
+      "severity": "CRITICAL",
+      "category": "fastapi",
+      "description": "Missing Authentication Dependency in Protected Endpoints",
+      "file": "[NO FILES MATCHING: **/*.py]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-009",
+      "severity": "CRITICAL",
+      "category": "file-structure",
+      "description": "functions.php thiếu include file quan trọng",
+      "file": "[NOT FOUND IN: functions.php|themes/*/functions.php]",
+      "line": 0,
+      "match": "Missing: inc/wz-shims\\.php"
+    },
+    {
+      "id": "LES-001",
+      "severity": "CRITICAL",
+      "category": "php-security",
+      "description": "Account template thiếu is_user_logged_in() gate",
+      "file": "[NO FILES MATCHING: wezone-templates/account/*.php|themes/*/wezone-templates/account/*.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-002",
+      "severity": "CRITICAL",
+      "category": "php-security",
+      "description": "order-detail.php không verify order thuộc về current user",
+      "file": "[NO FILES MATCHING: wezone-templates/account/order-detail.php|themes/*/wezone-templates/account/order-detail.php]",
+      "line": 0,
+      "match": "Scope resolved to 0 files — template may be missing entirely"
+    },
+    {
+      "id": "LES-460",
+      "severity": "CRITICAL",
+      "category": "php-security",
+      "description": "AJAX handler function missing nonce verification (AST-verified) [AST: kiwi_generator_ajax_add_to_cart() missing nonce]",
+      "file": "inc/cart.php",
+      "line": 51,
+      "match": "function kiwi_generator_ajax_add_to_cart()"
+    },
+    {
+      "id": "LES-461",
+      "severity": "CRITICAL",
+      "category": "php-security",
+      "description": "Direct $_GET/$_POST/$_REQUEST usage without sanitization (AST-verified) [AST: unsanitized superglobal]",
+      "file": "inc/security.php",
+      "line": 42,
+      "match": "$_POST['nonce']"
+    },
+    {
+      "id": "LES-023",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Thiếu wezone-templates/shop/archive.php — trang /shop trả 404",
+      "file": "wezone-templates/shop/archive.php",
+      "line": 0,
+      "match": "File does not exist: wezone-templates/shop/archive.php"
+    },
+    {
+      "id": "LES-025",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Thiếu wezone-templates/shop/category.php — trang /category/{slug} trả 404",
+      "file": "wezone-templates/shop/category.php",
+      "line": 0,
+      "match": "File does not exist: wezone-templates/shop/category.php"
+    },
+    {
+      "id": "LES-108",
+      "severity": "CRITICAL",
+      "category": "wezone-api",
+      "description": "Theme thiếu category routing shim khi wezone-core Router không active",
+      "file": "[NOT FOUND IN: inc/wz-shims.php|functions.php]",
+      "line": 0,
+      "match": "Missing: add_rewrite_rule.*category|class_exists.*Router"
+    }
+  ]
+}

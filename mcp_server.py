@@ -54,7 +54,6 @@ def _handle_scan(args: dict) -> str:
         scope: Force scope type (theme, plugin)
         diff_only: Only scan git-modified files
         max_per_lesson: Cap violations per lesson (default: 5)
-        include_disabled: Include disabled lessons in scan
 
     Returns:
         Formatted scan report with violations grouped by severity
@@ -74,14 +73,13 @@ def _handle_scan(args: dict) -> str:
     scope = args.get("scope")
     diff_only = args.get("diff_only", False)
     max_per = int(args.get("max_per_lesson", 5))
-    include_disabled = args.get("include_disabled", False)
 
     project_type = _detect_project_type(path)
     if project_type not in ("monorepo", "themes_folder"):
         path = _find_theme_root(path)
 
     if project_type == "monorepo" and not scope:
-        report = scan_monorepo(path, severity_filter=severity, diff_only=diff_only, platform=platform, include_disabled=include_disabled)
+        report = scan_monorepo(path, severity_filter=severity, diff_only=diff_only, platform=platform)
     elif project_type == "themes_folder" and not scope:
         from scanner.models import Report
         themes = _discover_themes_in_folder(path)
@@ -90,7 +88,7 @@ def _handle_scan(args: dict) -> str:
         for sub_path, scope_type, label in themes:
             sub = scan_theme(sub_path, severity_filter=severity, diff_only=diff_only,
                              platform=platform, scope_type=scope_type,
-                             skip_root_patterns=True, rewrite_scopes=True, include_disabled=include_disabled)
+                             skip_root_patterns=True, rewrite_scopes=True)
             for v in sub.violations:
                 v.file = f"{label}/{v.file}" if not v.file.startswith("[") else f"[{label}] {v.file}"
             merged.patterns_checked = max(merged.patterns_checked, sub.patterns_checked)
@@ -105,7 +103,7 @@ def _handle_scan(args: dict) -> str:
         report = scan_theme(path, severity_filter=severity, diff_only=diff_only,
                             platform=platform, scope_type=effective_scope,
                             skip_empty_scope=should_skip_empty,
-                            rewrite_scopes=(project_type == "theme"), include_disabled=include_disabled)
+                            rewrite_scopes=(project_type == "theme"))
 
     if max_per > 0:
         report = report.cap_per_lesson(max_per)
@@ -2387,6 +2385,94 @@ TOOL_DEFS = [
             "required": ["theme_name", "input_spec"]
         },
     },
+    {
+        "name": "kiwi_generate_from_demo",
+        "description": "Generate WordPress theme from demo HTML + DESIGN.md + screenshot. Extract design tokens, detect components, convert to PHP templates. Modes: tokens-only (config files), foundation (config + templates), full (config + G0 + G1).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "demo_path": {"type": "string", "description": "Path to demo folder (contains code.html, DESIGN.md, screen.png)"},
+                "theme_name": {"type": "string", "description": "Target theme name (e.g., 'sfvn-institutional')"},
+                "mode": {
+                    "type": "string",
+                    "enum": ["tokens-only", "foundation", "full"],
+                    "default": "tokens-only",
+                    "description": "Generation mode: tokens-only (config only), foundation (config + templates), full (config + G0 + G1)"
+                },
+                "confidence_threshold": {
+                    "type": "number",
+                    "default": 0.7,
+                    "description": "Min confidence to auto-apply components (0.0-1.0)"
+                }
+            },
+            "required": ["demo_path", "theme_name"]
+        },
+    },
+    {
+        "name": "kiwi_feedback",
+        "description": "Provide feedback on UI generator output. Collect user acceptance/rejection and corrections to improve pattern detection accuracy. Data feeds into ML classifier retraining.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "gen_id": {"type": "string", "description": "Generation ID from kiwi_generate_from_demo output"},
+                "accepted": {"type": "boolean", "description": "True if generation was acceptable, False if needs corrections"},
+                "corrections": {"type": "string", "description": "Optional: describe what was wrong or what needed manual fixes"},
+                "component_feedback": {
+                    "type": "array",
+                    "description": "Optional: per-component feedback for fine-grained learning",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "component_type": {"type": "string"},
+                            "accepted": {"type": "boolean"},
+                            "correction": {"type": "string"}
+                        },
+                        "required": ["component_type", "accepted"]
+                    }
+                }
+            },
+            "required": ["gen_id", "accepted"]
+        },
+    },
+    {
+        "name": "kiwi_feedback_stats",
+        "description": "View UI generator feedback statistics. Shows overall acceptance rate, per-component accuracy, and learning progress.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {},
+        },
+    },
+    {
+        "name": "kiwi_mine_ui_patterns",
+        "description": "Mine recurring UI component patterns from feedback history. Finds patterns with 3+ occurrences and suggests new Kiwi Templates.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "lookback_days": {"type": "integer", "default": 30, "description": "How far back to look for patterns"},
+                "min_occurrences": {"type": "integer", "default": 3, "description": "Minimum pattern occurrences to suggest"}
+            },
+        },
+    },
+    {
+        "name": "kiwi_confidence_analysis",
+        "description": "Analyze component detection accuracy and recommend optimal confidence thresholds. Uses precision/recall/F1 metrics.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "component_type": {"type": "string", "description": "Optional: analyze specific component type, or omit for all components"}
+            },
+        },
+    },
+    {
+        "name": "kiwi_retrain_classifier",
+        "description": "Manually trigger ML classifier retraining with labeled feedback data. Auto-triggers every 10 generations, but can be run manually anytime.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "force": {"type": "boolean", "default": False, "description": "Force retrain even if not at 10-generation threshold"}
+            },
+        },
+    },
 ]
 
 def _handle_generate_theme(args: dict) -> str:
@@ -2449,6 +2535,273 @@ def _handle_generate_theme(args: dict) -> str:
         return f"ERROR: Generation failed: {e}"
 
 
+def _handle_generate_from_demo(args: dict) -> str:
+    """
+    Generate WordPress theme from demo HTML + DESIGN.md + screenshot.
+
+    Args:
+        demo_path: Path to demo folder (contains code.html, DESIGN.md, screen.png)
+        theme_name: Target theme name (e.g., 'sfvn-institutional')
+        mode: Generation mode (default: 'tokens-only')
+        confidence_threshold: Min confidence to auto-apply components (default: 0.7)
+
+    Returns:
+        Generation report with files created, components detected, violations
+    """
+    sys.path.insert(0, str(KIWI_DIR))
+    from generator.demo_orchestrator import DemoThemeGenerator, format_generation_report
+
+    demo_path = args.get("demo_path", "")
+    theme_name = args.get("theme_name", "")
+    mode = args.get("mode", "tokens-only")
+    confidence_threshold = float(args.get("confidence_threshold", 0.7))
+
+    if not demo_path:
+        return "ERROR: demo_path is required"
+
+    if not theme_name:
+        return "ERROR: theme_name is required"
+
+    if mode not in ["tokens-only", "foundation", "full"]:
+        return f"ERROR: Invalid mode '{mode}'. Must be: tokens-only, foundation, or full"
+
+    try:
+        generator = DemoThemeGenerator()
+        report = generator.generate_from_demo(
+            demo_path=demo_path,
+            theme_name=theme_name,
+            mode=mode,
+            confidence_threshold=confidence_threshold
+        )
+        return format_generation_report(report)
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: Generation failed: {e}\n{traceback.format_exc()}"
+
+
+def _handle_feedback(args: dict) -> str:
+    """
+    Provide feedback on UI generator output.
+
+    Args:
+        gen_id: Generation ID from kiwi_generate_from_demo
+        accepted: True if acceptable, False if needs corrections
+        corrections: Optional description of issues
+        component_feedback: Optional per-component feedback
+
+    Returns:
+        Confirmation message with updated stats
+    """
+    sys.path.insert(0, str(KIWI_DIR))
+    from memory.db import update_generator_feedback, get_generator_feedback, get_pattern_stats
+
+    gen_id = args.get("gen_id", "")
+    accepted = args.get("accepted")
+    corrections = args.get("corrections", "")
+    component_feedback = args.get("component_feedback", [])
+
+    if not gen_id:
+        return "ERROR: gen_id is required"
+
+    if accepted is None:
+        return "ERROR: accepted (True/False) is required"
+
+    # Check if generation exists
+    existing = get_generator_feedback(gen_id=gen_id)
+    if not existing:
+        return f"ERROR: Generation ID '{gen_id}' not found. Use gen_id from kiwi_generate_from_demo output."
+
+    # Update main feedback
+    update_generator_feedback(gen_id, accepted, corrections)
+
+    # Update per-component feedback if provided
+    if component_feedback:
+        from memory.db import get_connection, _now
+        conn = get_connection()
+        for comp in component_feedback:
+            conn.execute("""
+                UPDATE component_patterns
+                SET user_accepted = ?, correction = ?
+                WHERE gen_id = ? AND component_type = ?
+            """, (comp["accepted"], comp.get("correction", ""), gen_id, comp["component_type"]))
+        conn.commit()
+        conn.close()
+
+    # Get updated stats
+    stats = get_pattern_stats()
+    overall = stats["overall"]
+
+    lines = [
+        f"Feedback recorded for generation {gen_id}",
+        f"",
+        f"Status: {'✓ ACCEPTED' if accepted else '✗ REJECTED'}",
+    ]
+
+    if corrections:
+        lines.append(f"Corrections: {corrections}")
+
+    if component_feedback:
+        lines.append(f"")
+        lines.append(f"Component feedback: {len(component_feedback)} components updated")
+
+    lines.append(f"")
+    lines.append(f"Overall Stats:")
+    lines.append(f"  Total generations with feedback: {overall.get('total_generations', 0)}")
+    lines.append(f"  Accepted: {overall.get('accepted_count', 0)}")
+    lines.append(f"  Rejected: {overall.get('rejected_count', 0)}")
+
+    if overall.get('total_generations', 0) > 0:
+        acceptance_rate = (overall.get('accepted_count', 0) / overall['total_generations']) * 100
+        lines.append(f"  Acceptance rate: {acceptance_rate:.1f}%")
+
+    lines.append(f"")
+    lines.append(f"Use kiwi_feedback_stats for detailed per-component accuracy.")
+
+    return "\n".join(lines)
+
+
+def _handle_feedback_stats(args: dict) -> str:
+    """
+    View UI generator feedback statistics.
+
+    Returns:
+        Detailed stats on acceptance rates and component accuracy
+    """
+    sys.path.insert(0, str(KIWI_DIR))
+    from memory.db import get_pattern_stats
+
+    stats = get_pattern_stats()
+    overall = stats["overall"]
+    per_component = stats["per_component"]
+
+    lines = [
+        f"Kiwi UI Generator V2 — Feedback Statistics",
+        f"",
+        f"Overall Performance:",
+        f"  Total generations: {overall.get('total_generations', 0)}",
+        f"  Accepted: {overall.get('accepted_count', 0)}",
+        f"  Rejected: {overall.get('rejected_count', 0)}",
+    ]
+
+    if overall.get('total_generations', 0) > 0:
+        acceptance_rate = (overall.get('accepted_count', 0) / overall['total_generations']) * 100
+        lines.append(f"  Acceptance rate: {acceptance_rate:.1f}%")
+        lines.append(f"  Avg components detected: {overall.get('avg_detected', 0):.1f}")
+        lines.append(f"  Avg components applied: {overall.get('avg_applied', 0):.1f}")
+
+    if per_component:
+        lines.append(f"")
+        lines.append(f"Per-Component Accuracy:")
+        lines.append(f"")
+        lines.append(f"{'Component':<20} {'Detected':<10} {'Auto-Applied':<15} {'Accepted':<10} {'Accuracy':<10} {'Avg Conf':<10}")
+        lines.append(f"{'-'*20} {'-'*10} {'-'*15} {'-'*10} {'-'*10} {'-'*10}")
+
+        for comp in per_component:
+            comp_type = comp["component_type"]
+            total = comp["total_detected"]
+            auto_applied = comp["auto_applied_count"]
+            accepted = comp["accepted_count"]
+            accuracy = (accepted / total * 100) if total > 0 else 0
+            avg_conf = comp["avg_confidence"]
+
+            lines.append(f"{comp_type:<20} {total:<10} {auto_applied:<15} {accepted:<10} {accuracy:<10.1f}% {avg_conf:<10.2f}")
+
+    lines.append(f"")
+    lines.append(f"Learning Progress:")
+    lines.append(f"  Target: 200+ labeled examples for ML retraining")
+    lines.append(f"  Current: {overall.get('total_generations', 0)} generations")
+
+    if overall.get('total_generations', 0) >= 200:
+        lines.append(f"  Status: ✓ Ready for ML classifier retraining")
+    else:
+        remaining = 200 - overall.get('total_generations', 0)
+        lines.append(f"  Status: Need {remaining} more generations")
+
+    return "\n".join(lines)
+
+
+def _handle_mine_ui_patterns(args: dict) -> str:
+    """
+    Mine recurring UI component patterns from feedback history.
+
+    Args:
+        lookback_days: How far back to look (default: 30)
+        min_occurrences: Minimum occurrences to suggest (default: 3)
+
+    Returns:
+        Pattern mining report with suggestions
+    """
+    sys.path.insert(0, str(KIWI_DIR))
+    from generator.learning import PatternMiner, format_pattern_report
+
+    lookback_days = args.get("lookback_days", 30)
+    min_occurrences = args.get("min_occurrences", 3)
+
+    try:
+        miner = PatternMiner(min_occurrences=min_occurrences)
+        patterns = miner.mine_patterns(lookback_days=lookback_days)
+        return format_pattern_report(patterns)
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: Pattern mining failed: {e}\n{traceback.format_exc()}"
+
+
+def _handle_confidence_analysis(args: dict) -> str:
+    """
+    Analyze component detection accuracy and recommend thresholds.
+
+    Args:
+        component_type: Optional specific component to analyze
+
+    Returns:
+        Confidence analysis report with recommended thresholds
+    """
+    sys.path.insert(0, str(KIWI_DIR))
+    from generator.learning import format_confidence_report
+
+    component_type = args.get("component_type")
+
+    try:
+        return format_confidence_report(component_type)
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: Confidence analysis failed: {e}\n{traceback.format_exc()}"
+
+
+def _handle_retrain_classifier(args: dict) -> str:
+    """
+    Manually trigger ML classifier retraining.
+
+    Args:
+        force: Force retrain even if not at threshold
+
+    Returns:
+        Retrain report with model performance metrics
+    """
+    sys.path.insert(0, str(KIWI_DIR))
+    from generator.ml_retrain import MLRetrainer, format_retrain_report
+
+    force = args.get("force", False)
+
+    try:
+        retrainer = MLRetrainer()
+
+        if not force:
+            should, reason = retrainer.should_retrain()
+            if not should:
+                return f"ML Classifier Retrain — Skipped\n\n{reason}\n\nUse force=true to retrain anyway."
+
+        report = retrainer.run_retrain()
+        return format_retrain_report(report)
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: Retrain failed: {e}\n{traceback.format_exc()}"
+
+
 HANDLERS = {
     "kiwi_scan": _handle_scan,
     "kiwi_query": _handle_query,
@@ -2483,6 +2836,12 @@ HANDLERS = {
     "kiwi_user_login": _handle_user_login,
     "kiwi_team_preferences": _handle_team_preferences,
     "kiwi_generate_theme": _handle_generate_theme,
+    "kiwi_generate_from_demo": _handle_generate_from_demo,
+    "kiwi_feedback": _handle_feedback,
+    "kiwi_feedback_stats": _handle_feedback_stats,
+    "kiwi_mine_ui_patterns": _handle_mine_ui_patterns,
+    "kiwi_confidence_analysis": _handle_confidence_analysis,
+    "kiwi_retrain_classifier": _handle_retrain_classifier,
 }
 
 

@@ -1,0 +1,6 @@
+rules:
+  - id: wp-mail-hardcoded-subject
+    pattern: wp_mail(...)
+    languages: [php]
+    severity: WARNING
+    message: wp_mail() should use wz_config() for subject/body to support theme cloning

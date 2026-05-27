@@ -1,0 +1,19 @@
+{
+  "name": "test-theme-1-full",
+  "version": "1.0.0",
+  "description": "test-theme-1-full WordPress Theme",
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "postcss": "^8.4.27",
+    "postcss-loader": "^7.3.3",
+    "tailwindcss": "^3.3.3",
+    "autoprefixer": "^10.4.14"
+  }
+}

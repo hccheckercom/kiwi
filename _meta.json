@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "next_id": 674,
+  "next_id": 727,
   "next_fea_id": 31,
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-05-27",
   "projects": {
     "wezone": "D:\\projects\\wezone",
     "wezone-plugins": "D:\\projects\\wezone\\wezone-plugins",
@@ -20,7 +20,12 @@
       "performance",
       "php-security",
       "placeholder",
-      "wezone-api"
+      "wezone-api",
+      "layout-consistency",
+      "responsive",
+      "dark-mode",
+      "accessibility",
+      "component-pattern"
     ],
     "nextjs": [
       "ads-compliance",
@@ -28,7 +33,12 @@
       "concurrency",
       "feature-suggest",
       "nextjs-react",
-      "supabase"
+      "supabase",
+      "layout-consistency",
+      "responsive",
+      "dark-mode",
+      "accessibility",
+      "component-pattern"
     ],
     "python": [
       "python",
@@ -170,6 +180,26 @@
     "code-quality": {
       "count": 6,
       "desc": ""
+    },
+    "layout-consistency": {
+      "count": 7,
+      "desc": "Container width, spacing, fullwidth consistency"
+    },
+    "responsive": {
+      "count": 14,
+      "desc": "Breakpoint coverage, mobile-first rules, overflow prevention"
+    },
+    "dark-mode": {
+      "count": 9,
+      "desc": "Dark mode class coverage, contrast, text/bg pairing"
+    },
+    "accessibility": {
+      "count": 13,
+      "desc": "ARIA, focus, contrast, labels, keyboard support"
+    },
+    "component-pattern": {
+      "count": 10,
+      "desc": "Loading/error/empty states, button consistency"
     }
   },
   "tags": [

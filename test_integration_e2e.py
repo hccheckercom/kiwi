@@ -45,7 +45,12 @@ exit 1  # Always fail
 }""", encoding="utf-8")
 
         # Initialize git repo (required for rollback)
-        os.system(f'cd "{tmpdir}" && git init && git config user.email "test@test.com" && git config user.name "Test" && git add . && git commit -m "initial"')
+        import subprocess
+        subprocess.run(['git', 'init'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'config', 'user.email', 'test@test.com'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'config', 'user.name', 'Test'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'add', '.'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'commit', '-m', 'initial'], cwd=tmpdir, capture_output=True)
 
         # Create a violation and try to fix it
         violation = Violation(
@@ -105,7 +110,12 @@ exit 0  # Always pass
 }""", encoding="utf-8")
 
         # Initialize git repo
-        os.system(f'cd "{tmpdir}" && git init && git config user.email "test@test.com" && git config user.name "Test" && git add . && git commit -m "initial"')
+        import subprocess
+        subprocess.run(['git', 'init'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'config', 'user.email', 'test@test.com'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'config', 'user.name', 'Test'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'add', '.'], cwd=tmpdir, capture_output=True)
+        subprocess.run(['git', 'commit', '-m', 'initial'], cwd=tmpdir, capture_output=True)
 
         violation = Violation(
             lesson_id="LES-001",

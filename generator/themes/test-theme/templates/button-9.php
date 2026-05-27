@@ -1,0 +1,1 @@
+<a class="logo text-2xl font-bold" href='<?php echo wz_config("button.link"); ?>'><?php echo wz_config("button.text"); ?></a>

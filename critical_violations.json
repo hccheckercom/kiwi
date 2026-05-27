@@ -1,0 +1,137 @@
+[
+  {
+    "lesson_id": "LES-611",
+    "severity": "CRITICAL",
+    "category": "ads-compliance",
+    "file": "[NO FILES MATCHING: **/header*.php|**/footer*.php|**/assets/js/*.js|**/src/**/*.{ts,tsx,js,jsx}]",
+    "line": 0,
+    "description": "Missing cookie consent banner — GDPR/CCPA violation, Google Ads account suspension risk",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-195",
+    "severity": "CRITICAL",
+    "category": "ai-safety",
+    "file": "[NO FILES MATCHING: app/api/ai/**/*.ts|lib/ai/**/*.ts|app/api/**/generate*/**/*.ts]",
+    "line": 0,
+    "description": "AI API call without cost control — unbounded spend on user action",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-200",
+    "severity": "CRITICAL",
+    "category": "ai-safety",
+    "file": "[NO FILES MATCHING: app/api/ai/**/route.ts|app/api/design-studio/**/route.ts]",
+    "line": 0,
+    "description": "AI image generation without content moderation — inappropriate output served to users",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-184",
+    "severity": "CRITICAL",
+    "category": "concurrency",
+    "file": "[NO FILES MATCHING: app/api/**/webhook*/route.ts|app/api/**/webhook*.handler*.ts|app/api/**/ipn*/route.ts|app/api/**/callback*/route.ts|app/api/**/callback*.handler*.ts]",
+    "line": 0,
+    "description": "Payment webhook handler not idempotent — double charge on retry",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-524",
+    "severity": "CRITICAL",
+    "category": "fastapi",
+    "file": "[NO FILES MATCHING: **/*.py]",
+    "line": 0,
+    "description": "Missing CORS Configuration in FastAPI",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-527",
+    "severity": "CRITICAL",
+    "category": "fastapi",
+    "file": "[NO FILES MATCHING: **/*.py]",
+    "line": 0,
+    "description": "Missing Authentication Dependency in Protected Endpoints",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-001",
+    "severity": "CRITICAL",
+    "category": "php-security",
+    "file": "[NO FILES MATCHING: wezone-templates/account/*.php|themes/*/wezone-templates/account/*.php]",
+    "line": 0,
+    "description": "Account template thiếu is_user_logged_in() gate",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-002",
+    "severity": "CRITICAL",
+    "category": "php-security",
+    "file": "[NO FILES MATCHING: wezone-templates/account/order-detail.php|themes/*/wezone-templates/account/order-detail.php]",
+    "line": 0,
+    "description": "order-detail.php không verify order thuộc về current user",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-330",
+    "severity": "CRITICAL",
+    "category": "php-security",
+    "file": "[NO FILES MATCHING: packages/*/src/Api/*Controller.php|packages/*/src/*Controller.php]",
+    "line": 0,
+    "description": "REST API password endpoint must reject empty current_password before wp_check_password()",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-372",
+    "severity": "CRITICAL",
+    "category": "php-security",
+    "file": "[NO FILES MATCHING: packages/wezone-core/src/Commerce/Cart/*.php|packages/wezone-shipping/src/**/*.php]",
+    "line": 0,
+    "description": "Cart shipping rate must validate non-negative — negative rate bypasses total",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-373",
+    "severity": "CRITICAL",
+    "category": "php-security",
+    "file": "[NO FILES MATCHING: packages/wezone-core/src/Commerce/Cart/CartEngine.php]",
+    "line": 0,
+    "description": "Cart must enforce max items/qty limit — unbounded cart is DoS vector",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  },
+  {
+    "lesson_id": "LES-023",
+    "severity": "CRITICAL",
+    "category": "wezone-api",
+    "file": "wezone-templates/shop/archive.php",
+    "line": 0,
+    "description": "Thiếu wezone-templates/shop/archive.php — trang /shop trả 404",
+    "match_text": "File does not exist: wezone-templates/shop/archive.php"
+  },
+  {
+    "lesson_id": "LES-025",
+    "severity": "CRITICAL",
+    "category": "wezone-api",
+    "file": "wezone-templates/shop/category.php",
+    "line": 0,
+    "description": "Thiếu wezone-templates/shop/category.php — trang /category/{slug} trả 404",
+    "match_text": "File does not exist: wezone-templates/shop/category.php"
+  },
+  {
+    "lesson_id": "LES-108",
+    "severity": "CRITICAL",
+    "category": "wezone-api",
+    "file": "[NOT FOUND IN: inc/wz-shims.php|functions.php]",
+    "line": 0,
+    "description": "Theme thiếu category routing shim khi wezone-core Router không active",
+    "match_text": "Missing: add_rewrite_rule.*category|class_exists.*Router"
+  },
+  {
+    "lesson_id": "LES-357",
+    "severity": "CRITICAL",
+    "category": "wezone-api",
+    "file": "[NO FILES MATCHING: packages/wezone-analytics/src/**/*.php|packages/*/src/*Aggregator*.php]",
+    "line": 0,
+    "description": "wpdb->insert() must check return before deleting transients",
+    "match_text": "Scope resolved to 0 files — template may be missing entirely"
+  }
+]

@@ -216,6 +216,42 @@ CREATE TABLE IF NOT EXISTS scoring_feedback (
 CREATE INDEX IF NOT EXISTS idx_sf_tool ON scoring_feedback(tool);
 CREATE INDEX IF NOT EXISTS idx_sf_outcome ON scoring_feedback(outcome);
 
+CREATE TABLE IF NOT EXISTS generator_feedback (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    gen_id              TEXT NOT NULL UNIQUE,
+    demo_path           TEXT NOT NULL,
+    theme_name          TEXT NOT NULL,
+    mode                TEXT NOT NULL,
+    confidence_threshold REAL NOT NULL,
+    components_detected INTEGER DEFAULT 0,
+    components_applied  INTEGER DEFAULT 0,
+    accepted            BOOLEAN,
+    corrections         TEXT,
+    feedback_at         TEXT,
+    generated_at        TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_genfb_demo ON generator_feedback(demo_path);
+CREATE INDEX IF NOT EXISTS idx_genfb_theme ON generator_feedback(theme_name);
+CREATE INDEX IF NOT EXISTS idx_genfb_accepted ON generator_feedback(accepted);
+
+CREATE TABLE IF NOT EXISTS component_patterns (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    gen_id          TEXT NOT NULL,
+    component_type  TEXT NOT NULL,
+    html_snippet    TEXT NOT NULL,
+    confidence      REAL NOT NULL,
+    auto_applied    BOOLEAN NOT NULL,
+    user_accepted   BOOLEAN,
+    correction      TEXT,
+    detected_at     TEXT NOT NULL,
+    FOREIGN KEY (gen_id) REFERENCES generator_feedback(gen_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_compat_type ON component_patterns(component_type);
+CREATE INDEX IF NOT EXISTS idx_compat_gen ON component_patterns(gen_id);
+CREATE INDEX IF NOT EXISTS idx_compat_accepted ON component_patterns(user_accepted);
+
 CREATE TABLE IF NOT EXISTS auto_tune_history (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     lesson_id       TEXT NOT NULL,
@@ -686,3 +722,141 @@ def get_deployment_history(path=None, target=None, limit=50):
     rows = conn.execute(query, params).fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
+
+def log_generator_feedback(gen_id, demo_path, theme_name, mode, confidence_threshold,
+                           components_detected, components_applied, accepted=None,
+                           corrections=None, generated_at=None):
+    """Log UI generator feedback."""
+    conn = get_connection()
+    conn.execute("""
+        INSERT INTO generator_feedback
+        (gen_id, demo_path, theme_name, mode, confidence_threshold,
+         components_detected, components_applied, accepted, corrections,
+         feedback_at, generated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (gen_id, demo_path, theme_name, mode, confidence_threshold,
+          components_detected, components_applied, accepted, corrections,
+          _now() if accepted is not None else None, generated_at or _now()))
+    conn.commit()
+    conn.close()
+
+
+def update_generator_feedback(gen_id, accepted, corrections=None):
+    """Update generator feedback with user response."""
+    conn = get_connection()
+    conn.execute("""
+        UPDATE generator_feedback
+        SET accepted = ?, corrections = ?, feedback_at = ?
+        WHERE gen_id = ?
+    """, (accepted, corrections, _now(), gen_id))
+    conn.commit()
+    conn.close()
+
+    # Check if auto-retrain should trigger
+    try:
+        import sys
+        from pathlib import Path
+        kiwi_dir = Path(__file__).parent.parent
+        sys.path.insert(0, str(kiwi_dir))
+        from generator.ml_retrain import auto_retrain_check
+        retrain_report = auto_retrain_check()
+        if retrain_report:
+            print("\n" + retrain_report)
+    except Exception as e:
+        print(f"Warning: Auto-retrain check failed: {e}")
+
+
+def log_component_pattern(gen_id, component_type, html_snippet, confidence,
+                          auto_applied, user_accepted=None, correction=None):
+    """Log detected component pattern."""
+    conn = get_connection()
+    conn.execute("""
+        INSERT INTO component_patterns
+        (gen_id, component_type, html_snippet, confidence, auto_applied,
+         user_accepted, correction, detected_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (gen_id, component_type, html_snippet, confidence, auto_applied,
+          user_accepted, correction, _now()))
+    conn.commit()
+    conn.close()
+
+
+def get_generator_feedback(gen_id=None, accepted=None, limit=50):
+    """Query generator feedback history."""
+    conn = get_connection()
+    query = "SELECT * FROM generator_feedback WHERE 1=1"
+    params = []
+
+    if gen_id:
+        query += " AND gen_id = ?"
+        params.append(gen_id)
+    if accepted is not None:
+        query += " AND accepted = ?"
+        params.append(accepted)
+
+    query += " ORDER BY generated_at DESC LIMIT ?"
+    params.append(limit)
+
+    rows = conn.execute(query, params).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def get_component_patterns(component_type=None, user_accepted=None, min_confidence=0.0, limit=100):
+    """Query component patterns for learning."""
+    conn = get_connection()
+    query = "SELECT * FROM component_patterns WHERE confidence >= ?"
+    params = [min_confidence]
+
+    if component_type:
+        query += " AND component_type = ?"
+        params.append(component_type)
+    if user_accepted is not None:
+        query += " AND user_accepted = ?"
+        params.append(user_accepted)
+
+    query += " ORDER BY detected_at DESC LIMIT ?"
+    params.append(limit)
+
+    rows = conn.execute(query, params).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def get_pattern_stats():
+    """Get statistics for component pattern detection."""
+    conn = get_connection()
+
+    # Overall stats
+    overall = conn.execute("""
+        SELECT
+            COUNT(*) as total_generations,
+            SUM(CASE WHEN accepted = 1 THEN 1 ELSE 0 END) as accepted_count,
+            SUM(CASE WHEN accepted = 0 THEN 1 ELSE 0 END) as rejected_count,
+            AVG(components_detected) as avg_detected,
+            AVG(components_applied) as avg_applied
+        FROM generator_feedback
+        WHERE feedback_at IS NOT NULL
+    """).fetchone()
+
+    # Per-component stats
+    per_component = conn.execute("""
+        SELECT
+            component_type,
+            COUNT(*) as total_detected,
+            SUM(CASE WHEN auto_applied = 1 THEN 1 ELSE 0 END) as auto_applied_count,
+            SUM(CASE WHEN user_accepted = 1 THEN 1 ELSE 0 END) as accepted_count,
+            AVG(confidence) as avg_confidence
+        FROM component_patterns
+        WHERE user_accepted IS NOT NULL
+        GROUP BY component_type
+        ORDER BY total_detected DESC
+    """).fetchall()
+
+    conn.close()
+
+    return {
+        "overall": dict(overall) if overall else {},
+        "per_component": [dict(r) for r in per_component]
+    }

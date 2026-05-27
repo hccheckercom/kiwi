@@ -465,8 +465,7 @@ def _execute_fixes_sequential(violations: list[dict], max_fixes: int, dry_run: b
             line=v["line"],
         )
 
-        # Enable rollback + test verification for non-dry-run fixes
-        result = apply_fix(violation, fix_config, dry_run=dry_run, enable_rollback=not dry_run)
+        result = apply_fix(violation, fix_config, dry_run=dry_run)
 
         if result.success:
             action = "preview" if dry_run else "applied"

@@ -1,0 +1,1 @@
+<button class="btn bg-secondary px-6 py-3 rounded"><?php echo wz_config("button.text"); ?></button>

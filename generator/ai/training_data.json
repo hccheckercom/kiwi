@@ -1,0 +1,992 @@
+[
+  {
+    "id": "TPL-017",
+    "type": "account",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\n$current_user = wp_get_current_user();\n$avatar_url   = get_avatar_url( $current_user->ID, [ 'size' => 80 ] );\n$active_page  = get_query_var( 'wz_tpl_account_page', 'dashboard' );\n\n$menu_items = [\n    [ 'slug' => 'dashboard',        'icon' => 'dashboard',           'label' => 'Tổng quan' ],\n    [ 'slug' => 'orders',           'icon' => 'receipt_long',        'label' => 'Đơn hàng' ],\n    [ 'slug' => 'profile',          'icon' => 'person',              'label' => 'Thông tin cá nhân' ],\n    [ 'slug' => 'addresses',        'icon' => 'location_on',         'label' => 'Địa chỉ' ],\n    [ 'slug' => 'change-password',  'icon' => 'lock',                'label' => 'Đổi mật khẩu' ],\n    [ 'slug' => 'notifications',    'icon' => 'notifications',       'label' => 'Thông báo' ],\n    [ 'slug' => 'vouchers',         'icon' => 'confirmation_number', 'label' => 'Mã giảm giá' ],\n    [ 'slug' => 'wishlist',         'icon' => 'favorite'",
+    "classes": [
+      "lg:hidden",
+      "overflow-x-auto",
+      "pb-2",
+      "-mx-5",
+      "px-5"
+    ],
+    "text": "0 ) : ?>9 ? '9+' : $unread_count; ?>",
+    "tags": [
+      "account",
+      "sidebar",
+      "navigation",
+      "responsive",
+      "mobile-tabs",
+      "desktop-sidebar"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\account\\TPL-017.md"
+  },
+  {
+    "id": "TPL-020",
+    "type": "account",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$current_user = wp_get_current_user();\n$user_id      = $current_user->ID;\n$shop_name    = wz_config( 'shop_name', get_bloginfo( 'name' ) );\n\nset_query_var( 'wz_tpl_account_page', 'dashboard' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <!-- Breadcrumb -->\n    <nav aria-label=\"Breadcrumb\" class=\"pb-4\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            <li><span class=\"material-symbols-outlined text-[14px]\" aria-hidden=\"true\">chevron_right</span></li>\n            <li><a href=\"<?php echo esc_url( home_url( '/my-account/' ) ); ?>\" class=\"hover",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Trang chủchevron_rightTài khoảnchevron_rightTổng quansupport_agentCần hỗ trợ?",
+    "tags": [
+      "account",
+      "dashboard",
+      "stats",
+      "orders",
+      "welcome-banner",
+      "quick-links"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\account\\TPL-020.md"
+  },
+  {
+    "id": "TPL-027",
+    "type": "account",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id = get_current_user_id();\n$orders = function_exists( 'wz_get_user_orders' ) ? wz_get_user_orders( $user_id ) : [];\n\nset_query_var( 'wz_tpl_account_page', 'orders' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <div class=\"flex flex-col lg:flex-row lg:gap-6\">\n        <?php include get_stylesheet_directory() . '/template-parts/account/sidebar.php'; ?>\n\n        <div class=\"flex-1 min-w-0 mt-4 lg:mt-0\">\n            <div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] p-5 shadow-[0_4px_24px_rgba(27,58,122,0.08)]\">\n                <h1 class=\"text-xl font-bold text-[var(--wz-primary)] mb-4\">Đơn hàng của tôi</h1>\n\n                <?php if ( ! empty( $orders ) ) : ?>\n                    <!-- Desktop table --",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Đơn hàng của tôiMã đơnNgày đặtTổng tiềnTrạng thái'bg-green-100 text-green-800',\n                                        'processing' => 'bg-blue-100 text-blue-800',\n                                   ",
+    "tags": [
+      "account",
+      "orders",
+      "order-history",
+      "status-badges",
+      "pagination"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\account\\TPL-027.md"
+  },
+  {
+    "id": "TPL-028",
+    "type": "account",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user = wp_get_current_user();\n$user_meta = get_user_meta( $user->ID );\n$avatar_url = get_avatar_url( $user->ID, [ 'size' => 120 ] );\n\nset_query_var( 'wz_tpl_account_page', 'profile' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <div class=\"flex flex-col lg:flex-row lg:gap-6\">\n        <?php include get_stylesheet_directory() . '/template-parts/account/sidebar.php'; ?>\n\n        <div class=\"flex-1 min-w-0 mt-4 lg:mt-0\">\n            <div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] p-5 md:p-6 shadow-[0_4px_24px_rgba(27,58,122,0.08)]\">\n                <h1 class=\"text-xl font-bold text-[var(--wz-primary)] mb-6\">Thông tin cá nhân</h1>\n\n                <form id=\"profile-form\" class=\"space-y-5\">\n               ",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Thông tin cá nhânĐổi ảnh đại diệnJPG, PNG tối đa 2MBHọ và tên*Email*Số điện thoạiNgày sinhLưu thay đổi",
+    "tags": [
+      "account",
+      "profile",
+      "form",
+      "validation",
+      "avatar-upload"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\account\\TPL-028.md"
+  },
+  {
+    "id": "TPL-030",
+    "type": "account",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id = get_current_user_id();\n$addresses = function_exists( 'wz_get_user_addresses' ) ? wz_get_user_addresses( $user_id ) : [];\n\nset_query_var( 'wz_tpl_account_page', 'addresses' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <div class=\"flex flex-col lg:flex-row lg:gap-6\">\n        <?php include get_stylesheet_directory() . '/template-parts/account/sidebar.php'; ?>\n\n        <div class=\"flex-1 min-w-0 mt-4 lg:mt-0\">\n            <div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] p-5 shadow-[0_4px_24px_rgba(27,58,122,0.08)]\">\n                \n                <div class=\"flex items-center justify-between mb-6\">\n                    <h1 class=\"text-xl font-bold text-[var(--wz-primary)]\">Sổ địa chỉ</h1>\n    ",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Sổ địa chỉaddThêm địa chỉMặc địnhSửaXóaĐặt mặc địnhlocation_onBạn chưa có địa chỉ nàoThêm địa chỉ đầu tiên",
+    "tags": [
+      "account",
+      "addresses",
+      "address-book",
+      "crud",
+      "default-address"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\account\\TPL-030.md"
+  },
+  {
+    "id": "TPL-035",
+    "type": "address-form",
+    "html": "<!-- addresses.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id   = get_current_user_id();\n$addresses = function_exists( 'wz_get_user_addresses' ) ? wz_get_user_addresses( $user_id ) : [];\n\nset_query_var( 'wz_tpl_account_page', 'addresses' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <nav aria-label=\"Breadcrumb\" class=\"pb-4\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            <li><span class=\"material-symbols-outlined text-[14px]\" aria-hidden=\"true\">chevron_right</span></li>\n            <li><a href=\"<?php echo esc_url( home_url( '/my-account/' ) ); ?>\" class=\"hover:text-[",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Trang chủchevron_rightTài khoảnchevron_rightĐịa chỉ giao hàngĐịa chỉ giao hàngQuản lý địa chỉ nhận hàng của bạnaddThêm địa chỉHọ và tên*Số điện thoại*Tỉnh/Thành phố*Chọn tỉnh/thànhQuận/Huyện*Chọn quận",
+    "tags": [
+      "grid",
+      "address-form",
+      "accessible",
+      "form"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\address-form\\TPL-035.md"
+  },
+  {
+    "id": "TPL-052",
+    "type": "blog-grid",
+    "html": "<?php\n/**\n * Blog Archive Template\n */\n\nget_header();\n?>\n\n<main class=\"blog-archive py-12\">\n\t<div class=\"max-w-[1280px] mx-auto px-10\">\n\t\t<!-- Archive Header -->\n\t\t<div class=\"mb-10\">\n\t\t\t<?php if ( is_category() ): ?>\n\t\t\t\t<h1 class=\"text-4xl font-bold mb-2\"><?php single_cat_title(); ?></h1>\n\t\t\t\t<?php if ( category_description() ): ?>\n\t\t\t\t\t<p class=\"text-gray-600\"><?php echo wp_kses_post( category_description() ); ?></p>\n\t\t\t\t<?php endif; ?>\n\t\t\t<?php elseif ( is_tag() ): ?>\n\t\t\t\t<h1 class=\"text-4xl font-bold mb-2\">Tag: <?php single_tag_title(); ?></h1>\n\t\t\t<?php elseif ( is_author() ): ?>\n\t\t\t\t<h1 class=\"text-4xl font-bold mb-2\">Bài viết của <?php the_author(); ?></h1>\n\t\t\t<?php else: ?>\n\t\t\t\t<h1 class=\"text-4xl font-bold mb-2\">Blog</h1>\n\t\t\t\t<p class=\"text-gray-600\">Tin tức, hướng dẫn và cập nhật mới nhất</p>\n\t\t\t<?php endif; ?>\n\t\t</div>\n\n\t\t<?php if ( have_posts() ): ?>\n\t\t\t<!-- Post Grid -->\n\t\t\t<div class=\"grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10\">\n\t\t\t\t<?php while ( have_posts() ): the_p",
+    "classes": [
+      "blog-archive",
+      "py-12"
+    ],
+    "text": "Tag:Bài viết củaBlogTin tức, hướng dẫn và cập nhật mới nhất'w-full h-full object-cover hover:scale-105 transition-transform duration-300',\n\t\t\t\t\t\t\t\t\t'loading' => 'lazy',\n\t\t\t\t\t\t\t\t]); ?>name ); ?>•'',\n\t\t",
+    "tags": [
+      "blog",
+      "archive",
+      "grid",
+      "pagination",
+      "featured-image",
+      "excerpt"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\blog-grid\\TPL-052.md"
+  },
+  {
+    "id": "TPL-053",
+    "type": "blog-post",
+    "html": "<?php\n/**\n * Single Post Template\n */\n\nget_header();\n\nwhile ( have_posts() ): the_post();\n?>\n\n<article class=\"single-post py-12\">\n\t<div class=\"max-w-[1280px] mx-auto px-10\">\n\t\t<!-- Post Header -->\n\t\t<header class=\"max-w-3xl mx-auto mb-10\">\n\t\t\t<!-- Category -->\n\t\t\t<?php\n\t\t\t$categories = get_the_category();\n\t\t\tif ( ! empty( $categories ) ):\n\t\t\t?>\n\t\t\t\t<a href=\"<?php echo esc_url( get_category_link( $categories[0]->term_id ) ); ?>\" class=\"inline-block px-3 py-1 text-sm font-medium bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 mb-4\">\n\t\t\t\t\t<?php echo esc_html( $categories[0]->name ); ?>\n\t\t\t\t</a>\n\t\t\t<?php endif; ?>\n\n\t\t\t<!-- Title -->\n\t\t\t<h1 class=\"text-4xl md:text-5xl font-bold mb-6\"><?php the_title(); ?></h1>\n\n\t\t\t<!-- Meta -->\n\t\t\t<div class=\"flex items-center gap-4 text-gray-600\">\n\t\t\t\t<div class=\"flex items-center gap-2\">\n\t\t\t\t\t<?php echo get_avatar( get_the_author_meta( 'ID' ), 40, '', '', ['class' => 'rounded-full'] ); ?>\n\t\t\t\t\t<span class=\"font-medium\"><?php the_author(); ?></span",
+    "classes": [
+      "single-post",
+      "py-12"
+    ],
+    "text": "name ); ?>'rounded-full'] ); ?>••phút đọc'w-full rounded-2xl',\n\t\t\t\t\t'loading' => 'eager',\n\t\t\t\t]); ?>#name ); ?>'rounded-full'] ); ?>Chia sẻ:FacebookCopy link'post',\n\t\t\t'posts_per_page' => 3,\n\t\t\t'post_",
+    "tags": [
+      "blog",
+      "single",
+      "post",
+      "comments",
+      "author-bio",
+      "related-posts",
+      "share"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\blog-post\\TPL-053.md"
+  },
+  {
+    "id": "TPL-054",
+    "type": "brand-grid",
+    "html": "<?php\n/**\n * Template Name: Thương Hiệu\n */\n\nget_header();\n?>\n\n<main class=\"brands-page py-12\">\n\t<div class=\"max-w-[1280px] mx-auto px-10\">\n\t\t<!-- Page Header -->\n\t\t<div class=\"text-center mb-12\">\n\t\t\t<h1 class=\"text-4xl font-bold mb-4\">Thương Hiệu Đối Tác</h1>\n\t\t\t<p class=\"text-gray-600 max-w-2xl mx-auto\">\n\t\t\t\tChúng tôi hợp tác với các thương hiệu hàng đầu để mang đến sản phẩm chất lượng cao nhất\n\t\t\t</p>\n\t\t</div>\n\n\t\t<?php\n\t\t// Get brands from taxonomy or custom post type\n\t\t$brands = get_terms([\n\t\t\t'taxonomy' => 'wz_brand',\n\t\t\t'hide_empty' => true,\n\t\t\t'orderby' => 'name',\n\t\t\t'order' => 'ASC',\n\t\t]);\n\n\t\tif ( ! empty( $brands ) && ! is_wp_error( $brands ) ):\n\t\t?>\n\t\t\t<!-- Brand Grid -->\n\t\t\t<div class=\"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6\">\n\t\t\t\t<?php foreach ( $brands as $brand ): \n\t\t\t\t\t$brand_logo = get_term_meta( $brand->term_id, 'logo', true );\n\t\t\t\t\t$brand_url = get_term_link( $brand );\n\t\t\t\t?>\n\t\t\t\t\t<a \n\t\t\t\t\t\thref=\"<?php echo esc_url( $brand_url ); ?>\" \n\t\t\t\t\t",
+    "classes": [
+      "brands-page",
+      "py-12"
+    ],
+    "text": "Thương Hiệu Đối TácChúng tôi hợp tác với các thương hiệu hàng đầu để mang đến sản phẩm chất lượng cao nhất'wz_brand',\n\t\t\t'hide_empty' => true,\n\t\t\t'orderby' => 'name',\n\t\t\t'order' => 'ASC',\n\t\t]);\n\n\t\tif ",
+    "tags": [
+      "brand",
+      "manufacturer",
+      "logo-grid",
+      "partner",
+      "vendor"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\brand-grid\\TPL-054.md"
+  },
+  {
+    "id": "TPL-018",
+    "type": "breadcrumb",
+    "html": "<?php\n/**\n * Checkout breadcrumb.\n */\n$cart_url = function_exists( 'wz_get_cart_url' ) ? wz_get_cart_url() : home_url( '/cart/' );\n?>\n<nav class=\"text-sm text-[var(--wz-text-muted)] mb-4\" aria-label=\"Breadcrumb\">\n    <a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:underline\"><?php esc_html_e( 'Trang chủ', 'wezone-haven' ); ?></a>\n    <span class=\"mx-1\">/</span>\n    <a href=\"<?php echo esc_url( $cart_url ); ?>\" class=\"hover:underline\"><?php esc_html_e( 'Giỏ hàng', 'wezone-haven' ); ?></a>\n    <span class=\"mx-1\">/</span>\n    <span aria-current=\"page\"><?php esc_html_e( 'Thanh toán', 'wezone-haven' ); ?></span>\n</nav>",
+    "classes": [
+      "text-sm",
+      "text-[var(--wz-text-muted)]",
+      "mb-4"
+    ],
+    "text": "//",
+    "tags": [
+      "breadcrumb",
+      "navigation",
+      "checkout",
+      "cart",
+      "aria"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\breadcrumb\\TPL-018.md"
+  },
+  {
+    "id": "TPL-045",
+    "type": "cart-summary",
+    "html": "<!-- order-summary.php -->\n<?php\nif ( ! defined( 'ABSPATH' ) ) {\n\texit; }\n$cart_data  = function_exists( 'wezone_trunganh_v2_read_cart_from_db' ) ? wezone_trunganh_v2_read_cart_from_db() : array();\n$cart_items = $cart_data['items'] ?? array();\n$subtotal   = 0;\nforeach ( $cart_items as $item ) {\n\t$subtotal += ( $item['price'] ?? 0 ) * ( $item['qty'] ?? $item['quantity'] ?? 1 );\n}\n$ship_fee = (int) wz_config( 'shipping.fees.default', 0 );\n$total    = $subtotal + $ship_fee;\n$count    = count( $cart_items );\n$phone    = wz_config( 'phone', '' );\n?>\n<div class=\"flex flex-col gap-lg\">\n\t<div class=\"bg-white p-lg rounded-xl shadow-md border border-surface-container-high\">\n\t\t<h2 class=\"font-h3 text-h3 mb-md pb-sm\" style=\"border-bottom:1px solid var(--wz-outline-variant)\">Tóm tắt đơn hàng</h2>\n\t\t<div class=\"space-y-sm mb-md\">\n\t\t\t<div class=\"flex justify-between items-center\">\n\t\t\t\t<span class=\"text-sm text-on-surface-variant\">Tạm tính (<?php echo $count; ?> sản phẩm)</span>\n\t\t\t\t<span class=\"font-",
+    "classes": [
+      "flex",
+      "flex-col",
+      "gap-lg"
+    ],
+    "text": "Tóm tắt đơn hàngTạm tính (sản phẩm)Phí vận chuyểnGiảm giá voucher-0đTổng cộng(Đã bao gồm VAT)TIẾN HÀNH THANH TOÁN'sm' ] ); ?>'xs' ] ); ?>\n\t\t\tThanh toán an toàn & bảo mậtChấp nhận thanh toánVisaMasterC",
+    "tags": [
+      "cart-summary"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\cart-summary\\TPL-045.md"
+  },
+  {
+    "id": "TPL-003",
+    "type": "categories",
+    "html": "<?php\n$icon_map = array(\n    'phong-khach'  => 'weekend',\n    'phong-ngu'    => 'bed',\n    'ban-an'       => 'dining',\n    'van-phong'    => 'desk',\n    'trang-tri'    => 'light_mode',\n    'den-chieu'    => 'lamp',\n    'luu-tru'      => 'shelves',\n    'ngoai-troi'   => 'deck',\n    'default'      => 'category',\n);\n\n$categories = get_terms( array(\n    'taxonomy'   => 'product_cat',\n    'hide_empty' => true,\n    'number'     => 8,\n    'orderby'    => 'count',\n    'order'      => 'DESC',\n    'exclude'    => get_option( 'default_product_cat', 0 ),\n) );\n\nif ( is_wp_error( $categories ) || empty( $categories ) ) {\n    $categories = array(\n        (object) array( 'term_id' => 0, 'slug' => 'phong-khach', 'name' => 'Phòng khách', 'link' => home_url( '/phong-khach/' ) ),\n        (object) array( 'term_id' => 0, 'slug' => 'phong-ngu',   'name' => 'Phòng ngủ',   'link' => home_url( '/phong-ngu/' ) ),\n        // ... more static fallbacks\n    );\n}\n?>\n\n<section style=\"padding:40px 24px;max-width:1280px",
+    "classes": [],
+    "text": "slug;\n            $icon = $icon_map[ $slug ] ?? $icon_map['default'];\n            $thumb_id = isset( $cat->term_id ) && $cat->term_id ? get_term_meta( $cat->term_id, 'thumbnail_id', true ) : 0;\n      ",
+    "tags": [
+      "icon-grid",
+      "material-symbols",
+      "fallback-static",
+      "hover-effect",
+      "responsive-grid"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\categories\\TPL-003.md"
+  },
+  {
+    "id": "TPL-019",
+    "type": "checkout",
+    "html": "<?php\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nget_header();\n?>\n\n<main class=\"max-w-container-max mx-auto px-gutter py-md md:py-xl\">\n\n    <?php require get_theme_file_path( 'template-parts/checkout/breadcrumb.php' ); ?>\n\n    <div class=\"mb-xl\">\n        <h1 class=\"font-h1 text-h1 text-on-surface mb-xs\">Thanh toán</h1>\n        <p class=\"font-body-md text-on-surface-variant\">Kiểm tra thông tin đơn hàng, lựa chọn vận chuyển và hoàn tất thanh toán</p>\n    </div>\n\n    <div id=\"checkout-error\" class=\"hidden mb-lg p-md bg-error-surface border border-error rounded-lg text-error font-technical-data\"></div>\n\n    <div class=\"grid grid-cols-1 lg:grid-cols-12 gap-md md:gap-xl items-start\">\n\n        <!-- Left column -->\n        <div class=\"lg:col-span-8\">\n\n            <!-- Empty state -->\n            <div id=\"checkout-empty\" class=\"hidden text-center py-2xl\">\n                <?php wz_icon( 'shopping_cart', [ 'size' => '2xl', 'color' => 'muted', 'class' => 'block mb-md' ] ); ?>\n                <h2 cla",
+    "classes": [
+      "max-w-container-max",
+      "mx-auto",
+      "px-gutter",
+      "py-md",
+      "md:py-xl"
+    ],
+    "text": "Thanh toánKiểm tra thông tin đơn hàng, lựa chọn vận chuyển và hoàn tất thanh toán'2xl', 'color' => 'muted', 'class' => 'block mb-md' ] ); ?>Giỏ hàng trốngBạn chưa có sản phẩm nào trong giỏ hàng.Tiếp t",
+    "tags": [
+      "checkout",
+      "form",
+      "address",
+      "shipping",
+      "payment",
+      "order-summary",
+      "responsive"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\checkout\\TPL-019.md"
+  },
+  {
+    "id": "TPL-021",
+    "type": "checkout",
+    "html": "<?php\ndefined( 'ABSPATH' ) || exit;\n\nget_header();\n\n$cart_items    = function_exists( 'wz_get_cart_items' ) ? wz_get_cart_items() : [];\n$cart_count    = count( $cart_items );\n$is_empty      = empty( $cart_items );\n$shop_url      = function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop/' );\n$checkout_url  = function_exists( 'wz_get_checkout_url' ) ? wz_get_checkout_url() : home_url( '/checkout/' );\n$phone         = function_exists( 'wz_config' ) ? wz_config( 'phone', '' ) : '';\n$zalo_url      = function_exists( 'wz_config' ) ? wz_config( 'zalo_url', '' ) : '';\n$free_threshold = function_exists( 'wz_config' ) ? (int) wz_config( 'shipping.free_ship_threshold', 5000000 ) : 5000000;\n?>\n\n<main id=\"main-content\" class=\"haven-cart\">\n\n    <!-- Breadcrumb -->\n    <nav class=\"haven-shop__breadcrumb\" aria-label=\"<?php esc_attr_e( 'Breadcrumb', 'wezone-haven' ); ?>\">\n        <a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\"><?php esc_html_e( 'Trang chủ', 'wezone-haven' ); ?><",
+    "classes": [
+      "haven-cart"
+    ],
+    "text": "/()$item ) :\n                    $product_id = (int) ( $item['product_id'] ?? 0 );\n                    $name       = $item['name'] ?? get_the_title( $product_id );\n                    $price      = (f",
+    "tags": [
+      "cart",
+      "order-summary",
+      "quantity-controls",
+      "free-shipping",
+      "support-card"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\checkout\\TPL-021.md"
+  },
+  {
+    "id": "TPL-029",
+    "type": "checkout",
+    "html": "<?php\n$cart_items = $cart_items ?? [];\n$subtotal = 0;\nforeach ( $cart_items as $item ) {\n    $subtotal += ( $item['price'] ?? 0 ) * ( $item['quantity'] ?? 1 );\n}\n$free_threshold = wz_config( 'shipping.free_ship_threshold', 5000000 );\n$shipping = $subtotal >= $free_threshold ? 0 : 30000;\n$total = $subtotal + $shipping;\n?>\n\n<div class=\"order-summary\">\n    <h3 class=\"order-summary__title\">Tóm tắt đơn hàng</h3>\n\n    <!-- Items -->\n    <div class=\"order-summary__items\">\n        <?php foreach ( $cart_items as $item ) : ?>\n            <div class=\"order-summary__item\">\n                <span class=\"order-summary__item-name\">\n                    <?php echo esc_html( $item['name'] ); ?>\n                    <span class=\"order-summary__item-qty\">×<?php echo esc_html( (string) $item['quantity'] ); ?></span>\n                </span>\n                <span class=\"order-summary__item-price\">\n                    <?php echo esc_html( wz_format_price( $item['price'] * $item['quantity'] ) ); ?>\n             ",
+    "classes": [
+      "order-summary"
+    ],
+    "text": "Tóm tắt đơn hàng×Tạm tínhVận chuyểnTổng cộnglocal_shippingMua thêmđể được miễn phí vận chuyển",
+    "tags": [
+      "order-summary",
+      "checkout",
+      "cart-summary",
+      "sticky",
+      "totals"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\checkout\\TPL-029.md"
+  },
+  {
+    "id": "TPL-037",
+    "type": "compare-table",
+    "html": "<!-- compare.php -->\n<?php\n/**\n * WeZone template: So sánh sản phẩm (Compare).\n *\n * @package WeZone\\TrungAnhV2\n */\n\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\nget_header();\n\n$compare_ids = [];\nif ( ! empty( $_COOKIE['wz_compare_ids'] ) ) {\n\t$raw = json_decode( wp_unslash( $_COOKIE['wz_compare_ids'] ), true );\n\tif ( is_array( $raw ) ) {\n\t\t$compare_ids = array_map( 'intval', array_slice( $raw, 0, 4 ) );\n\t}\n}\n\n$products = [];\nforeach ( $compare_ids as $pid ) {\n\tif ( function_exists( 'wz_get_product' ) ) {\n\t\t$p = wz_get_product( $pid );\n\t\tif ( is_array( $p ) && ! empty( $p['id'] ) ) {\n\t\t\t$attrs = [];\n\t\t\tif ( function_exists( 'wz_get_product_attributes' ) ) {\n\t\t\t\t$raw_attrs = wz_get_product_attributes( $pid );\n\t\t\t\tif ( is_array( $raw_attrs ) ) {\n\t\t\t\t\tforeach ( $raw_attrs as $attr ) {\n\t\t\t\t\t\tif ( ! empty( $attr['label'] ) && isset( $attr['value'] ) ) {\n\t\t\t\t\t\t\t$attrs[ $attr['label'] ] = $attr['value'];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\t$p['_attrs']  = $attrs;\n\t\t\t$p['_thumb",
+    "classes": [
+      "max-w-container-max",
+      "mx-auto",
+      "px-lg",
+      "py-md",
+      "pb-28"
+    ],
+    "text": "Trang chủ'xs', 'color' => 'muted' ] ); ?>So sánh sản phẩmSo sánh sản phẩm'compare' ] ); ?>Khám phá sản phẩmGiáĐánh giá0 ) : ?>★()—Tình trạngXem sản phẩmXóa khỏi so sánh",
+    "tags": [
+      "compare-table",
+      "responsive"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\compare-table\\TPL-037.md"
+  },
+  {
+    "id": "TPL-049",
+    "type": "contact-form",
+    "html": "<?php\n/**\n * Template Name: Liên Hệ\n */\n\nget_header();\n?>\n\n<main class=\"min-h-[60vh] py-12\">\n\t<div class=\"max-w-[1280px] mx-auto px-10\">\n\t\t<h1 class=\"text-3xl font-bold text-[#131b2e] mb-2\">Liên hệ <?php echo esc_html( wz_config('shop_name') ); ?></h1>\n\t\t<p class=\"text-[#3d4a3d] mb-10\">Chúng tôi luôn sẵn sàng hỗ trợ bạn. Liên hệ qua bất kỳ kênh nào bên dưới.</p>\n\n\t\t<div class=\"grid md:grid-cols-2 gap-6 mb-10\">\n\t\t\t<!-- Hotline Card -->\n\t\t\t<div class=\"bg-white rounded-2xl border border-[#bccbb9]/30 p-6 flex items-start gap-4\">\n\t\t\t\t<div class=\"w-12 h-12 bg-[#006e2f]/10 rounded-xl flex items-center justify-center text-[#006e2f] text-xl shrink-0\">\n\t\t\t\t\t<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 2",
+    "classes": [
+      "min-h-[60vh]",
+      "py-12"
+    ],
+    "text": "Liên hệChúng tôi luôn sẵn sàng hỗ trợ bạn. Liên hệ qua bất kỳ kênh nào bên dưới.Hotline 24/7Gọi ngay để được tư vấn miễn phíEmailPhản hồi trong vòng 24 giờZaloChat trực tiếp, phản hồi nhanhFacebookThe",
+    "tags": [
+      "contact",
+      "form",
+      "multi-channel",
+      "social-links",
+      "address",
+      "hotline"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\contact-form\\TPL-049.md"
+  },
+  {
+    "id": "TPL-039",
+    "type": "coupon-widget",
+    "html": "<!-- voucher-section.php -->\n<?php\nif ( ! defined( 'ABSPATH' ) ) {\n\texit; }\n?>\n<div class=\"bg-surface-container-lowest py-sm px-md rounded-xl shadow-sm hover:bg-surface-container-low cursor-pointer transition-colors group\" id=\"voucher-section\">\n\t<div class=\"flex items-center justify-between\" id=\"voucher-toggle\">\n\t\t<div class=\"flex items-center gap-sm\">\n\t\t\t<div class=\"w-8 h-8 bg-tertiary-container/20 rounded-full flex items-center justify-center text-tertiary flex-shrink-0\">\n\t\t\t\t<?php wz_icon( 'confirmation_number', [ 'size' => 'sm', 'filled' => true ] ); ?>\n\t\t\t</div>\n\t\t\t<h2 class=\"font-bold text-sm\">Chọn hoặc nhập mã giảm giá</h2>\n\t\t</div>\n\t\t<div class=\"flex items-center gap-xs\">\n\t\t\t<span class=\"text-primary font-technical-data uppercase tracking-wider\">Chọn voucher</span>\n\t\t\t<?php wz_icon( 'chevron_right', [ 'color' => 'muted', 'class' => 'group-hover:text-primary transition-colors' ] ); ?>\n\t\t</div>\n\t</div>\n\n\t<div id=\"voucher-form\" class=\"hidden mt-md\">\n\t\t<div class=\"flex gap-sm\">\n\t\t\t",
+    "classes": [
+      "bg-surface-container-lowest",
+      "py-sm",
+      "px-md",
+      "rounded-xl",
+      "shadow-sm",
+      "hover:bg-surface-container-low",
+      "cursor-pointer",
+      "transition-colors",
+      "group"
+    ],
+    "text": "'sm', 'filled' => true ] ); ?>Chọn hoặc nhập mã giảm giáChọn voucher'muted', 'class' => 'group-hover:text-primary transition-colors' ] ); ?>Áp dụng",
+    "tags": [
+      "coupon-widget"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\coupon-widget\\TPL-039.md"
+  },
+  {
+    "id": "TPL-043",
+    "type": "empty-state",
+    "html": "<!-- empty-state.php -->\n<?php\nif ( ! defined( 'ABSPATH' ) ) {\n\texit; }\n?>\n<div class=\"text-center py-2xl\">\n\t<?php wz_icon( 'shopping_cart', [ 'size' => '2xl', 'color' => 'muted', 'class' => 'block mb-md' ] ); ?>\n\t<h2 class=\"font-h2 text-h2 text-on-surface mb-sm\">Giỏ hàng trống</h2>\n\t<p class=\"text-on-surface-variant mb-lg\">Bạn chưa có sản phẩm nào trong giỏ hàng.</p>\n\t<a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\"\n\t\tclass=\"inline-flex items-center gap-sm bg-primary text-white px-xl py-md rounded-lg font-bold hover:brightness-110 transition-all\">\n\t\t<?php wz_icon( 'arrow_back', [ 'size' => 'sm' ] ); ?>\n\t\tTiếp tục mua sắm\n\t</a>\n</div>",
+    "classes": [
+      "text-center",
+      "py-2xl"
+    ],
+    "text": "'2xl', 'color' => 'muted', 'class' => 'block mb-md' ] ); ?>Giỏ hàng trốngBạn chưa có sản phẩm nào trong giỏ hàng.'sm' ] ); ?>\n\t\tTiếp tục mua sắm",
+    "tags": [
+      "empty-state"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\empty-state\\TPL-043.md"
+  },
+  {
+    "id": "TPL-044",
+    "type": "error-page",
+    "html": "<!-- 404.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nget_header();\n\n$phone    = wz_config( 'phone', '' );\n$email    = wz_config( 'email', '' );\n$zalo_url = wz_config( 'zalo_url', '' );\n$categories = function_exists( 'wz_get_categories' ) ? array_slice( wz_get_categories(), 0, 4 ) : [];\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1320px] mx-auto px-5 md:px-[20px] py-8 md:py-16\">\n\n    <!-- Hero 404 -->\n    <div class=\"text-center\">\n        <p class=\"text-[120px] md:text-[180px] font-bold leading-none text-[var(--wz-primary)]/10 select-none\">404</p>\n        <div class=\"-mt-16 md:-mt-20\">\n            <span class=\"material-symbols-outlined text-[56px] text-[var(--wz-primary)]\" aria-hidden=\"true\">search_off</span>\n            <h1 class=\"text-xl md:text-2xl font-bold text-[var(--wz-primary)] mt-3\">Trang không tồn tại</h1>\n            <p class=\"text-sm text-[var(--wz-outline)] mt-2 max-w-md mx-auto\">Trang bạn đang tìm kiếm có th",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "404search_offTrang không tồn tạiTrang bạn đang tìm kiếm có thể đã bị xóa, đổi tên hoặc tạm thời không khả dụngsearchTrang chủXem sản phẩmLiên hệDanh mục nổi bậtcategorycallemailchatChat Zalo",
+    "tags": [
+      "accessible",
+      "form",
+      "grid",
+      "error-page"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\error-page\\TPL-044.md"
+  },
+  {
+    "id": "TPL-051",
+    "type": "faq-accordion",
+    "html": "<?php\n/**\n * FAQ Accordion Component\n * \n * @param array $faqs Array of FAQ items [question, answer]\n */\n\n$faqs = $args['faqs'] ?? [];\nif ( empty( $faqs ) ) {\n\treturn;\n}\n?>\n\n<div class=\"faq-accordion space-y-4\">\n\t<?php foreach ( $faqs as $index => $faq ): ?>\n\t\t<div class=\"faq-item bg-white rounded-lg border border-gray-200 overflow-hidden\">\n\t\t\t<button \n\t\t\t\ttype=\"button\"\n\t\t\t\tclass=\"faq-question w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors\"\n\t\t\t\taria-expanded=\"false\"\n\t\t\t\taria-controls=\"faq-answer-<?php echo esc_attr( $index ); ?>\"\n\t\t\t>\n\t\t\t\t<span class=\"font-semibold text-gray-900 pr-4\"><?php echo esc_html( $faq['question'] ); ?></span>\n\t\t\t\t<svg class=\"faq-icon w-5 h-5 text-gray-500 shrink-0 transition-transform\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n\t\t\t\t\t<path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 4v16m8-8H4\" />\n\t\t\t\t</svg>\n\t\t\t</button>\n\t\t\t<div \n\t\t\t\tid=\"faq-answer-<?php echo esc_attr( $inde",
+    "classes": [
+      "faq-accordion",
+      "space-y-4"
+    ],
+    "text": "$faq ): ?>",
+    "tags": [
+      "faq",
+      "accordion",
+      "collapsible",
+      "help",
+      "support",
+      "q-and-a"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\faq-accordion\\TPL-051.md"
+  },
+  {
+    "id": "TPL-016",
+    "type": "filter-bar",
+    "html": "<?php\n/**\n * Template Part: Archive — Filter Bar (brand filter + sort).\n */\n\n$filter_attrs = [\n    'pa_brand' => __( 'Thương hiệu', 'wezone-haven' ),\n];\n\n$sort_options = [\n    ''           => __( 'Mặc định', 'wezone-haven' ),\n    'price'      => __( 'Giá thấp đến cao', 'wezone-haven' ),\n    'price-desc' => __( 'Giá cao đến thấp', 'wezone-haven' ),\n    'popularity' => __( 'Bán chạy', 'wezone-haven' ),\n    'date'       => __( 'Mới nhất', 'wezone-haven' ),\n];\n\n// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public archive filter, no state change.\n$current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : '';\n?>\n\n<section class=\"wz-filter-bar\">\n    <?php\n    foreach ( $filter_attrs as $attr_slug => $attr_label ) :\n        $attr_key = str_replace( 'pa_', '', $attr_slug );\n        $taxonomy = 'pa_' . $attr_key;\n        $terms    = get_terms(\n            [\n                'taxonomy'   => $taxonomy,\n                'hide_empty' =>",
+    "classes": [
+      "wz-filter-bar"
+    ],
+    "text": "$attr_label ) :\n        $attr_key = str_replace( 'pa_', '', $attr_slug );\n        $taxonomy = 'pa_' . $attr_key;\n        $terms    = get_terms(\n            [\n                'taxonomy'   => $taxonomy,",
+    "tags": [
+      "filter",
+      "sort",
+      "dropdown",
+      "archive",
+      "taxonomy",
+      "responsive"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\filter-bar\\TPL-016.md"
+  },
+  {
+    "id": "TPL-005",
+    "type": "flash-sale",
+    "html": "<?php\nif ( function_exists( 'wezone_is_active' ) && wezone_is_active( 'wezone-flash-sale' ) ) {\n    do_action( 'wezone/flash-sale/render_home_section' );\n    return;\n}\n\n$shop_url = function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop/' );\n\n$sale_products = new WP_Query( array(\n    'post_type'      => post_type_exists( 'wz_product' ) ? 'wz_product' : 'product',\n    'posts_per_page' => 4,\n    'post_status'    => 'publish',\n    'meta_query'     => array(\n        array(\n            'key'     => '_sale_price',\n            'value'   => '',\n            'compare' => '!=',\n        ),\n    ),\n) );\n\nif ( ! $sale_products->have_posts() ) {\n    return;\n}\n\n$end_time = time() + ( 5 * 3600 );\n?>\n\n<section style=\"padding:40px 24px;background:var(--wz-surface,#F5F0E8);\">\n    <div style=\"max-width:1280px;margin:0 auto;\">\n\n        <div style=\"display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;\">\n            <div class=\"haven-sec",
+    "classes": [],
+    "text": "00:00:00have_posts() ) : $sale_products->the_post();\n                $price     = get_post_meta( get_the_ID(), '_price', true );\n                $old_price = get_post_meta( get_the_ID(), '_regular_pri",
+    "tags": [
+      "countdown",
+      "timer",
+      "sale-products",
+      "meta-query",
+      "plugin-hook",
+      "responsive-grid"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\flash-sale\\TPL-005.md"
+  },
+  {
+    "id": "TPL-012",
+    "type": "flash-sale",
+    "html": "<?php\nif ( function_exists( 'wezone_is_active' ) && wezone_is_active( 'wezone-flash-sale' ) ) {\n    do_action( 'wezone/flash-sale/render_home_section' );\n    return;\n}\n\n$shop_url = function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop/' );\n\n$sale_products = new WP_Query( array(\n    'post_type'      => post_type_exists( 'wz_product' ) ? 'wz_product' : 'product',\n    'posts_per_page' => 4,\n    'post_status'    => 'publish',\n    'meta_query'     => array(\n        array(\n            'key'     => '_sale_price',\n            'value'   => '',\n            'compare' => '!=',\n        ),\n    ),\n) );\n\nif ( ! $sale_products->have_posts() ) {\n    return;\n}\n\n$end_time = time() + ( 5 * 3600 );\n\n$badges = array( 'Deal hot', 'Sắp hết', 'Deal hot', 'Sắp hết' );\n$sold_percents = array( 72, 89, 45, 95 );\n$viewers = array( '37 người đang xem', 'Còn 8 sản phẩm', '21 người đang xem', 'Chỉ còn 2 máy' );\n$i = 0;\n?>\n\n<section class=\"haven-flash\" id=\"haven-flash-sale\">\n    <div class=\"haven-f",
+    "classes": [
+      "haven-flash"
+    ],
+    "text": "00:00:00have_posts() ) : $sale_products->the_post();\n                $price     = get_post_meta( get_the_ID(), '_price', true );\n                $old_price = get_post_meta( get_the_ID(), '_regular_pri",
+    "tags": [
+      "countdown",
+      "progress-bar",
+      "badges",
+      "urgency",
+      "social-proof",
+      "gradient-cta",
+      "glassmorphism",
+      "responsive-grid",
+      "BEM"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\flash-sale\\TPL-012.md"
+  },
+  {
+    "id": "TPL-047",
+    "type": "flash-sale-countdown",
+    "html": "<!-- flash-sale.php -->\n<?php\n/**\n * Template Part: Home — Flash Sale\n * Dữ liệu lấy động từ wezone/v1/flash-sale/active\n *\n * @package WeZone\\TrungAnhV2\n */\n\ndefined( 'ABSPATH' ) || exit;\n\n// Lấy active flash sale từ API nội bộ\n$active_sales = array();\nif ( class_exists( '\\WeZone\\Core\\FlashSale\\Sale\\FlashSaleRepository' ) ) {\n\t$active_sales = \\WeZone\\Core\\FlashSale\\Sale\\FlashSaleRepository::get_active();\n}\n\nif ( empty( $active_sales ) ) {\n\treturn;\n}\n\n// Lấy sale đầu tiên đang active\n$sale     = $active_sales[0];\n$end_ts   = strtotime( $sale['end_time'] );\n$products = $sale['products'] ?? array();\n\nif ( empty( $products ) ) {\n\treturn;\n}\n\n$items = array_slice( $products, 0, 5 );\n?>\n\n<section style=\"margin:8px 0;border-radius:12px;overflow:hidden;\">\n\n\t<!-- Header — gradient Shopee-style, giữ màu primary brand -->\n\t<div style=\"background:linear-gradient(135deg,var(--wz-primary) 0%,#1a56d6 60%,#0d3fa8 100%);padding:10px 12px 8px;display:flex;align-items:center;justify-content:space-between",
+    "classes": [],
+    "text": "⚡Flash Sale00:00:00Xem tất cả ›0 && $orig_price > $sale_price;\n\t\t\t\t$discount_pct = $is_sale ? round( ( 1 - $sale_price / $orig_price ) * 100 ) : 0;\n\n\t\t\t\tif ( ! $image && $product_id ) {\n\t\t\t\t\t$thumb_id",
+    "tags": [
+      "accessible",
+      "flash-sale-countdown",
+      "responsive"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\flash-sale-countdown\\TPL-047.md"
+  },
+  {
+    "id": "TPL-007",
+    "type": "footer",
+    "html": "<?php\nif ( ! function_exists( 'wz_config' ) ) {\n    echo '</body></html>';\n    return;\n}\n\n$shop_name  = wz_config( 'name', get_bloginfo( 'name' ) );\n$tagline    = wz_config( 'tagline', '' );\n$phone      = wz_config( 'phone', '' );\n$email      = wz_config( 'email', '' );\n$address    = wz_config( 'address', '' );\n$copyright  = wz_config( 'footer.copyright', '© ' . gmdate( 'Y' ) . ' ' . $shop_name );\n$powered_by = wz_config( 'footer.powered_by', true );\n$zalo_url   = wz_config( 'zalo_url', '' );\n$facebook   = wz_config( 'facebook_url', '' );\n\n$policy_links = array(\n    'chinh-sach-van-chuyen' => __( 'Chính sách vận chuyển', 'wezone-haven' ),\n    'chinh-sach-doi-tra'    => __( 'Chính sách đổi trả', 'wezone-haven' ),\n    'chinh-sach-bao-mat'    => __( 'Chính sách bảo mật', 'wezone-haven' ),\n    'dieu-khoan-su-dung'    => __( 'Điều khoản sử dụng', 'wezone-haven' ),\n    'huong-dan-mua-hang'    => __( 'Hướng dẫn mua hàng', 'wezone-haven' ),\n    'lien-he'               => __( 'Liên hệ', 'wezone",
+    "classes": [
+      "wz-footer"
+    ],
+    "text": "FacebookZalo$label ) : ?>callmaillocation_onWeZone",
+    "tags": [
+      "multi-column",
+      "newsletter",
+      "social-links",
+      "policy-links",
+      "contact-info",
+      "dark-bg"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\footer\\TPL-007.md"
+  },
+  {
+    "id": "TPL-001",
+    "type": "header",
+    "html": "<?php\n$shop_name   = function_exists( 'wz_config' ) ? wz_config( 'name', get_bloginfo( 'name' ) ) : get_bloginfo( 'name' );\n$shop_url    = function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop/' );\n$cart_url    = function_exists( 'wz_get_cart_url' ) ? wz_get_cart_url() : '#';\n$cart_count  = function_exists( 'wz_get_cart_count' ) ? wz_get_cart_count() : 0;\n$account_url = function_exists( 'wz_get_myaccount_url' ) ? wz_get_myaccount_url() : wp_login_url();\n?>\n<!doctype html>\n<html <?php language_attributes(); ?>>\n<head>\n    <meta charset=\"<?php bloginfo( 'charset' ); ?>\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <?php wp_head(); ?>\n</head>\n<body <?php body_class( 'pb-16 md:pb-0' ); ?> style=\"background:var(--wz-bg,#FDFAF5);color:var(--wz-text,#3D2B1F);\">\n<?php wp_body_open(); ?>\n<a href=\"#main-content\" class=\"sr-only\"><?php esc_html_e( 'Bỏ qua đến nội dung', 'wezone-haven' ); ?></a>\n\n<header id=\"wz-header\" style=\"position:sticky;",
+    "classes": [],
+    "text": ">style=\"background:var(--wz-bg,#FDFAF5);color:var(--wz-text,#3D2B1F);\">menushopping_bag0 ) : ?>__( 'Trang chủ', 'wezone-haven' ),\n                // Add more nav items here\n            );\n            ",
+    "tags": [
+      "sticky",
+      "mobile-drawer",
+      "hamburger",
+      "cart-badge",
+      "responsive"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\header\\TPL-001.md"
+  },
+  {
+    "id": "TPL-014",
+    "type": "hero",
+    "html": "<?php get_header(); ?>\n\n<!-- Hero OUTSIDE <main> to bypass container constraints -->\n<?php get_template_part( 'template-parts/hero/default' ); ?>\n\n<main id=\"main-content\">\n    <?php get_template_part( 'template-parts/home/flash-sale' ); ?>\n    <!-- other sections -->\n</main>\n\n<?php get_footer(); ?>",
+    "classes": [],
+    "text": "",
+    "tags": [
+      "fullwidth",
+      "slider",
+      "products",
+      "mobile-first",
+      "full-bleed"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\hero\\TPL-014.md"
+  },
+  {
+    "id": "TPL-056",
+    "type": "landing-hero",
+    "html": "<?php\n/**\n * Landing Hero Component\n * \n * @param array $args Hero configuration\n */\n\n$headline = $args['headline'] ?? 'Giải Pháp Hoàn Hảo Cho Doanh Nghiệp';\n$subheadline = $args['subheadline'] ?? 'Tăng doanh thu, tối ưu chi phí, và phát triển bền vững với nền tảng của chúng tôi';\n$cta_text = $args['cta_text'] ?? 'Dùng thử miễn phí';\n$cta_url = $args['cta_url'] ?? '#';\n$benefits = $args['benefits'] ?? [\n\t'Dễ dàng sử dụng, không cần kỹ thuật',\n\t'Tích hợp đầy đủ với hệ thống hiện tại',\n\t'Hỗ trợ 24/7 bằng tiếng Việt',\n];\n$stats = $args['stats'] ?? [\n\t['number' => '10,000+', 'label' => 'Khách hàng'],\n\t['number' => '99.9%', 'label' => 'Uptime'],\n\t['number' => '4.9/5', 'label' => 'Đánh giá'],\n];\n$image = $args['image'] ?? get_template_directory_uri() . '/assets/images/hero-landing.png';\n?>\n\n<section class=\"landing-hero bg-gradient-to-br from-blue-50 to-white py-20\">\n\t<div class=\"max-w-[1280px] mx-auto px-10\">\n\t\t<div class=\"grid lg:grid-cols-2 gap-12 items-center\">\n\t\t\t<!-- Left: Content -->\n\t",
+    "classes": [
+      "landing-hero",
+      "bg-gradient-to-br",
+      "from-blue-50",
+      "to-white",
+      "py-20"
+    ],
+    "text": "Tìm hiểu thêmMiễn phí 30 ngàyKhông cần thẻ tín dụng",
+    "tags": [
+      "landing",
+      "hero",
+      "cta",
+      "conversion",
+      "headline",
+      "subheadline",
+      "benefits"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\landing-hero\\TPL-056.md"
+  },
+  {
+    "id": "TPL-041",
+    "type": "loyalty-points",
+    "html": "<!-- loyalty-points.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id = get_current_user_id();\n$points  = function_exists( 'wz_get_user_points' ) ? wz_get_user_points( $user_id ) : 0;\n$history = function_exists( 'wz_get_points_history' ) ? wz_get_points_history( $user_id ) : [];\n\nset_query_var( 'wz_tpl_account_page', 'dashboard' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <nav aria-label=\"Breadcrumb\" class=\"pb-4\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            <li><span class=\"material-symbols-outlined text-[14px]\" aria-hidden=\"true\">chevron_right</span></li>\n        ",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Trang chủchevron_rightTài khoảnchevron_rightĐiểm thưởngworkspace_premiumTổng điểm hiện cóđiểmTương đương:shopping_bagMua hàng1.000₫ = 1 điểmreviewsĐánh giá+50 điểm/reviewredeemĐổi điểm100 điểm = 1.000",
+    "tags": [
+      "grid",
+      "accessible",
+      "loyalty-points"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\loyalty-points\\TPL-041.md"
+  },
+  {
+    "id": "TPL-057",
+    "type": "maintenance-page",
+    "html": "<?php\n/**\n * Template Name: Maintenance Mode\n * \n * IMPORTANT: This template must return 503 status code\n */\n\n// Set 503 status code\nstatus_header( 503 );\n\n// Set Retry-After header (in seconds, e.g., 3600 = 1 hour)\nheader( 'Retry-After: 3600' );\n\n// Prevent caching\nnocache_headers();\n\n// Get maintenance config\n$maintenance_end = wz_config( 'maintenance_end', '' ); // ISO 8601 format: 2026-05-28T10:00:00+07:00\n$maintenance_reason = wz_config( 'maintenance_reason', 'Chúng tôi đang nâng cấp hệ thống để phục vụ bạn tốt hơn' );\n$show_countdown = ! empty( $maintenance_end );\n?>\n<!DOCTYPE html>\n<html <?php language_attributes(); ?>>\n<head>\n\t<meta charset=\"<?php bloginfo( 'charset' ); ?>\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t<meta name=\"robots\" content=\"noindex, nofollow\">\n\t<title>Đang bảo trì - <?php bloginfo( 'name' ); ?></title>\n\t\n\t<?php wp_head(); ?>\n\t\n\t<style>\n\t\tbody {\n\t\t\tmargin: 0;\n\t\t\tfont-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, ",
+    "classes": [],
+    "text": ">Đang bảo trì -Đang Bảo Trì00Ngày00Giờ00Phút00GiâyThông báoNhận thông báo khi website hoạt động trở lại",
+    "tags": [
+      "maintenance",
+      "503",
+      "downtime",
+      "coming-soon",
+      "under-construction"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\maintenance-page\\TPL-057.md"
+  },
+  {
+    "id": "TPL-036",
+    "type": "notification-list",
+    "html": "<!-- notifications.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id      = get_current_user_id();\n$unread_count = (int) get_user_meta( $user_id, '_wz_unread_notifications', true );\n$notifications = function_exists( 'wz_get_user_notifications' ) ? wz_get_user_notifications( $user_id, [ 'limit' => 20 ] ) : [];\n\n$type_icons = [\n    'order'     => [ 'icon' => 'local_shipping', 'bg' => 'bg-[var(--wz-primary)]/10', 'color' => 'text-[var(--wz-primary)]' ],\n    'promo'     => [ 'icon' => 'sell',           'bg' => 'bg-[var(--wz-accent)]/10',  'color' => 'text-[var(--wz-accent)]' ],\n    'system'    => [ 'icon' => 'info',           'bg' => 'bg-[var(--wz-outline)]/10', 'color' => 'text-[var(--wz-outline)]' ],\n];\n\nset_query_var( 'wz_tpl_account_page', 'notifications' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Trang chủchevron_rightTài khoảnchevron_rightThông báoThông báo0 ) : ?>0 ) : ?>Đọc tất cảTất cảChưa đọcĐơn hàngKhuyến mãiHệ thốngnotifications_noneKhông có thông báo nào",
+    "tags": [
+      "accessible",
+      "notification-list"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\notification-list\\TPL-036.md"
+  },
+  {
+    "id": "TPL-034",
+    "type": "order-summary",
+    "html": "<!-- order-summary.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\n$phone = function_exists( 'wz_config' ) ? wz_config( 'phone', '' ) : '';\n?>\n\n<div class=\"lg:sticky lg:top-[120px] space-y-4\">\n    <div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] shadow-[0_4px_24px_rgba(27,58,122,0.08)] p-5\">\n        <h2 class=\"text-base font-bold text-[var(--wz-primary)] mb-4\">Đơn hàng của bạn</h2>\n\n        <!-- Mini product list -->\n        <div class=\"space-y-2 mb-4\">\n            <?php $shown = 0; foreach ( $cart_items as $item ) :\n                if ( $shown >= 3 ) { break; }\n                $pid     = (int) $item['product_id'];\n                $qty     = (int) ( $item['qty'] ?? $item['quantity'] ?? 1 );\n                $product = function_exists( 'wz_get_product' ) ? wz_get_product( $pid ) : null;\n                if ( ! $product ) { continue; }\n                $images = function_exists( 'wz_get_product_images' ) ? wz_get_product_images( $pid )",
+    "classes": [
+      "lg:sticky",
+      "lg:top-[120px]",
+      "space-y-4"
+    ],
+    "text": "Đơn hàng của bạn= 3 ) { break; }\n                $pid     = (int) $item['product_id'];\n                $qty     = (int) ( $item['qty'] ?? $item['quantity'] ?? 1 );\n                $product = function_",
+    "tags": [
+      "order-summary",
+      "accessible"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\order-summary\\TPL-034.md"
+  },
+  {
+    "id": "TPL-019",
+    "type": "order-tracking",
+    "html": "<!-- tracking-form.php -->\n<?php\n/**\n * Tracking form partial — S4 of [28].\n *\n * @package WeZone\\TrungAnhV2\n */\n\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n?>\n\n<div class=\"bg-white rounded-xl shadow-sm border border-outline/20 p-6\">\n\t<form id=\"wz-tracking-form\" class=\"space-y-4\">\n\t\t<?php wp_nonce_field( 'wz-theme-nonce', 'wz_tracking_nonce', false ); ?>\n\n\t\t<div>\n\t\t\t<label for=\"wz-track-order-id\" class=\"block text-sm font-medium text-on-surface mb-1.5\">\n\t\t\t\t<?php esc_html_e( 'Mã đơn hàng', 'wezone-trunganh-v2' ); ?>\n\t\t\t\t<span class=\"text-error\">*</span>\n\t\t\t</label>\n\t\t\t<div class=\"relative\">\n\t\t\t\t<?php wz_icon( 'receipt_long', [ 'size' => 'sm', 'color' => 'muted', 'class' => 'absolute left-3 top-1/2 -translate-y-1/2' ] ); ?>\n\t\t\t\t<input type=\"text\"\n\t\t\t\t\tid=\"wz-track-order-id\"\n\t\t\t\t\tname=\"order_id\"\n\t\t\t\t\trequired\n\t\t\t\t\tplaceholder=\"<?php esc_attr_e( 'VD: 123456', 'wezone-trunganh-v2' ); ?>\"\n\t\t\t\t\tclass=\"w-full border border-outline/30 rounded-lg pl-10 pr-4 py-2.5 text-s",
+    "classes": [
+      "bg-white",
+      "rounded-xl",
+      "shadow-sm",
+      "border",
+      "border-outline/20",
+      "p-6"
+    ],
+    "text": "*'sm', 'color' => 'muted', 'class' => 'absolute left-3 top-1/2 -translate-y-1/2' ] ); ?>*'sm', 'color' => 'muted', 'class' => 'absolute left-3 top-1/2 -translate-y-1/2' ] ); ?>'sm' ] ); ?>",
+    "tags": [
+      "accessible",
+      "mobile-first",
+      "order-tracking",
+      "form"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\order-tracking\\TPL-019.md"
+  },
+  {
+    "id": "TPL-032",
+    "type": "payment-methods",
+    "html": "<!-- payment-section.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\n$bank_info = function_exists( 'wz_config' ) ? wz_config( 'bank_info', [] ) : [];\nif ( ! is_array( $bank_info ) ) { $bank_info = []; }\n$bank_name    = $bank_info['bank_name'] ?? 'Vietcombank';\n$account_no   = $bank_info['account_no'] ?? '';\n$account_name = $bank_info['account_name'] ?? '';\n?>\n\n<div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] shadow-[0_4px_24px_rgba(27,58,122,0.08)] p-5 md:p-6\">\n    <h2 class=\"text-base font-bold text-[var(--wz-primary)] mb-4 flex items-center gap-2\">\n        <span class=\"material-symbols-outlined text-[20px]\" aria-hidden=\"true\">payments</span>\n        Phương thức thanh toán\n    </h2>\n\n    <div class=\"space-y-3\">\n        <label class=\"flex items-center gap-3 p-3 border border-[var(--wz-primary)] bg-[var(--wz-primary)]/5 rounded-[var(--wz-radius)] cursor-pointer\">\n            <input type=\"radio\" name=\"payment_method\" value=\"cod\" che",
+    "classes": [
+      "bg-[var(--wz-surface-pure)]",
+      "rounded-[var(--wz-radius-card)]",
+      "shadow-[0_4px_24px_rgba(27,58,122,0.08)]",
+      "p-5",
+      "md:p-6"
+    ],
+    "text": "paymentsPhương thức thanh toánThanh toán khi nhận hàng (COD)Thanh toán bằng tiền mặt khi nhận hàngmoneyChuyển khoản ngân hàngChuyển khoản trước khi giao hàngaccount_balanceThông tin chuyển khoản:Ngân ",
+    "tags": [
+      "accessible",
+      "payment-methods"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\payment-methods\\TPL-032.md"
+  },
+  {
+    "id": "TPL-050",
+    "type": "policy-content",
+    "html": "<?php\n/**\n * Template Name: Refund Policy\n */\n\nget_header();\n?>\n\n<main class=\"refund-policy-page\">\n\t<div class=\"max-w-[1280px] mx-auto px-10 py-12\">\n\t\t<h1 class=\"text-4xl font-bold mb-8\">Chính Sách Hoàn Tiền</h1>\n\n\t\t<div class=\"prose prose-lg max-w-none\">\n\t\t\t<p class=\"text-gray-600 mb-6\">Cập nhật lần cuối: <?php echo date('d/m/Y'); ?></p>\n\n\t\t\t<section class=\"mb-8\">\n\t\t\t\t<h2 class=\"text-2xl font-semibold mb-4\">1. Giới Thiệu</h2>\n\t\t\t\t<p class=\"mb-4\"><?php echo esc_html( wz_config('shop_name') ); ?> cung cấp theme WordPress dạng sản phẩm số (digital). Do đặc thù sản phẩm số không thể \"trả lại\" sau khi đã tải xuống, chính sách hoàn tiền của chúng tôi áp dụng theo các điều kiện cụ thể dưới đây.</p>\n\t\t\t</section>\n\n\t\t\t<section class=\"mb-8\">\n\t\t\t\t<h2 class=\"text-2xl font-semibold mb-4\">2. Điều Kiện Được Hoàn Tiền</h2>\n\t\t\t\t<p class=\"mb-4\">Chúng tôi chấp nhận hoàn tiền trong các trường hợp sau:</p>\n\t\t\t\t<ul class=\"list-disc pl-6 mb-4\">\n\t\t\t\t\t<li><strong>Theme không hoạt động:</strong> Theme bị lỗi n",
+    "classes": [
+      "refund-policy-page"
+    ],
+    "text": "Chính Sách Hoàn TiềnCập nhật lần cuối:1. Giới Thiệucung cấp theme WordPress dạng sản phẩm số (digital). Do đặc thù sản phẩm số không thể \"trả lại\" sau khi đã tải xuống, chính sách hoàn tiền của chúng ",
+    "tags": [
+      "policy",
+      "gmc",
+      "refund",
+      "privacy",
+      "terms",
+      "shipping",
+      "prose",
+      "legal"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\policy-content\\TPL-050.md"
+  },
+  {
+    "id": "TPL-008",
+    "type": "product-card",
+    "html": "<?php\n$product_id = get_the_ID();\n$wz_product = function_exists( 'wz_get_product' ) ? wz_get_product( $product_id ) : null;\n\nif ( empty( $wz_product ) ) {\n    return;\n}\n\n$brand       = '';\n$brand_terms = wp_get_post_terms( $product_id, 'product_cat', [ 'number' => 1 ] );\nif ( ! is_wp_error( $brand_terms ) && ! empty( $brand_terms ) ) {\n    $brand = strtoupper( $brand_terms[0]->name );\n}\n\n$pa_brand = get_post_meta( $product_id, 'attribute_pa_brand', true );\nif ( $pa_brand ) {\n    $brand = strtoupper( $pa_brand );\n}\n\n$regular_price = (float) ( $wz_product['regular_price'] ?? $wz_product['price'] ?? 0 );\n$sale_price    = (float) ( $wz_product['sale_price'] ?: ( $wz_product['price'] ?? 0 ) );\n$is_on_sale    = $regular_price > 0 && $sale_price > 0 && $sale_price < $regular_price;\n\n$badge = $is_on_sale ? __( 'Giảm giá', 'wezone-haven' ) : '';\n\nif ( ! function_exists( 'wz_format_price' ) ) {\n    function wz_format_price( float $price ): string {\n        return number_format( $price, 0, ',', '",
+    "classes": [
+      "wz-product-card"
+    ],
+    "text": "'wz-product-card__img' ] ); ?>shopping_cart",
+    "tags": [
+      "wz-product",
+      "brand-badge",
+      "sale-badge",
+      "add-to-cart",
+      "stock-check",
+      "reusable"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\product-card\\TPL-008.md"
+  },
+  {
+    "id": "TPL-023",
+    "type": "product-detail",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\n$related = function_exists( 'wz_get_related_products' ) ? wz_get_related_products( $product_id, 4 ) : [];\n$related = array_filter( $related );\n\nif ( empty( $related ) ) { return; }\n?>\n\n<section class=\"mt-10 md:mt-16\">\n    <h2 class=\"text-xl md:text-[28px] font-bold text-[var(--wz-primary)] mb-6\">Sản phẩm liên quan</h2>\n    <div class=\"grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4\">\n        <?php foreach ( $related as $rel ) :\n            if ( ! $rel ) { continue; }\n            get_template_part( 'template-parts/product/card', null, [\n                'product_id' => $rel['id'],\n                'context'    => 'grid',\n            ] );\n        endforeach; ?>\n    </div>\n</section>",
+    "classes": [
+      "mt-10",
+      "md:mt-16"
+    ],
+    "text": "Sản phẩm liên quan$rel['id'],\n                'context'    => 'grid',\n            ] );\n        endforeach; ?>",
+    "tags": [
+      "related-products",
+      "product-grid",
+      "recommendations"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\product-detail\\TPL-023.md"
+  },
+  {
+    "id": "TPL-024",
+    "type": "product-detail",
+    "html": "<?php\n$images = $product['gallery'] ?? [];\n$main_image = $images[0] ?? null;\n?>\n\n<div class=\"product-gallery\">\n    <div class=\"product-gallery__main\">\n        <?php if ( $main_image ) : ?>\n            <img src=\"<?php echo esc_url( $main_image['url'] ); ?>\" \n                 alt=\"<?php echo esc_attr( $product['name'] ); ?>\"\n                 class=\"product-gallery__main-img\"\n                 data-lightbox=\"product\">\n        <?php else : ?>\n            <div class=\"product-gallery__placeholder\">\n                <span class=\"material-symbols-outlined\">image</span>\n            </div>\n        <?php endif; ?>\n    </div>\n\n    <?php if ( count( $images ) > 1 ) : ?>\n        <div class=\"product-gallery__thumbs\">\n            <?php foreach ( $images as $index => $img ) : ?>\n                <button type=\"button\" \n                        class=\"product-gallery__thumb <?php echo 0 === $index ? 'active' : ''; ?>\"\n                        data-index=\"<?php echo esc_attr( (string) $index ); ?>\">\n          ",
+    "classes": [
+      "product-gallery"
+    ],
+    "text": "image1 ) : ?>$img ) : ?>",
+    "tags": [
+      "gallery",
+      "lightbox",
+      "image-slider",
+      "product-images",
+      "zoom"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\product-detail\\TPL-024.md"
+  },
+  {
+    "id": "TPL-025",
+    "type": "product-detail",
+    "html": "<?php\n$description = $product['description'] ?? '';\n$specs = $product['specifications'] ?? [];\n$reviews_count = $product['reviews_count'] ?? 0;\n?>\n\n<div class=\"product-tabs\">\n    <div class=\"product-tabs__nav\">\n        <button class=\"product-tabs__tab active\" data-tab=\"description\">\n            <span class=\"material-symbols-outlined\">description</span>\n            Mô tả\n        </button>\n        <button class=\"product-tabs__tab\" data-tab=\"specs\">\n            <span class=\"material-symbols-outlined\">list_alt</span>\n            Thông số\n        </button>\n        <button class=\"product-tabs__tab\" data-tab=\"reviews\">\n            <span class=\"material-symbols-outlined\">star</span>\n            Đánh giá (<?php echo esc_html( (string) $reviews_count ); ?>)\n        </button>\n    </div>\n\n    <div class=\"product-tabs__content\">\n        <!-- Description tab -->\n        <div class=\"product-tabs__panel active\" data-panel=\"description\">\n            <?php if ( $description ) : ?>\n                <div c",
+    "classes": [
+      "product-tabs"
+    ],
+    "text": "descriptionMô tảlist_altThông sốstarĐánh giá ()Chưa có mô tả chi tiết.$value ) : ?>Chưa có thông số kỹ thuật.0 ) : ?>Chưa có đánh giá nào.",
+    "tags": [
+      "tabs",
+      "product-info",
+      "description",
+      "specifications",
+      "reviews"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\product-detail\\TPL-025.md"
+  },
+  {
+    "id": "TPL-031",
+    "type": "product-detail",
+    "html": "<!-- Quick view modal (hidden by default, shown via JS) -->\n<div id=\"quick-view-modal\" class=\"quick-view-modal hidden\">\n    <div class=\"quick-view-modal__overlay\"></div>\n    <div class=\"quick-view-modal__content\">\n        <button class=\"quick-view-modal__close\" aria-label=\"Close\">\n            <span class=\"material-symbols-outlined\">close</span>\n        </button>\n\n        <div class=\"quick-view-modal__body\">\n            <!-- Left: Image -->\n            <div class=\"quick-view-modal__images\">\n                <img id=\"qv-main-image\" src=\"\" alt=\"\" class=\"quick-view-modal__main-img\">\n                <div id=\"qv-thumbs\" class=\"quick-view-modal__thumbs\">\n                    <!-- Thumbnails rendered by JS -->\n                </div>\n            </div>\n\n            <!-- Right: Details -->\n            <div class=\"quick-view-modal__details\">\n                <h2 id=\"qv-name\" class=\"quick-view-modal__name\"></h2>\n                <div id=\"qv-price\" class=\"quick-view-modal__price\"></div>\n               ",
+    "classes": [
+      "quick-view-modal",
+      "hidden"
+    ],
+    "text": "closeSố lượng:removeaddshopping_cartThêm vào giỏXem chi tiết",
+    "tags": [
+      "quick-view",
+      "modal",
+      "product-preview",
+      "add-to-cart"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\product-detail\\TPL-031.md"
+  },
+  {
+    "id": "TPL-004",
+    "type": "product-grid",
+    "html": "<?php\n$args = array(\n    'post_type'      => 'wz_product',\n    'posts_per_page' => 8,\n    'post_status'    => 'publish',\n    'orderby'        => 'date',\n    'order'          => 'DESC',\n);\n\nif ( ! post_type_exists( 'wz_product' ) ) {\n    $args['post_type'] = 'product';\n}\n\n$products = new WP_Query( $args );\n\nif ( ! $products->have_posts() ) {\n    return;\n}\n\n$shop_url = function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop/' );\n?>\n\n<section style=\"padding:40px 24px;max-width:1280px;margin:0 auto;\">\n    <div class=\"haven-section-header--row\">\n        <div>\n            <p class=\"haven-eyebrow\"><?php esc_html_e( 'Tuyển chọn', 'wezone-haven' ); ?></p>\n            <h2 class=\"haven-heading\"><?php esc_html_e( 'Sản phẩm nổi bật', 'wezone-haven' ); ?></h2>\n        </div>\n        <a href=\"<?php echo esc_url( $shop_url ); ?>\" class=\"haven-view-all\">\n            <?php esc_html_e( 'Tất cả', 'wezone-haven' ); ?>\n        </a>\n    </div>\n\n    <div style=\"display:grid;grid-template-c",
+    "classes": [],
+    "text": "have_posts() ) : $products->the_post();\n            $price     = function_exists( 'wz_get_product_price' ) ? wz_get_product_price( get_the_ID() ) : get_post_meta( get_the_ID(), '_price', true );\n     ",
+    "tags": [
+      "wp-query",
+      "responsive-grid",
+      "discount-badge",
+      "quick-add",
+      "hover-effect",
+      "brand-badge"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\product-grid\\TPL-004.md"
+  },
+  {
+    "id": "TPL-055",
+    "type": "review-form",
+    "html": "<?php\n/**\n * Review Form Component\n * \n * @param int $product_id Product ID\n */\n\n$product_id = $args['product_id'] ?? get_the_ID();\n$current_user = wp_get_current_user();\n?>\n\n<div class=\"review-form-wrapper\">\n\t<h3 class=\"text-2xl font-bold mb-6\">Viết đánh giá</h3>\n\n\t<form id=\"wz-review-form\" class=\"space-y-6\">\n\t\t<!-- Star Rating -->\n\t\t<div>\n\t\t\t<label class=\"block font-semibold mb-2\">\n\t\t\t\tĐánh giá của bạn <span class=\"text-red-500\">*</span>\n\t\t\t</label>\n\t\t\t<div class=\"star-rating flex gap-2\">\n\t\t\t\t<?php for ( $i = 1; $i <= 5; $i++ ): ?>\n\t\t\t\t\t<button \n\t\t\t\t\t\ttype=\"button\" \n\t\t\t\t\t\tclass=\"star text-4xl text-gray-300 hover:text-yellow-400 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded\"\n\t\t\t\t\t\tdata-rating=\"<?php echo $i; ?>\"\n\t\t\t\t\t\taria-label=\"<?php echo $i; ?> sao\"\n\t\t\t\t\t>\n\t\t\t\t\t\t★\n\t\t\t\t\t</button>\n\t\t\t\t<?php endfor; ?>\n\t\t\t</div>\n\t\t\t<input type=\"hidden\" name=\"rating\" id=\"rating-input\" value=\"0\" required />\n\t\t\t<p class=\"text-sm text-red-500 mt-1 hidden\" id=\"rating-error",
+    "classes": [
+      "review-form-wrapper"
+    ],
+    "text": "Viết đánh giáĐánh giá của bạn*★Vui lòng chọn số saoTiêu đề*Nội dung*0/1000 ký tựTối thiểu 50 ký tựTên của bạn*Email*Email không được hiển thị công khaiHình ảnh (tùy chọn)Tối đa 3 ảnh, mỗi ảnh không qu",
+    "tags": [
+      "review",
+      "rating",
+      "form",
+      "star-rating",
+      "validation",
+      "ajax"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\review-form\\TPL-055.md"
+  },
+  {
+    "id": "TPL-042",
+    "type": "review-list",
+    "html": "<!-- reviews.php -->\n<?php\n/**\n * Account — Reviews page.\n */\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) exit;\n\nget_header();\n\nif ( ! is_user_logged_in() ) {\n\twp_safe_redirect( wp_login_url( function_exists( 'wz_get_myaccount_url' ) ? wz_get_myaccount_url() . 'reviews/' : home_url( '/my-account/reviews/' ) ) );\n\texit;\n}\n\n$account_url = function_exists( 'wz_get_myaccount_url' ) ? wz_get_myaccount_url() : home_url( '/my-account/' );\n$user_id     = get_current_user_id();\n\n$reviews = get_comments( [\n\t'user_id' => $user_id,\n\t'type'    => 'review',\n\t'status'  => 'approve',\n\t'number'  => 20,\n\t'orderby' => 'comment_date',\n\t'order'   => 'DESC',\n] );\n?>\n\n<main class=\"py-6 px-4 max-w-3xl mx-auto\">\n\t<nav class=\"text-sm text-[var(--wz-text-muted)] mb-4\" aria-label=\"Breadcrumb\">\n\t\t<a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:underline\"><?php esc_html_e( 'Trang chủ', 'wezone-haven' ); ?></a>\n\t\t<span class=\"mx-1\">/</span>\n\t\t<a href=\"<?php echo esc_url( $account_url ); ",
+    "classes": [
+      "py-6",
+      "px-4",
+      "max-w-3xl",
+      "mx-auto"
+    ],
+    "text": "//comment_post_ID;\n\t\t\t\t$rating     = (int) get_comment_meta( $review->comment_ID, 'rating', true );\n\t\t\t\t$product_title = get_the_title( $product_id );\n\t\t\t\t$product_url   = get_permalink( $product_id )",
+    "tags": [
+      "accessible",
+      "review-list"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\review-list\\TPL-042.md"
+  },
+  {
+    "id": "TPL-026",
+    "type": "search",
+    "html": "<?php\nget_header();\n\n$search_query = get_search_query();\n$results = function_exists( 'wz_search_products' ) ? wz_search_products( $search_query ) : [];\n$total = count( $results );\n?>\n\n<main class=\"search-page\">\n    <!-- Breadcrumb -->\n    <nav class=\"breadcrumb\">\n        <a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\">Trang chủ</a>\n        <span>/</span>\n        <span>Tìm kiếm</span>\n    </nav>\n\n    <!-- Search header -->\n    <div class=\"search-header\">\n        <h1>Kết quả tìm kiếm: \"<?php echo esc_html( $search_query ); ?>\"</h1>\n        <p class=\"search-count\"><?php echo esc_html( sprintf( '%d sản phẩm', $total ) ); ?></p>\n    </div>\n\n    <?php if ( ! empty( $results ) ) : ?>\n        <div class=\"search-layout\">\n            <!-- Sidebar filters -->\n            <aside class=\"search-sidebar\">\n                <?php get_template_part( 'template-parts/search/sidebar-filters' ); ?>\n            </aside>\n\n            <!-- Results grid -->\n            <div class=\"search-results\">\n          ",
+    "classes": [
+      "search-page"
+    ],
+    "text": "Trang chủ/Tìm kiếmKết quả tìm kiếm: \"\"$product['id'],\n                            'context' => 'search',\n                        ] ); ?>20 ) : ?>search_offKhông tìm thấy kết quảKhông có sản phẩm nào p",
+    "tags": [
+      "search",
+      "results",
+      "filters",
+      "pagination",
+      "empty-state"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\search\\TPL-026.md"
+  },
+  {
+    "id": "TPL-048",
+    "type": "search-filters",
+    "html": "<!-- search.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nget_header();\n\n$keyword  = sanitize_text_field( get_search_query() );\n$per_page = 12;\n$paged    = max( 1, (int) ( $_GET['paged'] ?? 1 ) );\n$orderby  = sanitize_text_field( $_GET['orderby'] ?? '' );\n$offset   = ( $paged - 1 ) * $per_page;\n\n$results     = function_exists( 'wz_search_products_db' ) ? wz_search_products_db( $keyword, $per_page, $offset, $orderby ) : [ 'items' => [], 'total' => 0 ];\n$items       = $results['items'];\n$total       = $results['total'];\n$total_pages = $total > 0 ? (int) ceil( $total / $per_page ) : 0;\n?>\n\n<main class=\"max-w-[1320px] mx-auto px-5 md:px-[20px]\">\n\n    <!-- Breadcrumb -->\n    <nav aria-label=\"Breadcrumb\" class=\"pt-4 pb-2\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            ",
+    "classes": [
+      "max-w-[1320px]",
+      "mx-auto",
+      "px-5",
+      "md:px-[20px]"
+    ],
+    "text": "Trang chủchevron_rightTìm kiếmchevron_right\"\"$item ) :\n                        get_template_part( 'template-parts/product/card', null, [\n                            'product_id' => $item['id'],\n      ",
+    "tags": [
+      "grid",
+      "accessible",
+      "mobile-first",
+      "search-filters",
+      "wz-product"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\search-filters\\TPL-048.md"
+  },
+  {
+    "id": "TPL-046",
+    "type": "search-results",
+    "html": "<!-- search.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nget_header();\n\n$keyword  = sanitize_text_field( get_search_query() );\n$per_page = 12;\n$paged    = max( 1, (int) ( $_GET['paged'] ?? 1 ) );\n$orderby  = sanitize_text_field( $_GET['orderby'] ?? '' );\n$offset   = ( $paged - 1 ) * $per_page;\n\n$results     = function_exists( 'wz_search_products_db' ) ? wz_search_products_db( $keyword, $per_page, $offset, $orderby ) : [ 'items' => [], 'total' => 0 ];\n$items       = $results['items'];\n$total       = $results['total'];\n$total_pages = $total > 0 ? (int) ceil( $total / $per_page ) : 0;\n?>\n\n<main class=\"max-w-[1320px] mx-auto px-5 md:px-[20px]\">\n\n    <!-- Breadcrumb -->\n    <nav aria-label=\"Breadcrumb\" class=\"pt-4 pb-2\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            ",
+    "classes": [
+      "max-w-[1320px]",
+      "mx-auto",
+      "px-5",
+      "md:px-[20px]"
+    ],
+    "text": "Trang chủchevron_rightTìm kiếmchevron_right\"\"$item ) :\n                        get_template_part( 'template-parts/product/card', null, [\n                            'product_id' => $item['id'],\n      ",
+    "tags": [
+      "search-results",
+      "wz-product",
+      "mobile-first",
+      "grid",
+      "accessible"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\search-results\\TPL-046.md"
+  },
+  {
+    "id": "TPL-033",
+    "type": "shipping-form",
+    "html": "<!-- shipping-section.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\n$express_fee = function_exists( 'wz_config' ) ? (float) wz_config( 'shipping.fees.express', 100000 ) : 100000;\n?>\n\n<div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] shadow-[0_4px_24px_rgba(27,58,122,0.08)] p-5 md:p-6\">\n    <h2 class=\"text-base font-bold text-[var(--wz-primary)] mb-4 flex items-center gap-2\">\n        <span class=\"material-symbols-outlined text-[20px]\" aria-hidden=\"true\">local_shipping</span>\n        Phương thức vận chuyển\n    </h2>\n\n    <div class=\"space-y-3\">\n        <label class=\"flex items-center gap-3 p-3 border border-[var(--wz-primary)] bg-[var(--wz-primary)]/5 rounded-[var(--wz-radius)] cursor-pointer\">\n            <input type=\"radio\" name=\"shipping_method\" value=\"standard\" checked class=\"w-4 h-4 text-[var(--wz-primary)] focus:ring-[var(--wz-primary)]\">\n            <div class=\"flex-1\">\n                <p class=\"text-sm font-semibold text-[v",
+    "classes": [
+      "bg-[var(--wz-surface-pure)]",
+      "rounded-[var(--wz-radius-card)]",
+      "shadow-[0_4px_24px_rgba(27,58,122,0.08)]",
+      "p-5",
+      "md:p-6"
+    ],
+    "text": "local_shippingPhương thức vận chuyểnGiao hàng tiêu chuẩn3-5 ngày làm việcGiao hàng nhanh1-2 ngày làm việccheck_circleĐơn hàng đủ điều kiện miễn phí vận chuyển",
+    "tags": [
+      "form",
+      "accessible",
+      "shipping-form"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\shipping-form\\TPL-033.md"
+  },
+  {
+    "id": "TPL-022",
+    "type": "sidebar",
+    "html": "<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\n$categories   = $categories ?? [];\n$current_slug = $current_slug ?? '';\n?>\n\n<?php $wz_filter_cat_id = isset( $category ) && ! empty( $category['id'] ) ? (int) $category['id'] : 0; ?>\n<aside class=\"hidden lg:block w-[260px] shrink-0 sticky top-[120px] self-start max-h-[calc(100vh-140px)] overflow-y-auto\" id=\"archive-sidebar\" data-category-id=\"<?php echo esc_attr( (string) $wz_filter_cat_id ); ?>\">\n    <div class=\"bg-[var(--wz-surface-pure)] rounded-[var(--wz-radius-card)] p-5 shadow-[0_4px_24px_rgba(27,58,122,0.08)]\">\n\n        <!-- Categories -->\n        <div class=\"wz-filter-group\" data-group=\"category\">\n            <button type=\"button\" class=\"wz-filter-toggle flex items-center justify-between w-full pb-3 border-b border-[var(--wz-outline)]/20\">\n                <span class=\"text-[11px] font-bold uppercase tracking-wide text-[var(--wz-primary)]\">Danh mục</span>\n                <span class=\"material-symbols-outline",
+    "classes": [
+      "hidden",
+      "lg:block",
+      "w-[260px]",
+      "shrink-0",
+      "sticky",
+      "top-[120px]",
+      "self-start",
+      "max-h-[calc(100vh-140px)]",
+      "overflow-y-auto"
+    ],
+    "text": "Danh mụcexpand_moreKhoảng giáexpand_moreDưới 2tr2-5tr5-10tr10-20trTrên 20tr$attr_values ) :\n            $group_key = sanitize_title( $attr_name );\n        ?>expand_more",
+    "tags": [
+      "sidebar",
+      "filters",
+      "category",
+      "price",
+      "attributes",
+      "sticky",
+      "collapsible"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\sidebar\\TPL-022.md"
+  },
+  {
+    "id": "TPL-006",
+    "type": "trust-badges",
+    "html": "<?php\n$badges = array(\n    array( 'icon' => 'forest',         'title' => __( 'Gỗ tự nhiên chuẩn FSC', 'wezone-haven' ),  'desc' => __( 'Bền vững & Thân thiện với môi trường', 'wezone-haven' ) ),\n    array( 'icon' => 'verified_user',  'title' => __( 'Bảo hành 36 tháng', 'wezone-haven' ),       'desc' => __( 'Cam kết chất lượng dài lâu', 'wezone-haven' ) ),\n    array( 'icon' => 'local_shipping', 'title' => __( 'Giao lắp tận nhà', 'wezone-haven' ),        'desc' => __( 'Nhanh chóng & Tận tâm', 'wezone-haven' ) ),\n    array( 'icon' => 'autorenew',      'title' => __( 'Đổi trả 30 ngày', 'wezone-haven' ),         'desc' => __( 'Miễn phí & Dễ dàng', 'wezone-haven' ) ),\n);\n?>\n\n<section style=\"width:100%;background:#fff;border-top:1px solid var(--wz-border,#E8E0D5);border-bottom:1px solid var(--wz-border,#E8E0D5);padding:28px 24px;\">\n    <div style=\"max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:20px;\" class=\"haven-trust-grid\">\n        <?php foreach ( $badge",
+    "classes": [],
+    "text": "",
+    "tags": [
+      "full-width",
+      "icon-text",
+      "material-symbols",
+      "border-separator",
+      "responsive-grid"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\trust-badges\\TPL-006.md"
+  },
+  {
+    "id": "TPL-040",
+    "type": "wallet-balance",
+    "html": "<!-- wallet.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id      = get_current_user_id();\n$balance      = function_exists( 'wz_get_wallet_balance' ) ? wz_get_wallet_balance( $user_id ) : 0;\n$transactions = function_exists( 'wz_get_wallet_transactions' ) ? wz_get_wallet_transactions( $user_id, 1 ) : [];\n\nset_query_var( 'wz_tpl_account_page', 'dashboard' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <nav aria-label=\"Breadcrumb\" class=\"pb-4\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            <li><span class=\"material-symbols-outlined text-[14px]\" aria-hidden=\"true\">chevron_",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Trang chủchevron_rightTài khoảnchevron_rightVí của tôiSố dư hiện tạiLịch sử giao dịchTất cảNạp tiềnSử dụngHoàn tiềnaccount_balance_walletChưa có giao dịch nàoBắt đầu mua sắm[ 'icon' => 'add_circle',  ",
+    "tags": [
+      "wallet-balance",
+      "accessible"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\wallet-balance\\TPL-040.md"
+  },
+  {
+    "id": "TPL-038",
+    "type": "wishlist-grid",
+    "html": "<!-- wishlist.php -->\n<?php\ndeclare(strict_types=1);\n\nif ( ! defined( 'ABSPATH' ) ) { exit; }\n\nif ( ! is_user_logged_in() ) {\n    wp_safe_redirect( home_url( '/my-account/login/' ) );\n    exit;\n}\n\nget_header();\n\n$user_id  = get_current_user_id();\n$wishlist = get_user_meta( $user_id, 'wz_wishlist', true );\n$wishlist = is_array( $wishlist ) ? $wishlist : [];\n\nset_query_var( 'wz_tpl_account_page', 'wishlist' );\n?>\n\n<div class=\"bg-[var(--wz-surface)] min-h-screen\">\n<div class=\"max-w-[1280px] mx-auto px-5 md:px-[20px] py-4\">\n\n    <nav aria-label=\"Breadcrumb\" class=\"pb-4\">\n        <ol class=\"flex items-center gap-1 text-xs md:text-sm text-[var(--wz-outline)]\">\n            <li><a href=\"<?php echo esc_url( home_url( '/' ) ); ?>\" class=\"hover:text-[var(--wz-primary)] transition\">Trang chủ</a></li>\n            <li><span class=\"material-symbols-outlined text-[14px]\" aria-hidden=\"true\">chevron_right</span></li>\n            <li><a href=\"<?php echo esc_url( home_url( '/my-account/' ) ); ?>\" class=\"h",
+    "classes": [
+      "bg-[var(--wz-surface)]",
+      "min-h-screen"
+    ],
+    "text": "Trang chủchevron_rightTài khoảnchevron_rightYêu thíchSản phẩm yêu thích ()favorite_borderChưa có sản phẩm yêu thíchThêm sản phẩm vào danh sách yêu thích để mua sauKhám phá sản phẩm(int) $product_id,\n ",
+    "tags": [
+      "wishlist-grid",
+      "grid",
+      "accessible"
+    ],
+    "source": "kiwi_template",
+    "file": "templates\\sections\\wishlist-grid\\TPL-038.md"
+  },
+  {
+    "id": "TPL-014",
+    "type": "wp-plugin",
+    "html": "<?php\n/**\n * Plugin Name: Wezone Demo Bar\n * Description: Floating CTA bar hiển thị trên demo sites — tự động inject vào mọi theme.\n * Version: 1.0.0\n */\n\ndefined( 'ABSPATH' ) || exit;\n\nclass Wezone_Demo_Bar {\n\n    private const API_URL  = 'https://wezone.vn/api/wordpress/themes';\n    private const ZALO_URL = 'https://zalo.me/wezone';\n    private const SITE_URL = 'https://wezone.vn';\n\n    public function boot(): void {\n        if ( ! $this->should_show() ) return;\n        add_action( 'wp_footer', [ $this, 'render' ] );\n    }\n\n    private function should_show(): bool {\n        $host = $_SERVER['HTTP_HOST'] ?? '';\n        return str_contains( $host, 'wp.wezone.vn' ) || isset( $_GET['demo-bar'] );\n    }\n\n    private function get_slug(): string {\n        $option = get_option( 'wezone_demo_slug', '' );\n        if ( $option ) return sanitize_key( $option );\n\n        $text_domain = wp_get_theme()->get( 'TextDomain' );\n        if ( $text_domain && str_starts_with( $text_domain, 'wezone-' ) ) {",
+    "classes": [],
+    "text": "#wz-demo-bar {\n            position: fixed; left: 0; right: 0; z-index: 99999;\n            background: #fff; border-top: 3px solid <?php echo $accent; ?>;\n            box-shadow: 0 -2px 12px rgba(0,0,",
+    "tags": "plugin,floating-bar,cta,demo,responsive,wp_footer,transient",
+    "source": "kiwi_template",
+    "file": "templates\\sections\\wp-plugin\\TPL-014.md"
+  }
+]

@@ -78,8 +78,10 @@ class TestVerifier:
             )
 
         try:
+            # Use shell=True for cross-platform compatibility (npm, bash, etc.)
             result = subprocess.run(
-                test_command.split(),
+                test_command,
+                shell=True,
                 cwd=self.project_path,
                 capture_output=True,
                 text=True,

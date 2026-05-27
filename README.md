@@ -1,59 +1,26 @@
-# Kiwi — Autonomous Code Quality Agent
-
-**Version:** 2.0.0 (Dual-Mode)  
-**Score:** 86/100  
-**Total Lessons:** 562 | CRITICAL: 139 | HIGH: 331 | INFO: 18 | MEDIUM: 3 | SUGGEST: 71
-
-Kiwi là bug pattern scanner + autonomous agent với 2 modes:
-1. **Standalone CLI** — Chạy độc lập, không cần Claude Code
-2. **MCP Integration** — Tích hợp với Claude Code qua 19 MCP tools
-
----
-
-## Quick Start
-
-### Standalone Mode
-
-```bash
-# Install
-cd .claude/kiwi
-pip install -e .
-
-# Scan project
-kiwi scan wezone-plugins --severity CRITICAL
-
-# Quick file check
-kiwi check src/Plugin.php
-
-# Auto-fix với agent
-kiwi agent wezone-plugins --lite --apply
-
-# Deploy to VPS
-kiwi deploy themes/sfvn --type wp_theme --mode execute
-```
-
-### MCP Mode (Claude Code)
-
-Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
-- `kiwi_context` — Inject rules trước khi code
-- `kiwi_check` — Quick file check sau Write/Edit
-- `kiwi_scan` — Scan project
-- `kiwi_deploy` — Token-optimized deployment
-- ... và 15 tools khác
-
----
-
-## Documentation
-
-- **[README-CLI.md](README-CLI.md)** — Standalone CLI usage guide
-- **[README-MCP.md](README-MCP.md)** — Claude Code integration guide
-- **[UPGRADE-PLAN-90.md](UPGRADE-PLAN-90.md)** — Roadmap to 90/100
-
----
-
-## Lesson Index
+# Kiwi — Bug/Lesson Index
 
 > Auto-generated. Do NOT edit manually. Run `python tools/rebuild_index.py`.
+
+**Total: 595** | CRITICAL: 144 | HIGH: 355 | INFO: 18 | MEDIUM: 3 | SUGGEST: 75
+
+## accessibility
+
+| ID | Sev | Pattern | Summary |
+|----|-----|---------|---------|
+| LES-674 | CRIT | `<button[^>]*(?:className)[^>]*>(?:\s*<(?...` | Interactive element missing accessible name |
+| LES-678 | CRIT | `className="[^"]*(?:text-red|text-green|b...` | Color-only state indication without text/icon alternative |
+| LES-679 | CRIT | `focus-visible:|focus:` | Interactive elements missing focus-visible styles |
+| LES-675 | HIGH | `<(?:img|Image)\b[^>]*(?<!alt="[^"]*")[^>...` | Image missing alt attribute |
+| LES-676 | HIGH | `<input[^>]*(?:type="(?:text|email|passwo...` | Form input without associated label |
+| LES-677 | HIGH | `<div[^>]*onClick[^>]*(?<!role="button")(...` | Click handler on non-interactive element without keyboard su |
+| LES-680 | HIGH | `<main|role="main"` | Page missing landmark roles (main/nav/header/footer) |
+| LES-681 | HIGH | `<h[3-6]` | Heading hierarchy skip (h1 followed by h3, no h2) |
+| LES-682 | HIGH | `<(div|span)[^>]*onClick(?![^>]*role=)` | Click handlers on div/span without role='button' and tabInde |
+| LES-683 | HIGH | `text-red-[4-7]00|text-green-[4-7]00|bg-r...` | Color-only state indication (no icon/aria for errors) |
+| LES-685 | HIGH | `skip.*content|skip.*main|#main-content|s...` | WP template missing skip-nav link |
+| LES-686 | HIGH | `<input[^>]*type="(text|email|tel|passwor...` | WP form inputs missing associated labels (for= attribute) |
+| LES-684 | SUGG | `skip.*content|skip.*main|#main-content` | Skip-to-content link missing at page top |
 
 ## ads-compliance
 
@@ -106,6 +73,16 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 | LES-658 | SUGG | `^\s{4,}(import|from)\s+` | Nested Import Inside Function Body |
 | LES-664 | SUGG | `from \w+ import \*` | Wildcard Import — Namespace Pollution |
 
+## component-pattern
+
+| ID | Sev | Pattern | Summary |
+|----|-----|---------|---------|
+| LES-687 | HIGH | `loading|skeleton|spinner|Skeleton|Loadin...` | Loading state missing — content jumps on data fetch |
+| LES-688 | HIGH | `error|Error|isError|ErrorBoundary|error\...` | Error state missing — failed fetch shows blank or crashes |
+| LES-689 | HIGH | `empty|Empty|no.*found|không.*có|length\s...` | Empty state missing — zero items shows blank area |
+| LES-693 | HIGH | `(?:w-[3-6] h-[3-6]|size=['"]?(?:1[2-9]|2...` | Mixed icon sizes in same toolbar/nav (w-4 h-4 vs w-5 h-5) |
+| LES-695 | SUGG | `shadow-lg|shadow-xl|shadow-2xl` | Mixed shadow scales in same page section |
+
 ## concurrency
 
 | ID | Sev | Pattern | Summary |
@@ -154,6 +131,14 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 | ID | Sev | Pattern | Summary |
 |----|-----|---------|---------|
 | LES-534 | CRIT | `d3\.forceSimulation\([^)]*\).*\.data\([^...` | D3 force simulation nodes without initial x/y positions â€”  |
+
+## dark-mode
+
+| ID | Sev | Pattern | Summary |
+|----|-----|---------|---------|
+| LES-701 | HIGH | `ring-gray-[23]00|ring-blue-[23]00|outlin...` | Ring/outline colors missing dark variants |
+| LES-702 | HIGH | `style=.*(?:background|color).*(?:#fff|#f...` | Hardcoded white/black in inline styles without dark check |
+| LES-703 | SUGG | `placeholder-gray-[45]00(?!.*dark:placeho...` | Placeholder text color missing dark variant |
 
 ## db-schema
 
@@ -308,6 +293,13 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 | LES-315 | HIGH | `update.*\$request->get_param|wpdb->updat...` | Admin concurrent edit — no optimistic locking on shared reso |
 | LES-320 | HIGH | `catch\s*\([^)]*\)\s*\{[^}]*(?:console\.(...` | Admin SPA error handling — API errors shown as raw JSON or s |
 
+## layout-consistency
+
+| ID | Sev | Pattern | Summary |
+|----|-----|---------|---------|
+| PW-032 | HIGH | `px-6|px-8` | Container padding inconsistency (px-4 vs px-6 in same sectio |
+| PW-034 | HIGH | `max-w-screen-xl|max-w-screen-2xl` | Mixed container strategies (max-w-7xl vs max-w-screen-xl) |
+
 ## loyalty
 
 | ID | Sev | Pattern | Summary |
@@ -456,7 +448,6 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 | LES-076 | CRIT | `'\$wpdb->(?:query|get_results|get_row|ge...` | SQL query không dùng $wpdb->prepare() — SQL injection risk |
 | LES-078 | CRIT | `DROP TABLE|TRUNCATE TABLE` | DROP/TRUNCATE TABLE ngoài migration file — data loss risk nế |
 | LES-081 | CRIT | `verify_ipn|verify_signature|verify_hmac|...` | IPN/webhook handler thiếu verify signature/amount/status — f |
-| LES-103 | CRIT | `file_get_contents\s*\(|file_put_contents...` | file_get/put_contents trong plugin — bypass WP_Filesystem, p |
 | LES-213 | CRIT | `register_rest_route.*(?:'permission_call...` | WordPress plugin REST endpoint without permission callback — |
 | LES-214 | CRIT | `\$wpdb->(?:query|get_results|get_row|get...` | wpdb query without prepare — SQL injection vulnerability |
 | LES-309 | CRIT | `foreach.*\$ids.*\{[\s\S]*?\$wpdb->(?:upd...` | Admin bulk action without DB transaction — partial state on  |
@@ -596,7 +587,7 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 
 | ID | Sev | Pattern | Summary |
 |----|-----|---------|---------|
-| LES-531 | CRIT | `(?<!useEffect\([^)]*\)\s*\{\s*)(?<!if\s*...` | React useEffect race condition â€” renderGraph called before |
+| LES-531 | CRIT | `renderGraph\s*\([^)]*\)` | React useEffect race condition - renderGraph called before S |
 | LES-536 | HIGH | `useEffect.*\[\].*loadGraph|useEffect.*We...` | React useEffect infinite loop on WebSocket reconnect |
 | LES-537 | HIGH | `useEffect.*\[\].*load|useEffect.*async.*...` | useEffect infinite loading on WebSocket reconnect |
 | LES-539 | HIGH | `setInterval.*async\s+function|setInterva...` | setInterval polling async function without mounted guard |
@@ -621,6 +612,22 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 |----|-----|---------|---------|
 | LES-528 | HIGH | `open\([^)]+\)(?!\s*as\s)` | File Handle Leak - Missing Context Manager |
 
+## responsive
+
+| ID | Sev | Pattern | Summary |
+|----|-----|---------|---------|
+| LES-718 | CRIT | `grid-cols` | Grid missing tablet breakpoint (grid-cols-2 lg:grid-cols-4,  |
+| LES-719 | CRIT | `md:hidden|lg:hidden` | md:hidden on body/main blocking desktop content |
+| LES-725 | CRIT | `grid-cols` | WP theme grid missing tablet breakpoint |
+| LES-715 | HIGH | `className="[^"]*\bw-\[(?:[4-9]\d{2}|[1-9...` | Fixed width on container causes horizontal scroll on mobile |
+| LES-717 | HIGH | `className="[^"]*\bflex\b[^"]*\bflex-row\...` | Flex row without wrap causes overflow on mobile |
+| LES-720 | HIGH | `flex-row|flex-col` | Flex layout missing responsive stack (no flex-col on mobile) |
+| LES-721 | HIGH | `md:hidden|lg:hidden` | Bottom nav visible on desktop (missing md:hidden) |
+| LES-722 | HIGH | `hidden lg:block|hidden md:block` | Sidebar filters visible on mobile (missing responsive hide) |
+| LES-723 | HIGH | `text-(xl|2xl|3xl|4xl|5xl)` | Text size has lg: variant but no base mobile size |
+| LES-726 | HIGH | `hidden lg:block|hidden md:block|lg:block...` | WP sidebar visible on mobile without responsive hide |
+| LES-724 | SUGG | `p[xytblr]?-|m[xytblr]?-` | Padding/margin jumps without intermediate breakpoint |
+
 ## security
 
 | ID | Sev | Pattern | Summary |
@@ -630,7 +637,7 @@ Kiwi tự động available trong Claude Code qua hooks. Claude có thể gọi:
 | LES-635 | CRIT | `pickle\.(load|loads)\s*\(` | pickle.load — Arbitrary Code Execution Risk |
 | LES-637 | CRIT | `\bos\.system\s*\(` | os.system() — Use subprocess Instead |
 | LES-638 | CRIT | `(password|secret|api_key|token)\s*=\s*["...` | Hardcoded Credentials in Python Source |
-| LES-641 | CRIT | `(execute|executemany)\s*\(\s*f["\x27]` | SQL Injection via String Formatting |
+| LES-641 | CRIT | `(execute|executemany)\s*\(\s*f["\x27](?!...` | SQL Injection via String Formatting |
 | LES-644 | CRIT | `subprocess\.\w+\(.*shell\s*=\s*True` | subprocess shell=True — Command Injection Risk |
 | LES-655 | CRIT | `\bexec\s*\(` | exec() Usage — Arbitrary Code Execution |
 | LES-656 | CRIT | `yaml\.load\(` | yaml.load() Without SafeLoader — Code Execution Risk |

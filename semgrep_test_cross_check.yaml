@@ -1,0 +1,11 @@
+rules:
+  - id: wp-mail-without-wz-config
+    patterns:
+      - pattern: wp_mail(...)
+      - pattern-not-inside: |
+          $SHOP = wz_config(...);
+          ...
+          wp_mail(...);
+    languages: [php]
+    severity: WARNING
+    message: wp_mail() should use wz_config() for subject/body to support theme cloning

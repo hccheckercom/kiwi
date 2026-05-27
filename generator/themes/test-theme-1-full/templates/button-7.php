@@ -1,0 +1,1 @@
+<a href='<?php echo wz_config("button.link"); ?>'><?php echo wz_config("button.text"); ?></a>

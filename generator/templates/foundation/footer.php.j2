@@ -65,7 +65,14 @@
 			<!-- Copyright -->
 			<div class="border-t border-outline mt-8 pt-8 text-center text-sm text-on-surface-variant">
 				<p><?php echo esc_html( {{ theme_slug_underscore }}_config( 'footer.copyright' ) ); ?></p>
-				<p class="mt-2"><?php echo esc_html( {{ theme_slug_underscore }}_config( 'footer.powered_by' ) ); ?></p>
+				<p class="mt-2">
+					<a href="<?php echo esc_url( home_url( '/chinh-sach-hoan-tien' ) ); ?>" class="hover:text-primary">
+						<?php esc_html_e( 'Chính sách hoàn tiền', '{{ theme_slug }}' ); ?>
+					</a>
+					<?php if ( {{ theme_slug_underscore }}_config( 'footer.powered_by' ) ) : ?>
+						| <?php echo esc_html( {{ theme_slug_underscore }}_config( 'footer.powered_by' ) ); ?>
+					<?php endif; ?>
+				</p>
 			</div>
 		</div>
 	</footer>
