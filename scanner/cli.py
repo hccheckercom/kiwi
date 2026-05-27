@@ -232,9 +232,45 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
     print(f"Scanning {os.path.basename(theme_path)}...", flush=True)
     print(f"Checking {total_patterns} patterns...", flush=True)
 
+    # Collect ALL unique files across ALL patterns BEFORE scanning
+    all_unique_files = set()
+    if cache_available and not cache_is_empty:
+        for pattern_def in patterns:
+            if skip_root_patterns and _is_root_level_pattern(pattern_def):
+                continue
+            if pattern_def.get("severity") == "INFO" and severity_filter != "INFO":
+                continue
+            if severity_filter != "ALL" and pattern_def["severity"] != severity_filter:
+                continue
+
+            scope = pattern_def.get("scope", "**/*")
+            exclude = pattern_def.get("exclude")
+            if rewrite_scopes:
+                scope = rewrite_scope_for_theme(scope)
+                if exclude:
+                    exclude = rewrite_scope_for_theme(exclude)
+            files = resolve_scope(theme_path, scope, exclude)
+
+            if diff_only and changed_files is not None:
+                files = [f for f in files if f in changed_files]
+
+            all_unique_files.update(files)
+
+    # Single batch query for ALL files at once (O(1) query)
+    all_files_cache = {}
+    if cache_available and not cache_is_empty and all_unique_files:
+        from . import cache as cache_module
+        print(f"Loading cache for {len(all_unique_files)} files...", flush=True)
+        all_files_cache = cache_module.get_cached_violations_batch(
+            list(all_unique_files),
+            patterns_version,
+            git_commit  # Pass git commit for fast-path optimization
+        )
+        cache_hits = sum(1 for v in all_files_cache.values() if v is not None)
+        print(f"Cache: {cache_hits} hits, {len(all_unique_files) - cache_hits} misses", flush=True)
+
     # Track violations to cache after scan
     files_to_cache = {}  # file_path -> list of violations
-    all_files_cache = {}  # Lazy-loaded cache results
 
     patterns_processed = 0
     for pattern_def in patterns:
@@ -274,18 +310,9 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
         checker = get_checker(ptype)
 
         if checker:
-            # Lazy-load cache for files in this pattern's scope
-            if cache_available and not cache_is_empty:
+            # Use pre-loaded cache (already queried once at start)
+            if cache_available and not cache_is_empty and all_files_cache:
                 from .models import Violation
-                from . import cache as cache_module
-
-                # Check which files need cache lookup
-                files_needing_cache = [f for f in files if f not in all_files_cache]
-
-                if files_needing_cache:
-                    # Batch query only for new files
-                    batch_cache = cache_module.get_cached_violations_batch(files_needing_cache, patterns_version)
-                    all_files_cache.update(batch_cache)
 
                 cached_violations = []
                 files_to_scan = []

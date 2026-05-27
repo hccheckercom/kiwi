@@ -102,12 +102,13 @@ def get_cached_violations(file_path: str, current_hash: str, patterns_version: s
         return None
 
 
-def get_cached_violations_batch(file_paths: list[str], patterns_version: str = None) -> dict[str, Optional[list]]:
+def get_cached_violations_batch(file_paths: list[str], patterns_version: str = None, git_commit: str = None) -> dict[str, Optional[list]]:
     """Get cached violations for multiple files in one query.
 
     Args:
         file_paths: List of file paths to check
         patterns_version: Current patterns version for cache invalidation
+        git_commit: Current git commit hash (if unchanged, skip hash validation)
 
     Returns:
         Dict mapping file_path -> violations list (or None if cache miss)
@@ -118,16 +119,25 @@ def get_cached_violations_batch(file_paths: list[str], patterns_version: str = N
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
 
-    # Batch query with IN clause - only fetch files that have cache entries
+    # Batch query with IN clause
     placeholders = ",".join("?" * len(file_paths))
     rows = conn.execute(
-        f"SELECT file_path, file_hash, patterns_version, violations_json FROM scan_cache WHERE file_path IN ({placeholders})",
+        f"SELECT file_path, file_hash, git_commit, patterns_version, violations_json FROM scan_cache WHERE file_path IN ({placeholders})",
         file_paths
     ).fetchall()
     conn.close()
 
-    # Only compute hashes for files that have cache entries
+    # Build lookup dict
     cached_data = {row["file_path"]: row for row in rows}
+
+    # Optimization: if git commit matches, skip hash validation entirely
+    # (files can't change without commit changing)
+    skip_hash_check = False
+    if git_commit and cached_data:
+        # Check if all cached entries have same git commit
+        cached_commits = {row["git_commit"] for row in cached_data.values()}
+        if len(cached_commits) == 1 and git_commit in cached_commits:
+            skip_hash_check = True
 
     # Build result dict
     result = {}
@@ -138,10 +148,22 @@ def get_cached_violations_batch(file_paths: list[str], patterns_version: str = N
             result[file_path] = None
             continue
 
-        # Compute hash only for this cached file
-        current_hash = _get_file_hash(file_path)
+        # Fast path: git commit unchanged, skip hash validation
+        if skip_hash_check:
+            # Check patterns version only
+            if patterns_version and row["patterns_version"] and row["patterns_version"] != patterns_version:
+                result[file_path] = None
+                continue
 
-        # Check hash match
+            # Parse violations
+            try:
+                result[file_path] = json.loads(row["violations_json"])
+            except json.JSONDecodeError:
+                result[file_path] = None
+            continue
+
+        # Slow path: validate hash (git commit changed or missing)
+        current_hash = _get_file_hash(file_path)
         if row["file_hash"] != current_hash:
             result[file_path] = None
             continue
