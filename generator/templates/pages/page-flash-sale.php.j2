@@ -1,0 +1,138 @@
+<?php
+/**
+ * Page: Flash Sale
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+$paged    = max( 1, (int) ( get_query_var( 'paged' ) ?: 1 ) );
+$products = get_posts( array(
+	'post_type'      => 'wz_product',
+	'posts_per_page' => 20,
+	'paged'          => $paged,
+	'meta_query'     => array(
+		array(
+			'key'     => '_sale_price',
+			'value'   => 0,
+			'compare' => '>',
+			'type'    => 'NUMERIC',
+		),
+	),
+	'orderby'  => 'meta_value_num',
+	'meta_key' => '_discount_percent',
+	'order'    => 'DESC',
+) );
+$end_time = function_exists( 'wz_config' ) ? wz_config( 'flash_sale.end_time' ) : '';
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Flash Sale</span>
+		</nav>
+
+		<!-- Banner + Countdown -->
+		<div class="bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 mb-8 text-white text-center">
+			<h1 class="text-3xl font-bold mb-2">Flash Sale</h1>
+			<p class="text-white/80 mb-4">Ưu đãi có thời hạn — Nhanh tay kẻo lỡ!</p>
+			<?php if ( $end_time ) : ?>
+			<div id="wz-countdown" class="flex justify-center gap-4" aria-label="Đếm ngược thời gian">
+				<?php foreach ( array( 'hours' => 'Giờ', 'minutes' => 'Phút', 'seconds' => 'Giây' ) as $unit => $label ) : ?>
+				<div class="bg-white/20 rounded-xl px-4 py-3 min-w-[64px]">
+					<div class="text-3xl font-bold font-mono" id="wz-cd-<?php echo esc_attr( $unit ); ?>">00</div>
+					<div class="text-xs text-white/70 mt-1"><?php echo esc_html( $label ); ?></div>
+				</div>
+				<?php endforeach; ?>
+			</div>
+			<?php endif; ?>
+		</div>
+
+		<?php if ( ! empty( $products ) ) : ?>
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+			<?php foreach ( $products as $post ) :
+				$product = function_exists( 'wz_get_product' ) ? wz_get_product( $post->ID ) : null;
+				if ( ! $product ) continue;
+				$discount = ! empty( $product['regular_price'] ) && $product['regular_price'] > 0
+					? round( ( 1 - $product['price'] / $product['regular_price'] ) * 100 )
+					: 0;
+			?>
+			<article class="bg-white rounded-xl shadow-sm overflow-hidden group">
+				<div class="relative">
+					<a href="<?php echo esc_url( wz_get_permalink( $product ) ); ?>">
+						<img src="<?php echo esc_url( $product['thumbnail'] ); ?>"
+						     alt="<?php echo esc_attr( $product['name'] ); ?>"
+						     class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+						     loading="lazy">
+					</a>
+					<?php if ( $discount > 0 ) : ?>
+					<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+						-<?php echo esc_html( (string) (int) $discount ); ?>%
+					</span>
+					<?php endif; ?>
+				</div>
+				<div class="p-3">
+					<a href="<?php echo esc_url( wz_get_permalink( $product ) ); ?>"
+					   class="text-sm font-medium line-clamp-2 hover:text-primary transition-colors">
+						<?php echo esc_html( $product['name'] ); ?>
+					</a>
+					<div class="flex items-center gap-2 mt-2">
+						<span class="font-bold text-primary"><?php echo esc_html( wz_format_price( $product['price'] ) ); ?></span>
+						<?php if ( ! empty( $product['regular_price'] ) ) : ?>
+						<span class="text-xs text-gray-400 line-through"><?php echo esc_html( wz_format_price( $product['regular_price'] ) ); ?></span>
+						<?php endif; ?>
+					</div>
+					<button type="button"
+					        class="mt-3 w-full py-1.5 bg-primary text-white text-sm rounded-lg hover:opacity-90 transition-opacity wz-add-to-cart"
+					        data-product-id="<?php echo esc_attr( $product['id'] ); ?>">
+						Thêm vào giỏ
+					</button>
+				</div>
+			</article>
+			<?php endforeach; ?>
+		</div>
+		<?php else : ?>
+		<div class="text-center py-16">
+			<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">local_offer</span>
+			<h2 class="text-xl font-bold mb-2">Hiện tại chưa có chương trình khuyến mãi</h2>
+			<a href="<?php echo esc_url( function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop' ) ); ?>"
+			   class="inline-block mt-4 px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+				Xem tất cả sản phẩm
+			</a>
+		</div>
+		<?php endif; ?>
+
+	</div>
+</main>
+
+<?php if ( $end_time ) : ?>
+<script>
+(function() {
+	var end = new Date('<?php echo esc_js( $end_time ); ?>').getTime();
+	function update() {
+		var now = Date.now();
+		var diff = Math.max(0, end - now);
+		var h = Math.floor(diff / 3600000);
+		var m = Math.floor((diff % 3600000) / 60000);
+		var s = Math.floor((diff % 60000) / 1000);
+		var pad = function(n) { return String(n).padStart(2, '0'); };
+		var hEl = document.getElementById('wz-cd-hours');
+		var mEl = document.getElementById('wz-cd-minutes');
+		var sEl = document.getElementById('wz-cd-seconds');
+		if (hEl) hEl.textContent = pad(h);
+		if (mEl) mEl.textContent = pad(m);
+		if (sEl) sEl.textContent = pad(s);
+		if (diff > 0) setTimeout(update, 1000);
+	}
+	update();
+})();
+</script>
+<?php endif; ?>
+
+<?php get_footer(); ?>

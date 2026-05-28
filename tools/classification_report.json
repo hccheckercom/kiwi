@@ -1,0 +1,4652 @@
+{
+  "summary": {
+    "total": 740,
+    "universal": 379,
+    "wezone": 361,
+    "review": 0
+  },
+  "category_stats": {
+    "accessibility": {
+      "universal": 11,
+      "wezone": 2,
+      "review": 0
+    },
+    "ads-compliance": {
+      "universal": 17,
+      "wezone": 10,
+      "review": 0
+    },
+    "ai-safety": {
+      "universal": 7,
+      "wezone": 0,
+      "review": 0
+    },
+    "code-quality": {
+      "universal": 5,
+      "wezone": 0,
+      "review": 0
+    },
+    "component-pattern": {
+      "universal": 9,
+      "wezone": 1,
+      "review": 0
+    },
+    "concurrency": {
+      "universal": 10,
+      "wezone": 1,
+      "review": 0
+    },
+    "css-tokens": {
+      "universal": 12,
+      "wezone": 22,
+      "review": 0
+    },
+    "d3": {
+      "universal": 1,
+      "wezone": 0,
+      "review": 0
+    },
+    "dark-mode": {
+      "universal": 7,
+      "wezone": 2,
+      "review": 0
+    },
+    "db-schema": {
+      "universal": 4,
+      "wezone": 10,
+      "review": 0
+    },
+    "deployment": {
+      "universal": 0,
+      "wezone": 1,
+      "review": 0
+    },
+    "edge-cases": {
+      "universal": 8,
+      "wezone": 10,
+      "review": 0
+    },
+    "error-handling": {
+      "universal": 2,
+      "wezone": 0,
+      "review": 0
+    },
+    "fastapi": {
+      "universal": 17,
+      "wezone": 0,
+      "review": 0
+    },
+    "feature-suggest": {
+      "universal": 19,
+      "wezone": 18,
+      "review": 0
+    },
+    "file-structure": {
+      "universal": 3,
+      "wezone": 19,
+      "review": 0
+    },
+    "js-contract": {
+      "universal": 6,
+      "wezone": 9,
+      "review": 0
+    },
+    "js-security": {
+      "universal": 3,
+      "wezone": 0,
+      "review": 0
+    },
+    "layout-consistency": {
+      "universal": 6,
+      "wezone": 1,
+      "review": 0
+    },
+    "loyalty": {
+      "universal": 0,
+      "wezone": 4,
+      "review": 0
+    },
+    "nextjs-react": {
+      "universal": 33,
+      "wezone": 6,
+      "review": 0
+    },
+    "performance": {
+      "universal": 25,
+      "wezone": 37,
+      "review": 0
+    },
+    "php-architecture": {
+      "universal": 2,
+      "wezone": 2,
+      "review": 0
+    },
+    "php-db": {
+      "universal": 7,
+      "wezone": 2,
+      "review": 0
+    },
+    "php-i18n": {
+      "universal": 2,
+      "wezone": 2,
+      "review": 0
+    },
+    "php-performance": {
+      "universal": 3,
+      "wezone": 3,
+      "review": 0
+    },
+    "php-security": {
+      "universal": 34,
+      "wezone": 84,
+      "review": 0
+    },
+    "placeholder": {
+      "universal": 1,
+      "wezone": 0,
+      "review": 0
+    },
+    "portability": {
+      "universal": 7,
+      "wezone": 0,
+      "review": 0
+    },
+    "python": {
+      "universal": 36,
+      "wezone": 0,
+      "review": 0
+    },
+    "python-windows": {
+      "universal": 1,
+      "wezone": 0,
+      "review": 0
+    },
+    "react": {
+      "universal": 4,
+      "wezone": 1,
+      "review": 0
+    },
+    "reliability": {
+      "universal": 9,
+      "wezone": 0,
+      "review": 0
+    },
+    "resource-management": {
+      "universal": 1,
+      "wezone": 0,
+      "review": 0
+    },
+    "responsive": {
+      "universal": 12,
+      "wezone": 2,
+      "review": 0
+    },
+    "security": {
+      "universal": 27,
+      "wezone": 0,
+      "review": 0
+    },
+    "supabase": {
+      "universal": 25,
+      "wezone": 3,
+      "review": 0
+    },
+    "websocket": {
+      "universal": 3,
+      "wezone": 0,
+      "review": 0
+    },
+    "wezone-api": {
+      "universal": 0,
+      "wezone": 109,
+      "review": 0
+    }
+  },
+  "lessons": {
+    "universal": [
+      {
+        "file": "accessibility\\LES-674.md",
+        "category": "accessibility",
+        "id": "LES-674",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-675.md",
+        "category": "accessibility",
+        "id": "LES-675",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-676.md",
+        "category": "accessibility",
+        "id": "LES-676",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-677.md",
+        "category": "accessibility",
+        "id": "LES-677",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-678.md",
+        "category": "accessibility",
+        "id": "LES-678",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-679.md",
+        "category": "accessibility",
+        "id": "LES-679",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-680.md",
+        "category": "accessibility",
+        "id": "LES-680",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-681.md",
+        "category": "accessibility",
+        "id": "LES-681",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-682.md",
+        "category": "accessibility",
+        "id": "LES-682",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-683.md",
+        "category": "accessibility",
+        "id": "LES-683",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "accessibility\\LES-684.md",
+        "category": "accessibility",
+        "id": "LES-684",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-217.md",
+        "category": "ads-compliance",
+        "id": "LES-217",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-218.md",
+        "category": "ads-compliance",
+        "id": "LES-218",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-220.md",
+        "category": "ads-compliance",
+        "id": "LES-220",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-221.md",
+        "category": "ads-compliance",
+        "id": "LES-221",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-222.md",
+        "category": "ads-compliance",
+        "id": "LES-222",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-224.md",
+        "category": "ads-compliance",
+        "id": "LES-224",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-225.md",
+        "category": "ads-compliance",
+        "id": "LES-225",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-226.md",
+        "category": "ads-compliance",
+        "id": "LES-226",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-227.md",
+        "category": "ads-compliance",
+        "id": "LES-227",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-228.md",
+        "category": "ads-compliance",
+        "id": "LES-228",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-229.md",
+        "category": "ads-compliance",
+        "id": "LES-229",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-230.md",
+        "category": "ads-compliance",
+        "id": "LES-230",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-231.md",
+        "category": "ads-compliance",
+        "id": "LES-231",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-232.md",
+        "category": "ads-compliance",
+        "id": "LES-232",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-233.md",
+        "category": "ads-compliance",
+        "id": "LES-233",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-234.md",
+        "category": "ads-compliance",
+        "id": "LES-234",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ads-compliance\\LES-236.md",
+        "category": "ads-compliance",
+        "id": "LES-236",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-194.md",
+        "category": "ai-safety",
+        "id": "LES-194",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-195.md",
+        "category": "ai-safety",
+        "id": "LES-195",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-196.md",
+        "category": "ai-safety",
+        "id": "LES-196",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-197.md",
+        "category": "ai-safety",
+        "id": "LES-197",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-198.md",
+        "category": "ai-safety",
+        "id": "LES-198",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-199.md",
+        "category": "ai-safety",
+        "id": "LES-199",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "ai-safety\\LES-200.md",
+        "category": "ai-safety",
+        "id": "LES-200",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "code-quality\\LES-474.md",
+        "category": "code-quality",
+        "id": "LES-474",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "code-quality\\LES-552.md",
+        "category": "code-quality",
+        "id": "LES-552",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "code-quality\\LES-650.md",
+        "category": "code-quality",
+        "id": "LES-650",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "code-quality\\LES-658.md",
+        "category": "code-quality",
+        "id": "LES-658",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "code-quality\\LES-664.md",
+        "category": "code-quality",
+        "id": "LES-664",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-687.md",
+        "category": "component-pattern",
+        "id": "LES-687",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-688.md",
+        "category": "component-pattern",
+        "id": "LES-688",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-689.md",
+        "category": "component-pattern",
+        "id": "LES-689",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-690.md",
+        "category": "component-pattern",
+        "id": "LES-690",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-691.md",
+        "category": "component-pattern",
+        "id": "LES-691",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-692.md",
+        "category": "component-pattern",
+        "id": "LES-692",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-693.md",
+        "category": "component-pattern",
+        "id": "LES-693",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-694.md",
+        "category": "component-pattern",
+        "id": "LES-694",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "component-pattern\\LES-695.md",
+        "category": "component-pattern",
+        "id": "LES-695",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-184.md",
+        "category": "concurrency",
+        "id": "LES-184",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-185.md",
+        "category": "concurrency",
+        "id": "LES-185",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-186.md",
+        "category": "concurrency",
+        "id": "LES-186",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-187.md",
+        "category": "concurrency",
+        "id": "LES-187",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-188.md",
+        "category": "concurrency",
+        "id": "LES-188",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-189.md",
+        "category": "concurrency",
+        "id": "LES-189",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-190.md",
+        "category": "concurrency",
+        "id": "LES-190",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-191.md",
+        "category": "concurrency",
+        "id": "LES-191",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-192.md",
+        "category": "concurrency",
+        "id": "LES-192",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "concurrency\\LES-193.md",
+        "category": "concurrency",
+        "id": "LES-193",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-007.md",
+        "category": "css-tokens",
+        "id": "LES-007",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-044.md",
+        "category": "css-tokens",
+        "id": "LES-044",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-048.md",
+        "category": "css-tokens",
+        "id": "LES-048",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-118.md",
+        "category": "css-tokens",
+        "id": "LES-118",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-121.md",
+        "category": "css-tokens",
+        "id": "LES-121",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-216.md",
+        "category": "css-tokens",
+        "id": "LES-216",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-246.md",
+        "category": "css-tokens",
+        "id": "LES-246",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-289.md",
+        "category": "css-tokens",
+        "id": "LES-289",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-290.md",
+        "category": "css-tokens",
+        "id": "LES-290",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-291.md",
+        "category": "css-tokens",
+        "id": "LES-291",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-292.md",
+        "category": "css-tokens",
+        "id": "LES-292",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "css-tokens\\LES-293.md",
+        "category": "css-tokens",
+        "id": "LES-293",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "d3\\LES-534.md",
+        "category": "d3",
+        "id": "LES-534",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-697.md",
+        "category": "dark-mode",
+        "id": "LES-697",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-698.md",
+        "category": "dark-mode",
+        "id": "LES-698",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-699.md",
+        "category": "dark-mode",
+        "id": "LES-699",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-700.md",
+        "category": "dark-mode",
+        "id": "LES-700",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-701.md",
+        "category": "dark-mode",
+        "id": "LES-701",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-702.md",
+        "category": "dark-mode",
+        "id": "LES-702",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "dark-mode\\LES-703.md",
+        "category": "dark-mode",
+        "id": "LES-703",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "db-schema\\LES-386.md",
+        "category": "db-schema",
+        "id": "LES-386",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "db-schema\\LES-387.md",
+        "category": "db-schema",
+        "id": "LES-387",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "db-schema\\LES-389.md",
+        "category": "db-schema",
+        "id": "LES-389",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "db-schema\\LES-431.md",
+        "category": "db-schema",
+        "id": "LES-431",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-268.md",
+        "category": "edge-cases",
+        "id": "LES-268",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-270.md",
+        "category": "edge-cases",
+        "id": "LES-270",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-271.md",
+        "category": "edge-cases",
+        "id": "LES-271",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-273.md",
+        "category": "edge-cases",
+        "id": "LES-273",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-275.md",
+        "category": "edge-cases",
+        "id": "LES-275",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-276.md",
+        "category": "edge-cases",
+        "id": "LES-276",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-277.md",
+        "category": "edge-cases",
+        "id": "LES-277",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "edge-cases\\LES-443.md",
+        "category": "edge-cases",
+        "id": "LES-443",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "error-handling\\LES-530.md",
+        "category": "error-handling",
+        "id": "LES-530",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "error-handling\\LES-632.md",
+        "category": "error-handling",
+        "id": "LES-632",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-521.md",
+        "category": "fastapi",
+        "id": "LES-521",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-522.md",
+        "category": "fastapi",
+        "id": "LES-522",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-523.md",
+        "category": "fastapi",
+        "id": "LES-523",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-524.md",
+        "category": "fastapi",
+        "id": "LES-524",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-525.md",
+        "category": "fastapi",
+        "id": "LES-525",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-526.md",
+        "category": "fastapi",
+        "id": "LES-526",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-527.md",
+        "category": "fastapi",
+        "id": "LES-527",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-528.md",
+        "category": "fastapi",
+        "id": "LES-528",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-529.md",
+        "category": "fastapi",
+        "id": "LES-529",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-530.md",
+        "category": "fastapi",
+        "id": "LES-530",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-532.md",
+        "category": "fastapi",
+        "id": "LES-532",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-533.md",
+        "category": "fastapi",
+        "id": "LES-533",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-534.md",
+        "category": "fastapi",
+        "id": "LES-534",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-535.md",
+        "category": "fastapi",
+        "id": "LES-535",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-538.md",
+        "category": "fastapi",
+        "id": "LES-538",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-540.md",
+        "category": "fastapi",
+        "id": "LES-540",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "fastapi\\LES-541.md",
+        "category": "fastapi",
+        "id": "LES-541",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-009.md",
+        "category": "feature-suggest",
+        "id": "FEA-009",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-010.md",
+        "category": "feature-suggest",
+        "id": "FEA-010",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-011.md",
+        "category": "feature-suggest",
+        "id": "FEA-011",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-012.md",
+        "category": "feature-suggest",
+        "id": "FEA-012",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-013.md",
+        "category": "feature-suggest",
+        "id": "FEA-013",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-014.md",
+        "category": "feature-suggest",
+        "id": "FEA-014",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-015.md",
+        "category": "feature-suggest",
+        "id": "FEA-015",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-017.md",
+        "category": "feature-suggest",
+        "id": "FEA-017",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-018.md",
+        "category": "feature-suggest",
+        "id": "FEA-018",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-019.md",
+        "category": "feature-suggest",
+        "id": "FEA-019",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-020.md",
+        "category": "feature-suggest",
+        "id": "FEA-020",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-021.md",
+        "category": "feature-suggest",
+        "id": "FEA-021",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-022.md",
+        "category": "feature-suggest",
+        "id": "FEA-022",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-023.md",
+        "category": "feature-suggest",
+        "id": "FEA-023",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-024.md",
+        "category": "feature-suggest",
+        "id": "FEA-024",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-026.md",
+        "category": "feature-suggest",
+        "id": "FEA-026",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-027.md",
+        "category": "feature-suggest",
+        "id": "FEA-027",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\FEA-028.md",
+        "category": "feature-suggest",
+        "id": "FEA-028",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "feature-suggest\\LES-302.md",
+        "category": "feature-suggest",
+        "id": "LES-302",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "file-structure\\LES-034.md",
+        "category": "file-structure",
+        "id": "LES-034",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "file-structure\\LES-242.md",
+        "category": "file-structure",
+        "id": "LES-242",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "file-structure\\LES-426.md",
+        "category": "file-structure",
+        "id": "LES-426",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-contract\\LES-043.md",
+        "category": "js-contract",
+        "id": "LES-043",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-contract\\LES-051.md",
+        "category": "js-contract",
+        "id": "LES-051",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-contract\\LES-052.md",
+        "category": "js-contract",
+        "id": "LES-052",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-contract\\LES-183.md",
+        "category": "js-contract",
+        "id": "LES-183",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-contract\\LES-310.md",
+        "category": "js-contract",
+        "id": "LES-310",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-contract\\LES-320.md",
+        "category": "js-contract",
+        "id": "LES-320",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-security\\LES-549.md",
+        "category": "js-security",
+        "id": "LES-549",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-security\\LES-550.md",
+        "category": "js-security",
+        "id": "LES-550",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "js-security\\LES-551.md",
+        "category": "js-security",
+        "id": "LES-551",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "layout-consistency\\LES-706.md",
+        "category": "layout-consistency",
+        "id": "LES-706",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "layout-consistency\\LES-707.md",
+        "category": "layout-consistency",
+        "id": "LES-707",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "layout-consistency\\LES-708.md",
+        "category": "layout-consistency",
+        "id": "LES-708",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "layout-consistency\\LES-709.md",
+        "category": "layout-consistency",
+        "id": "LES-709",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "layout-consistency\\LES-710.md",
+        "category": "layout-consistency",
+        "id": "LES-710",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "layout-consistency\\LES-711.md",
+        "category": "layout-consistency",
+        "id": "LES-711",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-128.md",
+        "category": "nextjs-react",
+        "id": "LES-128",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-129.md",
+        "category": "nextjs-react",
+        "id": "LES-129",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-130.md",
+        "category": "nextjs-react",
+        "id": "LES-130",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-131.md",
+        "category": "nextjs-react",
+        "id": "LES-131",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-132.md",
+        "category": "nextjs-react",
+        "id": "LES-132",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-133.md",
+        "category": "nextjs-react",
+        "id": "LES-133",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-134.md",
+        "category": "nextjs-react",
+        "id": "LES-134",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-135.md",
+        "category": "nextjs-react",
+        "id": "LES-135",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-136.md",
+        "category": "nextjs-react",
+        "id": "LES-136",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-137.md",
+        "category": "nextjs-react",
+        "id": "LES-137",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-138.md",
+        "category": "nextjs-react",
+        "id": "LES-138",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-139.md",
+        "category": "nextjs-react",
+        "id": "LES-139",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-152.md",
+        "category": "nextjs-react",
+        "id": "LES-152",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-154.md",
+        "category": "nextjs-react",
+        "id": "LES-154",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-160.md",
+        "category": "nextjs-react",
+        "id": "LES-160",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-161.md",
+        "category": "nextjs-react",
+        "id": "LES-161",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-163.md",
+        "category": "nextjs-react",
+        "id": "LES-163",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-165.md",
+        "category": "nextjs-react",
+        "id": "LES-165",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-167.md",
+        "category": "nextjs-react",
+        "id": "LES-167",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-168.md",
+        "category": "nextjs-react",
+        "id": "LES-168",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-173.md",
+        "category": "nextjs-react",
+        "id": "LES-173",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-174.md",
+        "category": "nextjs-react",
+        "id": "LES-174",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-178.md",
+        "category": "nextjs-react",
+        "id": "LES-178",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-179.md",
+        "category": "nextjs-react",
+        "id": "LES-179",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-201.md",
+        "category": "nextjs-react",
+        "id": "LES-201",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-202.md",
+        "category": "nextjs-react",
+        "id": "LES-202",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-203.md",
+        "category": "nextjs-react",
+        "id": "LES-203",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-204.md",
+        "category": "nextjs-react",
+        "id": "LES-204",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-205.md",
+        "category": "nextjs-react",
+        "id": "LES-205",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-231.md",
+        "category": "nextjs-react",
+        "id": "LES-231",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-254.md",
+        "category": "nextjs-react",
+        "id": "LES-254",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-329.md",
+        "category": "nextjs-react",
+        "id": "LES-329",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "nextjs-react\\LES-610.md",
+        "category": "nextjs-react",
+        "id": "LES-610",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-093.md",
+        "category": "performance",
+        "id": "LES-093",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-113.md",
+        "category": "performance",
+        "id": "LES-113",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-114.md",
+        "category": "performance",
+        "id": "LES-114",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-115.md",
+        "category": "performance",
+        "id": "LES-115",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-116.md",
+        "category": "performance",
+        "id": "LES-116",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-117.md",
+        "category": "performance",
+        "id": "LES-117",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-209.md",
+        "category": "performance",
+        "id": "LES-209",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-210.md",
+        "category": "performance",
+        "id": "LES-210",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-211.md",
+        "category": "performance",
+        "id": "LES-211",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-212.md",
+        "category": "performance",
+        "id": "LES-212",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-263.md",
+        "category": "performance",
+        "id": "LES-263",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-265.md",
+        "category": "performance",
+        "id": "LES-265",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-281.md",
+        "category": "performance",
+        "id": "LES-281",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-282.md",
+        "category": "performance",
+        "id": "LES-282",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-283.md",
+        "category": "performance",
+        "id": "LES-283",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-351.md",
+        "category": "performance",
+        "id": "LES-351",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-358.md",
+        "category": "performance",
+        "id": "LES-358",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-363.md",
+        "category": "performance",
+        "id": "LES-363",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-364.md",
+        "category": "performance",
+        "id": "LES-364",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-382.md",
+        "category": "performance",
+        "id": "LES-382",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-446.md",
+        "category": "performance",
+        "id": "LES-446",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-453.md",
+        "category": "performance",
+        "id": "LES-453",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-457.md",
+        "category": "performance",
+        "id": "LES-457",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-493.md",
+        "category": "performance",
+        "id": "LES-493",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "performance\\LES-652.md",
+        "category": "performance",
+        "id": "LES-652",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-architecture\\LES-518.md",
+        "category": "php-architecture",
+        "id": "LES-518",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-architecture\\LES-525.md",
+        "category": "php-architecture",
+        "id": "LES-525",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-469.md",
+        "category": "php-db",
+        "id": "LES-469",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-473.md",
+        "category": "php-db",
+        "id": "LES-473",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-476.md",
+        "category": "php-db",
+        "id": "LES-476",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-482.md",
+        "category": "php-db",
+        "id": "LES-482",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-491.md",
+        "category": "php-db",
+        "id": "LES-491",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-495.md",
+        "category": "php-db",
+        "id": "LES-495",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-db\\LES-496.md",
+        "category": "php-db",
+        "id": "LES-496",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-i18n\\LES-474.md",
+        "category": "php-i18n",
+        "id": "LES-474",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-i18n\\LES-497.md",
+        "category": "php-i18n",
+        "id": "LES-497",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-performance\\LES-471.md",
+        "category": "php-performance",
+        "id": "LES-471",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-performance\\LES-488.md",
+        "category": "php-performance",
+        "id": "LES-488",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-performance\\LES-496.md",
+        "category": "php-performance",
+        "id": "LES-496",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-045.md",
+        "category": "php-security",
+        "id": "LES-045",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-050.md",
+        "category": "php-security",
+        "id": "LES-050",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-073.md",
+        "category": "php-security",
+        "id": "LES-073",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-074.md",
+        "category": "php-security",
+        "id": "LES-074",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-076.md",
+        "category": "php-security",
+        "id": "LES-076",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-077.md",
+        "category": "php-security",
+        "id": "LES-077",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-078.md",
+        "category": "php-security",
+        "id": "LES-078",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-103.md",
+        "category": "php-security",
+        "id": "LES-103",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-314.md",
+        "category": "php-security",
+        "id": "LES-314",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-319.md",
+        "category": "php-security",
+        "id": "LES-319",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-345.md",
+        "category": "php-security",
+        "id": "LES-345",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-350.md",
+        "category": "php-security",
+        "id": "LES-350",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-417.md",
+        "category": "php-security",
+        "id": "LES-417",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-429.md",
+        "category": "php-security",
+        "id": "LES-429",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-434.md",
+        "category": "php-security",
+        "id": "LES-434",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-441.md",
+        "category": "php-security",
+        "id": "LES-441",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-454.md",
+        "category": "php-security",
+        "id": "LES-454",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-458.md",
+        "category": "php-security",
+        "id": "LES-458",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-459.md",
+        "category": "php-security",
+        "id": "LES-459",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-461.md",
+        "category": "php-security",
+        "id": "LES-461",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-470.md",
+        "category": "php-security",
+        "id": "LES-470",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-475.md",
+        "category": "php-security",
+        "id": "LES-475",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-484.md",
+        "category": "php-security",
+        "id": "LES-484",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-486.md",
+        "category": "php-security",
+        "id": "LES-486",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-497.md",
+        "category": "php-security",
+        "id": "LES-497",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-504.md",
+        "category": "php-security",
+        "id": "LES-504",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-509.md",
+        "category": "php-security",
+        "id": "LES-509",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-523.md",
+        "category": "php-security",
+        "id": "LES-523",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-524.md",
+        "category": "php-security",
+        "id": "LES-524",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-545.md",
+        "category": "php-security",
+        "id": "LES-545",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-546.md",
+        "category": "php-security",
+        "id": "LES-546",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-547.md",
+        "category": "php-security",
+        "id": "LES-547",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-548.md",
+        "category": "php-security",
+        "id": "LES-548",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "php-security\\LES-TEST-SEMGREP.md",
+        "category": "php-security",
+        "id": "LES-TEST-SEMGREP",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "placeholder\\LES-011.md",
+        "category": "placeholder",
+        "id": "LES-011",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-639.md",
+        "category": "portability",
+        "id": "LES-639",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-640.md",
+        "category": "portability",
+        "id": "LES-640",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-643.md",
+        "category": "portability",
+        "id": "LES-643",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-647.md",
+        "category": "portability",
+        "id": "LES-647",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-650.md",
+        "category": "portability",
+        "id": "LES-650",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-651.md",
+        "category": "portability",
+        "id": "LES-651",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "portability\\LES-672.md",
+        "category": "portability",
+        "id": "LES-672",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-510.md",
+        "category": "python",
+        "id": "LES-510",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-511.md",
+        "category": "python",
+        "id": "LES-511",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-512.md",
+        "category": "python",
+        "id": "LES-512",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-513.md",
+        "category": "python",
+        "id": "LES-513",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-514.md",
+        "category": "python",
+        "id": "LES-514",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-515.md",
+        "category": "python",
+        "id": "LES-515",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-516.md",
+        "category": "python",
+        "id": "LES-516",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-517.md",
+        "category": "python",
+        "id": "LES-517",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-518.md",
+        "category": "python",
+        "id": "LES-518",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-519.md",
+        "category": "python",
+        "id": "LES-519",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-520.md",
+        "category": "python",
+        "id": "LES-520",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-531.md",
+        "category": "python",
+        "id": "LES-531",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-532.md",
+        "category": "python",
+        "id": "LES-532",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-533.md",
+        "category": "python",
+        "id": "LES-533",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-536.md",
+        "category": "python",
+        "id": "LES-536",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-537.md",
+        "category": "python",
+        "id": "LES-537",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-539.md",
+        "category": "python",
+        "id": "LES-539",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-543.md",
+        "category": "python",
+        "id": "LES-543",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-544.md",
+        "category": "python",
+        "id": "LES-544",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-616.md",
+        "category": "python",
+        "id": "LES-616",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-617.md",
+        "category": "python",
+        "id": "LES-617",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-618.md",
+        "category": "python",
+        "id": "LES-618",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-619.md",
+        "category": "python",
+        "id": "LES-619",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-620.md",
+        "category": "python",
+        "id": "LES-620",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-621.md",
+        "category": "python",
+        "id": "LES-621",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-622.md",
+        "category": "python",
+        "id": "LES-622",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-623.md",
+        "category": "python",
+        "id": "LES-623",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-624.md",
+        "category": "python",
+        "id": "LES-624",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-625.md",
+        "category": "python",
+        "id": "LES-625",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-626.md",
+        "category": "python",
+        "id": "LES-626",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-627.md",
+        "category": "python",
+        "id": "LES-627",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-630.md",
+        "category": "python",
+        "id": "LES-630",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-631.md",
+        "category": "python",
+        "id": "LES-631",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-633.md",
+        "category": "python",
+        "id": "LES-633",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-634.md",
+        "category": "python",
+        "id": "LES-634",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python\\LES-727.md",
+        "category": "python",
+        "id": "LES-727",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "python-windows\\LES-612.md",
+        "category": "python-windows",
+        "id": "LES-612",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "react\\LES-531.md",
+        "category": "react",
+        "id": "LES-531",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "react\\LES-536.md",
+        "category": "react",
+        "id": "LES-536",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "react\\LES-537.md",
+        "category": "react",
+        "id": "LES-537",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "react\\LES-539.md",
+        "category": "react",
+        "id": "LES-539",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-642.md",
+        "category": "reliability",
+        "id": "LES-642",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-646.md",
+        "category": "reliability",
+        "id": "LES-646",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-648.md",
+        "category": "reliability",
+        "id": "LES-648",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-649.md",
+        "category": "reliability",
+        "id": "LES-649",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-653.md",
+        "category": "reliability",
+        "id": "LES-653",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-657.md",
+        "category": "reliability",
+        "id": "LES-657",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-661.md",
+        "category": "reliability",
+        "id": "LES-661",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-665.md",
+        "category": "reliability",
+        "id": "LES-665",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "reliability\\LES-673.md",
+        "category": "reliability",
+        "id": "LES-673",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "resource-management\\LES-528.md",
+        "category": "resource-management",
+        "id": "LES-528",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-713.md",
+        "category": "responsive",
+        "id": "LES-713",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-714.md",
+        "category": "responsive",
+        "id": "LES-714",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-715.md",
+        "category": "responsive",
+        "id": "LES-715",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-716.md",
+        "category": "responsive",
+        "id": "LES-716",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-717.md",
+        "category": "responsive",
+        "id": "LES-717",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-718.md",
+        "category": "responsive",
+        "id": "LES-718",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-719.md",
+        "category": "responsive",
+        "id": "LES-719",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-720.md",
+        "category": "responsive",
+        "id": "LES-720",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-721.md",
+        "category": "responsive",
+        "id": "LES-721",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-722.md",
+        "category": "responsive",
+        "id": "LES-722",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-723.md",
+        "category": "responsive",
+        "id": "LES-723",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "responsive\\LES-724.md",
+        "category": "responsive",
+        "id": "LES-724",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-526.md",
+        "category": "security",
+        "id": "LES-526",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-527.md",
+        "category": "security",
+        "id": "LES-527",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-529.md",
+        "category": "security",
+        "id": "LES-529",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-628.md",
+        "category": "security",
+        "id": "LES-628",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-629.md",
+        "category": "security",
+        "id": "LES-629",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-635.md",
+        "category": "security",
+        "id": "LES-635",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-636.md",
+        "category": "security",
+        "id": "LES-636",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-637.md",
+        "category": "security",
+        "id": "LES-637",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-638.md",
+        "category": "security",
+        "id": "LES-638",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-641.md",
+        "category": "security",
+        "id": "LES-641",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-644.md",
+        "category": "security",
+        "id": "LES-644",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-645.md",
+        "category": "security",
+        "id": "LES-645",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-649.md",
+        "category": "security",
+        "id": "LES-649",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-651.md",
+        "category": "security",
+        "id": "LES-651",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-654.md",
+        "category": "security",
+        "id": "LES-654",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-655.md",
+        "category": "security",
+        "id": "LES-655",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-656.md",
+        "category": "security",
+        "id": "LES-656",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-659.md",
+        "category": "security",
+        "id": "LES-659",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-660.md",
+        "category": "security",
+        "id": "LES-660",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-662.md",
+        "category": "security",
+        "id": "LES-662",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-663.md",
+        "category": "security",
+        "id": "LES-663",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-666.md",
+        "category": "security",
+        "id": "LES-666",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-667.md",
+        "category": "security",
+        "id": "LES-667",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-668.md",
+        "category": "security",
+        "id": "LES-668",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-669.md",
+        "category": "security",
+        "id": "LES-669",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-670.md",
+        "category": "security",
+        "id": "LES-670",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "security\\LES-671.md",
+        "category": "security",
+        "id": "LES-671",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-140.md",
+        "category": "supabase",
+        "id": "LES-140",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-141.md",
+        "category": "supabase",
+        "id": "LES-141",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-142.md",
+        "category": "supabase",
+        "id": "LES-142",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-143.md",
+        "category": "supabase",
+        "id": "LES-143",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-144.md",
+        "category": "supabase",
+        "id": "LES-144",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-146.md",
+        "category": "supabase",
+        "id": "LES-146",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-148.md",
+        "category": "supabase",
+        "id": "LES-148",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-149.md",
+        "category": "supabase",
+        "id": "LES-149",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-151.md",
+        "category": "supabase",
+        "id": "LES-151",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-153.md",
+        "category": "supabase",
+        "id": "LES-153",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-155.md",
+        "category": "supabase",
+        "id": "LES-155",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-157.md",
+        "category": "supabase",
+        "id": "LES-157",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-159.md",
+        "category": "supabase",
+        "id": "LES-159",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-162.md",
+        "category": "supabase",
+        "id": "LES-162",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-166.md",
+        "category": "supabase",
+        "id": "LES-166",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-169.md",
+        "category": "supabase",
+        "id": "LES-169",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-171.md",
+        "category": "supabase",
+        "id": "LES-171",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-172.md",
+        "category": "supabase",
+        "id": "LES-172",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-175.md",
+        "category": "supabase",
+        "id": "LES-175",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-176.md",
+        "category": "supabase",
+        "id": "LES-176",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-180.md",
+        "category": "supabase",
+        "id": "LES-180",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-206.md",
+        "category": "supabase",
+        "id": "LES-206",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-207.md",
+        "category": "supabase",
+        "id": "LES-207",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-208.md",
+        "category": "supabase",
+        "id": "LES-208",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "supabase\\LES-240.md",
+        "category": "supabase",
+        "id": "LES-240",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "websocket\\LES-535.md",
+        "category": "websocket",
+        "id": "LES-535",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "websocket\\LES-536.md",
+        "category": "websocket",
+        "id": "LES-536",
+        "reason": "no wezone markers found"
+      },
+      {
+        "file": "websocket\\LES-542.md",
+        "category": "websocket",
+        "id": "LES-542",
+        "reason": "no wezone markers found"
+      }
+    ],
+    "wezone": [
+      {
+        "file": "accessibility\\LES-685.md",
+        "category": "accessibility",
+        "id": "LES-685",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "accessibility\\LES-686.md",
+        "category": "accessibility",
+        "id": "LES-686",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "ads-compliance\\LES-219.md",
+        "category": "ads-compliance",
+        "id": "LES-219",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "ads-compliance\\LES-223.md",
+        "category": "ads-compliance",
+        "id": "LES-223",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "ads-compliance\\LES-235.md",
+        "category": "ads-compliance",
+        "id": "LES-235",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "ads-compliance\\LES-294.md",
+        "category": "ads-compliance",
+        "id": "LES-294",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "ads-compliance\\LES-295.md",
+        "category": "ads-compliance",
+        "id": "LES-295",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "ads-compliance\\LES-296.md",
+        "category": "ads-compliance",
+        "id": "LES-296",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "ads-compliance\\LES-297.md",
+        "category": "ads-compliance",
+        "id": "LES-297",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "ads-compliance\\LES-298.md",
+        "category": "ads-compliance",
+        "id": "LES-298",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "ads-compliance\\LES-299.md",
+        "category": "ads-compliance",
+        "id": "LES-299",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "ads-compliance\\LES-611.md",
+        "category": "ads-compliance",
+        "id": "LES-611",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "component-pattern\\LES-696.md",
+        "category": "component-pattern",
+        "id": "LES-696",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "concurrency\\LES-465.md",
+        "category": "concurrency",
+        "id": "LES-465",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "css-tokens\\LES-006.md",
+        "category": "css-tokens",
+        "id": "LES-006",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-018.md",
+        "category": "css-tokens",
+        "id": "LES-018",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-019.md",
+        "category": "css-tokens",
+        "id": "LES-019",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-020.md",
+        "category": "css-tokens",
+        "id": "LES-020",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-021.md",
+        "category": "css-tokens",
+        "id": "LES-021",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-022.md",
+        "category": "css-tokens",
+        "id": "LES-022",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-027.md",
+        "category": "css-tokens",
+        "id": "LES-027",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-028.md",
+        "category": "css-tokens",
+        "id": "LES-028",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-029.md",
+        "category": "css-tokens",
+        "id": "LES-029",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-061.md",
+        "category": "css-tokens",
+        "id": "LES-061",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-063.md",
+        "category": "css-tokens",
+        "id": "LES-063",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-068.md",
+        "category": "css-tokens",
+        "id": "LES-068",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-069.md",
+        "category": "css-tokens",
+        "id": "LES-069",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "css-tokens\\LES-120.md",
+        "category": "css-tokens",
+        "id": "LES-120",
+        "reason": "regex:wz-[a-z]+-"
+      },
+      {
+        "file": "css-tokens\\LES-241.md",
+        "category": "css-tokens",
+        "id": "LES-241",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-245.md",
+        "category": "css-tokens",
+        "id": "LES-245",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-247.md",
+        "category": "css-tokens",
+        "id": "LES-247",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-248.md",
+        "category": "css-tokens",
+        "id": "LES-248",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-249.md",
+        "category": "css-tokens",
+        "id": "LES-249",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-266.md",
+        "category": "css-tokens",
+        "id": "LES-266",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-267.md",
+        "category": "css-tokens",
+        "id": "LES-267",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "css-tokens\\LES-280.md",
+        "category": "css-tokens",
+        "id": "LES-280",
+        "reason": "regex:wz-[a-z]+-"
+      },
+      {
+        "file": "dark-mode\\LES-704.md",
+        "category": "dark-mode",
+        "id": "LES-704",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "dark-mode\\LES-705.md",
+        "category": "dark-mode",
+        "id": "LES-705",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "db-schema\\LES-385.md",
+        "category": "db-schema",
+        "id": "LES-385",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-388.md",
+        "category": "db-schema",
+        "id": "LES-388",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-390.md",
+        "category": "db-schema",
+        "id": "LES-390",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-391.md",
+        "category": "db-schema",
+        "id": "LES-391",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-415.md",
+        "category": "db-schema",
+        "id": "LES-415",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "db-schema\\LES-416.md",
+        "category": "db-schema",
+        "id": "LES-416",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "db-schema\\LES-420.md",
+        "category": "db-schema",
+        "id": "LES-420",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-421.md",
+        "category": "db-schema",
+        "id": "LES-421",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-437.md",
+        "category": "db-schema",
+        "id": "LES-437",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "db-schema\\LES-456.md",
+        "category": "db-schema",
+        "id": "LES-456",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "deployment\\LES-462.md",
+        "category": "deployment",
+        "id": "LES-462",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "edge-cases\\LES-269.md",
+        "category": "edge-cases",
+        "id": "LES-269",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "edge-cases\\LES-272.md",
+        "category": "edge-cases",
+        "id": "LES-272",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "edge-cases\\LES-274.md",
+        "category": "edge-cases",
+        "id": "LES-274",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "edge-cases\\LES-278.md",
+        "category": "edge-cases",
+        "id": "LES-278",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "edge-cases\\LES-405.md",
+        "category": "edge-cases",
+        "id": "LES-405",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "edge-cases\\LES-423.md",
+        "category": "edge-cases",
+        "id": "LES-423",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "edge-cases\\LES-427.md",
+        "category": "edge-cases",
+        "id": "LES-427",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "edge-cases\\LES-439.md",
+        "category": "edge-cases",
+        "id": "LES-439",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "edge-cases\\LES-449.md",
+        "category": "edge-cases",
+        "id": "LES-449",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "edge-cases\\LES-492.md",
+        "category": "edge-cases",
+        "id": "LES-492",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "feature-suggest\\FEA-001.md",
+        "category": "feature-suggest",
+        "id": "FEA-001",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-002.md",
+        "category": "feature-suggest",
+        "id": "FEA-002",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-003.md",
+        "category": "feature-suggest",
+        "id": "FEA-003",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "feature-suggest\\FEA-004.md",
+        "category": "feature-suggest",
+        "id": "FEA-004",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "feature-suggest\\FEA-005.md",
+        "category": "feature-suggest",
+        "id": "FEA-005",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-006.md",
+        "category": "feature-suggest",
+        "id": "FEA-006",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-007.md",
+        "category": "feature-suggest",
+        "id": "FEA-007",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-008.md",
+        "category": "feature-suggest",
+        "id": "FEA-008",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-016.md",
+        "category": "feature-suggest",
+        "id": "FEA-016",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-025.md",
+        "category": "feature-suggest",
+        "id": "FEA-025",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-029.md",
+        "category": "feature-suggest",
+        "id": "FEA-029",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\FEA-030.md",
+        "category": "feature-suggest",
+        "id": "FEA-030",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\LES-300.md",
+        "category": "feature-suggest",
+        "id": "LES-300",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\LES-301.md",
+        "category": "feature-suggest",
+        "id": "LES-301",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\LES-303.md",
+        "category": "feature-suggest",
+        "id": "LES-303",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\LES-304.md",
+        "category": "feature-suggest",
+        "id": "LES-304",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\LES-305.md",
+        "category": "feature-suggest",
+        "id": "LES-305",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "feature-suggest\\LES-306.md",
+        "category": "feature-suggest",
+        "id": "LES-306",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-009.md",
+        "category": "file-structure",
+        "id": "LES-009",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-010.md",
+        "category": "file-structure",
+        "id": "LES-010",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-035.md",
+        "category": "file-structure",
+        "id": "LES-035",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-036.md",
+        "category": "file-structure",
+        "id": "LES-036",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-037.md",
+        "category": "file-structure",
+        "id": "LES-037",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-053.md",
+        "category": "file-structure",
+        "id": "LES-053",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-087.md",
+        "category": "file-structure",
+        "id": "LES-087",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-088.md",
+        "category": "file-structure",
+        "id": "LES-088",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-238.md",
+        "category": "file-structure",
+        "id": "LES-238",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-239.md",
+        "category": "file-structure",
+        "id": "LES-239",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-255.md",
+        "category": "file-structure",
+        "id": "LES-255",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-257.md",
+        "category": "file-structure",
+        "id": "LES-257",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-260.md",
+        "category": "file-structure",
+        "id": "LES-260",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-279.md",
+        "category": "file-structure",
+        "id": "LES-279",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-284.md",
+        "category": "file-structure",
+        "id": "LES-284",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-285.md",
+        "category": "file-structure",
+        "id": "LES-285",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-286.md",
+        "category": "file-structure",
+        "id": "LES-286",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "file-structure\\LES-287.md",
+        "category": "file-structure",
+        "id": "LES-287",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "file-structure\\LES-288.md",
+        "category": "file-structure",
+        "id": "LES-288",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "js-contract\\LES-008.md",
+        "category": "js-contract",
+        "id": "LES-008",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "js-contract\\LES-014.md",
+        "category": "js-contract",
+        "id": "LES-014",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "js-contract\\LES-015.md",
+        "category": "js-contract",
+        "id": "LES-015",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "js-contract\\LES-042.md",
+        "category": "js-contract",
+        "id": "LES-042",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "js-contract\\LES-047.md",
+        "category": "js-contract",
+        "id": "LES-047",
+        "reason": "regex:wz-[a-z]+-"
+      },
+      {
+        "file": "js-contract\\LES-056.md",
+        "category": "js-contract",
+        "id": "LES-056",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "js-contract\\LES-122.md",
+        "category": "js-contract",
+        "id": "LES-122",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "js-contract\\LES-308.md",
+        "category": "js-contract",
+        "id": "LES-308",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "js-contract\\LES-315.md",
+        "category": "js-contract",
+        "id": "LES-315",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "layout-consistency\\LES-712.md",
+        "category": "layout-consistency",
+        "id": "LES-712",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "loyalty\\LES-505.md",
+        "category": "loyalty",
+        "id": "LES-505",
+        "reason": "category:loyalty is wezone-only"
+      },
+      {
+        "file": "loyalty\\LES-506.md",
+        "category": "loyalty",
+        "id": "LES-506",
+        "reason": "category:loyalty is wezone-only"
+      },
+      {
+        "file": "loyalty\\LES-507.md",
+        "category": "loyalty",
+        "id": "LES-507",
+        "reason": "category:loyalty is wezone-only"
+      },
+      {
+        "file": "loyalty\\LES-508.md",
+        "category": "loyalty",
+        "id": "LES-508",
+        "reason": "category:loyalty is wezone-only"
+      },
+      {
+        "file": "nextjs-react\\LES-156.md",
+        "category": "nextjs-react",
+        "id": "LES-156",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "nextjs-react\\LES-158.md",
+        "category": "nextjs-react",
+        "id": "LES-158",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "nextjs-react\\LES-164.md",
+        "category": "nextjs-react",
+        "id": "LES-164",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "nextjs-react\\LES-170.md",
+        "category": "nextjs-react",
+        "id": "LES-170",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "nextjs-react\\LES-177.md",
+        "category": "nextjs-react",
+        "id": "LES-177",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "nextjs-react\\LES-182.md",
+        "category": "nextjs-react",
+        "id": "LES-182",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-049.md",
+        "category": "performance",
+        "id": "LES-049",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-067.md",
+        "category": "performance",
+        "id": "LES-067",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-080.md",
+        "category": "performance",
+        "id": "LES-080",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-098.md",
+        "category": "performance",
+        "id": "LES-098",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-111.md",
+        "category": "performance",
+        "id": "LES-111",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-112.md",
+        "category": "performance",
+        "id": "LES-112",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-262.md",
+        "category": "performance",
+        "id": "LES-262",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-264.md",
+        "category": "performance",
+        "id": "LES-264",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-316.md",
+        "category": "performance",
+        "id": "LES-316",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-336.md",
+        "category": "performance",
+        "id": "LES-336",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-340.md",
+        "category": "performance",
+        "id": "LES-340",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-368.md",
+        "category": "performance",
+        "id": "LES-368",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-369.md",
+        "category": "performance",
+        "id": "LES-369",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-370.md",
+        "category": "performance",
+        "id": "LES-370",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-371.md",
+        "category": "performance",
+        "id": "LES-371",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-375.md",
+        "category": "performance",
+        "id": "LES-375",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-379.md",
+        "category": "performance",
+        "id": "LES-379",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-380.md",
+        "category": "performance",
+        "id": "LES-380",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-383.md",
+        "category": "performance",
+        "id": "LES-383",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-384.md",
+        "category": "performance",
+        "id": "LES-384",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-393.md",
+        "category": "performance",
+        "id": "LES-393",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-397.md",
+        "category": "performance",
+        "id": "LES-397",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-398.md",
+        "category": "performance",
+        "id": "LES-398",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-410.md",
+        "category": "performance",
+        "id": "LES-410",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-417.md",
+        "category": "performance",
+        "id": "LES-417",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-418.md",
+        "category": "performance",
+        "id": "LES-418",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-422.md",
+        "category": "performance",
+        "id": "LES-422",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-424.md",
+        "category": "performance",
+        "id": "LES-424",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "performance\\LES-425.md",
+        "category": "performance",
+        "id": "LES-425",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-428.md",
+        "category": "performance",
+        "id": "LES-428",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-435.md",
+        "category": "performance",
+        "id": "LES-435",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-445.md",
+        "category": "performance",
+        "id": "LES-445",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-447.md",
+        "category": "performance",
+        "id": "LES-447",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-448.md",
+        "category": "performance",
+        "id": "LES-448",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-452.md",
+        "category": "performance",
+        "id": "LES-452",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-502.md",
+        "category": "performance",
+        "id": "LES-502",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "performance\\LES-511.md",
+        "category": "performance",
+        "id": "LES-511",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-architecture\\LES-515.md",
+        "category": "php-architecture",
+        "id": "LES-515",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-architecture\\LES-520.md",
+        "category": "php-architecture",
+        "id": "LES-520",
+        "reason": "keyword:Plugin.php"
+      },
+      {
+        "file": "php-db\\LES-498.md",
+        "category": "php-db",
+        "id": "LES-498",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-db\\LES-519.md",
+        "category": "php-db",
+        "id": "LES-519",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-i18n\\LES-499.md",
+        "category": "php-i18n",
+        "id": "LES-499",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-i18n\\LES-522.md",
+        "category": "php-i18n",
+        "id": "LES-522",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-performance\\LES-481.md",
+        "category": "php-performance",
+        "id": "LES-481",
+        "reason": "regex:wz-[a-z]+-"
+      },
+      {
+        "file": "php-performance\\LES-497.md",
+        "category": "php-performance",
+        "id": "LES-497",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-performance\\LES-516.md",
+        "category": "php-performance",
+        "id": "LES-516",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-001.md",
+        "category": "php-security",
+        "id": "LES-001",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-002.md",
+        "category": "php-security",
+        "id": "LES-002",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-003.md",
+        "category": "php-security",
+        "id": "LES-003",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-016.md",
+        "category": "php-security",
+        "id": "LES-016",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-017.md",
+        "category": "php-security",
+        "id": "LES-017",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-030.md",
+        "category": "php-security",
+        "id": "LES-030",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-031.md",
+        "category": "php-security",
+        "id": "LES-031",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-039.md",
+        "category": "php-security",
+        "id": "LES-039",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-046.md",
+        "category": "php-security",
+        "id": "LES-046",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-055.md",
+        "category": "php-security",
+        "id": "LES-055",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-057.md",
+        "category": "php-security",
+        "id": "LES-057",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-064.md",
+        "category": "php-security",
+        "id": "LES-064",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-066.md",
+        "category": "php-security",
+        "id": "LES-066",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-070.md",
+        "category": "php-security",
+        "id": "LES-070",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-071.md",
+        "category": "php-security",
+        "id": "LES-071",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-072.md",
+        "category": "php-security",
+        "id": "LES-072",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-075.md",
+        "category": "php-security",
+        "id": "LES-075",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-079.md",
+        "category": "php-security",
+        "id": "LES-079",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-081.md",
+        "category": "php-security",
+        "id": "LES-081",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-085.md",
+        "category": "php-security",
+        "id": "LES-085",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-094.md",
+        "category": "php-security",
+        "id": "LES-094",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-124.md",
+        "category": "php-security",
+        "id": "LES-124",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-213.md",
+        "category": "php-security",
+        "id": "LES-213",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-214.md",
+        "category": "php-security",
+        "id": "LES-214",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-215.md",
+        "category": "php-security",
+        "id": "LES-215",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-309.md",
+        "category": "php-security",
+        "id": "LES-309",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-311.md",
+        "category": "php-security",
+        "id": "LES-311",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-312.md",
+        "category": "php-security",
+        "id": "LES-312",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-323.md",
+        "category": "php-security",
+        "id": "LES-323",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-324.md",
+        "category": "php-security",
+        "id": "LES-324",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-325.md",
+        "category": "php-security",
+        "id": "LES-325",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-326.md",
+        "category": "php-security",
+        "id": "LES-326",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-328.md",
+        "category": "php-security",
+        "id": "LES-328",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-330.md",
+        "category": "php-security",
+        "id": "LES-330",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-331.md",
+        "category": "php-security",
+        "id": "LES-331",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-334.md",
+        "category": "php-security",
+        "id": "LES-334",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-335.md",
+        "category": "php-security",
+        "id": "LES-335",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-341.md",
+        "category": "php-security",
+        "id": "LES-341",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-346.md",
+        "category": "php-security",
+        "id": "LES-346",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-349.md",
+        "category": "php-security",
+        "id": "LES-349",
+        "reason": "keyword:store_config"
+      },
+      {
+        "file": "php-security\\LES-356.md",
+        "category": "php-security",
+        "id": "LES-356",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-362.md",
+        "category": "php-security",
+        "id": "LES-362",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-367.md",
+        "category": "php-security",
+        "id": "LES-367",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-372.md",
+        "category": "php-security",
+        "id": "LES-372",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-373.md",
+        "category": "php-security",
+        "id": "LES-373",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-374.md",
+        "category": "php-security",
+        "id": "LES-374",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-381.md",
+        "category": "php-security",
+        "id": "LES-381",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-392.md",
+        "category": "php-security",
+        "id": "LES-392",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-395.md",
+        "category": "php-security",
+        "id": "LES-395",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-400.md",
+        "category": "php-security",
+        "id": "LES-400",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-401.md",
+        "category": "php-security",
+        "id": "LES-401",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-402.md",
+        "category": "php-security",
+        "id": "LES-402",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-403.md",
+        "category": "php-security",
+        "id": "LES-403",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-411.md",
+        "category": "php-security",
+        "id": "LES-411",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-412.md",
+        "category": "php-security",
+        "id": "LES-412",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-413.md",
+        "category": "php-security",
+        "id": "LES-413",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-419.md",
+        "category": "php-security",
+        "id": "LES-419",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-420.md",
+        "category": "php-security",
+        "id": "LES-420",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-430.md",
+        "category": "php-security",
+        "id": "LES-430",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-438.md",
+        "category": "php-security",
+        "id": "LES-438",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-440.md",
+        "category": "php-security",
+        "id": "LES-440",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-444.md",
+        "category": "php-security",
+        "id": "LES-444",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-450.md",
+        "category": "php-security",
+        "id": "LES-450",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-451.md",
+        "category": "php-security",
+        "id": "LES-451",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-455.md",
+        "category": "php-security",
+        "id": "LES-455",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-460.md",
+        "category": "php-security",
+        "id": "LES-460",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-463.md",
+        "category": "php-security",
+        "id": "LES-463",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-464.md",
+        "category": "php-security",
+        "id": "LES-464",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-466.md",
+        "category": "php-security",
+        "id": "LES-466",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-468.md",
+        "category": "php-security",
+        "id": "LES-468",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-472-MIGRATION-PLAN.md",
+        "category": "php-security",
+        "id": "LES-472-MIGRATION-PLAN",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-472.md",
+        "category": "php-security",
+        "id": "LES-472",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-480.md",
+        "category": "php-security",
+        "id": "LES-480",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-485.md",
+        "category": "php-security",
+        "id": "LES-485",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-490.md",
+        "category": "php-security",
+        "id": "LES-490",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-500.md",
+        "category": "php-security",
+        "id": "LES-500",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-501.md",
+        "category": "php-security",
+        "id": "LES-501",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-503.md",
+        "category": "php-security",
+        "id": "LES-503",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-510.md",
+        "category": "php-security",
+        "id": "LES-510",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-512.md",
+        "category": "php-security",
+        "id": "LES-512",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-513.md",
+        "category": "php-security",
+        "id": "LES-513",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-514.md",
+        "category": "php-security",
+        "id": "LES-514",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "php-security\\LES-517.md",
+        "category": "php-security",
+        "id": "LES-517",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "php-security\\LES-521.md",
+        "category": "php-security",
+        "id": "LES-521",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "react\\LES-538.md",
+        "category": "react",
+        "id": "LES-538",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "responsive\\LES-725.md",
+        "category": "responsive",
+        "id": "LES-725",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "responsive\\LES-726.md",
+        "category": "responsive",
+        "id": "LES-726",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "supabase\\LES-145.md",
+        "category": "supabase",
+        "id": "LES-145",
+        "reason": "keyword:wz_"
+      },
+      {
+        "file": "supabase\\LES-147.md",
+        "category": "supabase",
+        "id": "LES-147",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "supabase\\LES-150.md",
+        "category": "supabase",
+        "id": "LES-150",
+        "reason": "keyword:wezone"
+      },
+      {
+        "file": "wezone-api\\LES-004.md",
+        "category": "wezone-api",
+        "id": "LES-004",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-005.md",
+        "category": "wezone-api",
+        "id": "LES-005",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-012.md",
+        "category": "wezone-api",
+        "id": "LES-012",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-013.md",
+        "category": "wezone-api",
+        "id": "LES-013",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-023.md",
+        "category": "wezone-api",
+        "id": "LES-023",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-024.md",
+        "category": "wezone-api",
+        "id": "LES-024",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-025.md",
+        "category": "wezone-api",
+        "id": "LES-025",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-026.md",
+        "category": "wezone-api",
+        "id": "LES-026",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-032.md",
+        "category": "wezone-api",
+        "id": "LES-032",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-033.md",
+        "category": "wezone-api",
+        "id": "LES-033",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-038.md",
+        "category": "wezone-api",
+        "id": "LES-038",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-040.md",
+        "category": "wezone-api",
+        "id": "LES-040",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-041.md",
+        "category": "wezone-api",
+        "id": "LES-041",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-054.md",
+        "category": "wezone-api",
+        "id": "LES-054",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-058.md",
+        "category": "wezone-api",
+        "id": "LES-058",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-059.md",
+        "category": "wezone-api",
+        "id": "LES-059",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-060.md",
+        "category": "wezone-api",
+        "id": "LES-060",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-062.md",
+        "category": "wezone-api",
+        "id": "LES-062",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-065.md",
+        "category": "wezone-api",
+        "id": "LES-065",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-082.md",
+        "category": "wezone-api",
+        "id": "LES-082",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-083.md",
+        "category": "wezone-api",
+        "id": "LES-083",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-084.md",
+        "category": "wezone-api",
+        "id": "LES-084",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-086.md",
+        "category": "wezone-api",
+        "id": "LES-086",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-089.md",
+        "category": "wezone-api",
+        "id": "LES-089",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-090.md",
+        "category": "wezone-api",
+        "id": "LES-090",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-091.md",
+        "category": "wezone-api",
+        "id": "LES-091",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-092.md",
+        "category": "wezone-api",
+        "id": "LES-092",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-095.md",
+        "category": "wezone-api",
+        "id": "LES-095",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-096.md",
+        "category": "wezone-api",
+        "id": "LES-096",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-097.md",
+        "category": "wezone-api",
+        "id": "LES-097",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-099.md",
+        "category": "wezone-api",
+        "id": "LES-099",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-100.md",
+        "category": "wezone-api",
+        "id": "LES-100",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-101.md",
+        "category": "wezone-api",
+        "id": "LES-101",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-102.md",
+        "category": "wezone-api",
+        "id": "LES-102",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-104.md",
+        "category": "wezone-api",
+        "id": "LES-104",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-105.md",
+        "category": "wezone-api",
+        "id": "LES-105",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-106.md",
+        "category": "wezone-api",
+        "id": "LES-106",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-107.md",
+        "category": "wezone-api",
+        "id": "LES-107",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-108.md",
+        "category": "wezone-api",
+        "id": "LES-108",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-119.md",
+        "category": "wezone-api",
+        "id": "LES-119",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-123.md",
+        "category": "wezone-api",
+        "id": "LES-123",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-125.md",
+        "category": "wezone-api",
+        "id": "LES-125",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-126.md",
+        "category": "wezone-api",
+        "id": "LES-126",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-127.md",
+        "category": "wezone-api",
+        "id": "LES-127",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-181.md",
+        "category": "wezone-api",
+        "id": "LES-181",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-237.md",
+        "category": "wezone-api",
+        "id": "LES-237",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-243.md",
+        "category": "wezone-api",
+        "id": "LES-243",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-244.md",
+        "category": "wezone-api",
+        "id": "LES-244",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-249.md",
+        "category": "wezone-api",
+        "id": "LES-249",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-250.md",
+        "category": "wezone-api",
+        "id": "LES-250",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-251.md",
+        "category": "wezone-api",
+        "id": "LES-251",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-252.md",
+        "category": "wezone-api",
+        "id": "LES-252",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-253.md",
+        "category": "wezone-api",
+        "id": "LES-253",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-256.md",
+        "category": "wezone-api",
+        "id": "LES-256",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-258.md",
+        "category": "wezone-api",
+        "id": "LES-258",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-259.md",
+        "category": "wezone-api",
+        "id": "LES-259",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-261.md",
+        "category": "wezone-api",
+        "id": "LES-261",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-307.md",
+        "category": "wezone-api",
+        "id": "LES-307",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-313.md",
+        "category": "wezone-api",
+        "id": "LES-313",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-317.md",
+        "category": "wezone-api",
+        "id": "LES-317",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-318.md",
+        "category": "wezone-api",
+        "id": "LES-318",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-321.md",
+        "category": "wezone-api",
+        "id": "LES-321",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-322.md",
+        "category": "wezone-api",
+        "id": "LES-322",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-327.md",
+        "category": "wezone-api",
+        "id": "LES-327",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-332.md",
+        "category": "wezone-api",
+        "id": "LES-332",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-333.md",
+        "category": "wezone-api",
+        "id": "LES-333",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-337.md",
+        "category": "wezone-api",
+        "id": "LES-337",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-338.md",
+        "category": "wezone-api",
+        "id": "LES-338",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-339.md",
+        "category": "wezone-api",
+        "id": "LES-339",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-342.md",
+        "category": "wezone-api",
+        "id": "LES-342",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-343.md",
+        "category": "wezone-api",
+        "id": "LES-343",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-344.md",
+        "category": "wezone-api",
+        "id": "LES-344",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-347.md",
+        "category": "wezone-api",
+        "id": "LES-347",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-348.md",
+        "category": "wezone-api",
+        "id": "LES-348",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-352.md",
+        "category": "wezone-api",
+        "id": "LES-352",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-353.md",
+        "category": "wezone-api",
+        "id": "LES-353",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-354.md",
+        "category": "wezone-api",
+        "id": "LES-354",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-355.md",
+        "category": "wezone-api",
+        "id": "LES-355",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-357.md",
+        "category": "wezone-api",
+        "id": "LES-357",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-359.md",
+        "category": "wezone-api",
+        "id": "LES-359",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-360.md",
+        "category": "wezone-api",
+        "id": "LES-360",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-361.md",
+        "category": "wezone-api",
+        "id": "LES-361",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-365.md",
+        "category": "wezone-api",
+        "id": "LES-365",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-366.md",
+        "category": "wezone-api",
+        "id": "LES-366",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-368.md",
+        "category": "wezone-api",
+        "id": "LES-368",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-369.md",
+        "category": "wezone-api",
+        "id": "LES-369",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-370.md",
+        "category": "wezone-api",
+        "id": "LES-370",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-376.md",
+        "category": "wezone-api",
+        "id": "LES-376",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-377.md",
+        "category": "wezone-api",
+        "id": "LES-377",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-378.md",
+        "category": "wezone-api",
+        "id": "LES-378",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-394.md",
+        "category": "wezone-api",
+        "id": "LES-394",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-396.md",
+        "category": "wezone-api",
+        "id": "LES-396",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-399.md",
+        "category": "wezone-api",
+        "id": "LES-399",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-404.md",
+        "category": "wezone-api",
+        "id": "LES-404",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-406.md",
+        "category": "wezone-api",
+        "id": "LES-406",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-407.md",
+        "category": "wezone-api",
+        "id": "LES-407",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-408.md",
+        "category": "wezone-api",
+        "id": "LES-408",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-409.md",
+        "category": "wezone-api",
+        "id": "LES-409",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-414.md",
+        "category": "wezone-api",
+        "id": "LES-414",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-432.md",
+        "category": "wezone-api",
+        "id": "LES-432",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-433.md",
+        "category": "wezone-api",
+        "id": "LES-433",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-436.md",
+        "category": "wezone-api",
+        "id": "LES-436",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-442.md",
+        "category": "wezone-api",
+        "id": "LES-442",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-467.md",
+        "category": "wezone-api",
+        "id": "LES-467",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-482.md",
+        "category": "wezone-api",
+        "id": "LES-482",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-483.md",
+        "category": "wezone-api",
+        "id": "LES-483",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-487.md",
+        "category": "wezone-api",
+        "id": "LES-487",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-494.md",
+        "category": "wezone-api",
+        "id": "LES-494",
+        "reason": "category:wezone-api is wezone-only"
+      },
+      {
+        "file": "wezone-api\\LES-496.md",
+        "category": "wezone-api",
+        "id": "LES-496",
+        "reason": "category:wezone-api is wezone-only"
+      }
+    ],
+    "review": []
+  }
+}

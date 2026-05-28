@@ -308,23 +308,81 @@ class Validator:
         phase: Optional[str] = None
     ) -> Tuple[bool, List[str]]:
         """
-        Run all validation layers.
+        Run all validation layers. Collects all failures before returning
+        so a file with multiple violations across layers is fully reported.
 
         Returns:
             (success, messages) tuple
         """
         messages = []
+        passed = True
 
         # Layer 2: Content validation
         result = self.validate_content(content, file_path)
         messages.append(f"Content: {result.message}")
         if not result.passed:
-            return False, messages
+            passed = False
+
+        # Layer 3: Kiwi scan (always runs, even if Layer 2 failed)
+        try:
+            kiwi_result = self.validate_with_kiwi(Path(file_path))
+            messages.append(f"Kiwi: {kiwi_result.message}")
+            if not kiwi_result.passed:
+                passed = False
+        except Exception as e:
+            messages.append(f"Kiwi: warning - scan skipped ({e})")
 
         # Layer 4: GATE compliance
         result = self.validate_gate_compliance(content, file_path)
         messages.append(f"GATE: {result.message}")
         if not result.passed:
-            return False, messages
+            passed = False
 
-        return True, messages
+        # Layer 5: Extra PHP-specific checks
+        if file_path.endswith('.php'):
+            result = self.validate_php_extra(content, file_path)
+            messages.append(f"PHP: {result.message}")
+            if not result.passed:
+                passed = False
+
+        return passed, messages
+
+    def validate_php_extra(self, content: str, file_path: str) -> ValidationResult:
+        """
+        Extra PHP checks not covered by GATE compliance.
+
+        Checks:
+        - No hardcoded hex colors in PHP (style= attributes)
+        - No dead links (href="#")
+        - wz_config() guard present in non-layout files
+        """
+        issues = []
+
+        # Hex colors inside style= attributes in PHP files
+        # Token definition files are allowed
+        token_files = ['store-config.php', 'design-tokens.json']
+        is_token_file = any(file_path.endswith(f) for f in token_files)
+
+        if not is_token_file:
+            hex_in_style = re.findall(r'style=["\'][^"\']*#[0-9a-fA-F]{3,6}[^"\']*["\']', content)
+            if hex_in_style:
+                issues.append(f"Hardcoded hex in style= attribute: {hex_in_style[0][:60]}")
+
+        # Dead links
+        if re.search(r'href=["\']#["\']', content):
+            issues.append("Dead link: href=\"#\" found — use real URL or conditional rendering")
+
+        # wz_config() guard — required in non-layout PHP files
+        layout_files = ['header.php', 'footer.php', 'index.php', 'functions.php']
+        config_files = ['store-config.php', 'design-tokens.json', 'tailwind.config.js', 'package.json']
+        is_layout = any(file_path.endswith(f) for f in layout_files)
+        is_config = any(file_path.endswith(f) for f in config_files)
+        is_inc = '/inc/' in file_path or '\\inc\\' in file_path
+
+        if not is_layout and not is_config and not is_inc and 'function_exists' not in content and 'wz_config' in content:
+            issues.append("Missing wz_config() guard: add if (!function_exists('wz_config')) return;")
+
+        if issues:
+            return ValidationResult(False, "; ".join(issues))
+
+        return ValidationResult(True, "PHP extra checks passed")

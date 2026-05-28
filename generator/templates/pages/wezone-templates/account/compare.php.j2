@@ -1,0 +1,122 @@
+<?php
+/**
+ * Account Compare
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user_id  = get_current_user_id();
+$compare  = function_exists( 'wz_get_compare_list' ) ? wz_get_compare_list( $user_id ) : array();
+$products = array();
+foreach ( $compare as $pid ) {
+	$p = function_exists( 'wz_get_product' ) ? wz_get_product( $pid ) : null;
+	if ( $p ) {
+		$products[] = $p;
+	}
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<a href="<?php echo esc_url( home_url( '/tai-khoan' ) ); ?>" class="text-gray-600 hover:text-primary">Tài khoản</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">So sánh</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'compare' ) ); ?>
+			</aside>
+
+			<div class="lg:col-span-3">
+				<h1 class="text-xl font-semibold mb-6">So sánh sản phẩm</h1>
+
+				<?php if ( ! empty( $products ) ) : ?>
+				<div class="overflow-x-auto">
+					<table class="w-full bg-white rounded-xl shadow-sm text-sm">
+						<thead>
+							<tr>
+								<th class="p-4 text-left font-medium text-gray-600 w-32">Thông tin</th>
+								<?php foreach ( $products as $product ) : ?>
+								<th class="p-4 text-center">
+									<div class="relative inline-block">
+										<img src="<?php echo esc_url( $product['thumbnail'] ); ?>"
+										     alt="<?php echo esc_attr( $product['name'] ); ?>"
+										     class="w-20 h-20 object-cover rounded-lg mx-auto mb-2"
+										     width="80" height="80">
+										<button type="button"
+										        class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center wz-remove-compare"
+										        data-product-id="<?php echo esc_attr( $product['id'] ); ?>"
+										        aria-label="Xóa khỏi so sánh">×</button>
+									</div>
+									<a href="<?php echo esc_url( wz_get_permalink( $product ) ); ?>"
+									   class="font-medium hover:text-primary line-clamp-2 block">
+										<?php echo esc_html( $product['name'] ); ?>
+									</a>
+								</th>
+								<?php endforeach; ?>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-gray-100">
+							<tr>
+								<td class="p-4 font-medium text-gray-600">Giá</td>
+								<?php foreach ( $products as $product ) : ?>
+								<td class="p-4 text-center font-bold text-primary"><?php echo esc_html( wz_format_price( $product['price'] ) ); ?></td>
+								<?php endforeach; ?>
+							</tr>
+							<?php
+							$attrs = array( 'brand' => 'Thương hiệu', 'sku' => 'SKU', 'weight' => 'Trọng lượng', 'dimensions' => 'Kích thước' );
+							foreach ( $attrs as $key => $label ) :
+							?>
+							<tr>
+								<td class="p-4 font-medium text-gray-600"><?php echo esc_html( $label ); ?></td>
+								<?php foreach ( $products as $product ) : ?>
+								<td class="p-4 text-center text-gray-700"><?php echo esc_html( $product[ $key ] ?? '—' ); ?></td>
+								<?php endforeach; ?>
+							</tr>
+							<?php endforeach; ?>
+							<tr>
+								<td class="p-4"></td>
+								<?php foreach ( $products as $product ) : ?>
+								<td class="p-4 text-center">
+									<button type="button"
+									        class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90 transition-opacity wz-add-to-cart"
+									        data-product-id="<?php echo esc_attr( $product['id'] ); ?>">
+										Thêm vào giỏ
+									</button>
+								</td>
+								<?php endforeach; ?>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<?php else : ?>
+				<div class="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500">
+					<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">compare</span>
+					<p class="font-medium">Chưa có sản phẩm để so sánh</p>
+					<a href="<?php echo esc_url( function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop' ) ); ?>"
+					   class="inline-block mt-4 px-6 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90 transition-opacity">
+						Khám phá sản phẩm
+					</a>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

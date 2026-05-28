@@ -1,0 +1,1 @@
+"""LSP capabilities — diagnostics, code actions, hover."""

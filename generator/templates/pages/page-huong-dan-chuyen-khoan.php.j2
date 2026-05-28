@@ -1,0 +1,90 @@
+<?php
+/**
+ * Page: Hướng dẫn chuyển khoản / Thanh toán
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Hướng dẫn chuyển khoản</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-8">Hướng dẫn chuyển khoản</h1>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Thông tin tài khoản ngân hàng</h2>
+				<div class="bg-gray-50 rounded-xl p-6 space-y-3">
+					<?php
+					$bank_accounts = function_exists( 'wz_config' ) ? wz_config( 'bank_accounts' ) : array();
+					if ( ! empty( $bank_accounts ) ) :
+						foreach ( $bank_accounts as $bank ) :
+					?>
+					<div class="border-b border-gray-200 pb-3 last:border-0 last:pb-0">
+						<p class="font-semibold"><?php echo esc_html( $bank['bank_name'] ); ?></p>
+						<p class="text-sm text-gray-600">Số tài khoản: <span class="font-mono font-bold"><?php echo esc_html( $bank['account_number'] ); ?></span></p>
+						<p class="text-sm text-gray-600">Chủ tài khoản: <?php echo esc_html( $bank['account_name'] ); ?></p>
+						<?php if ( ! empty( $bank['branch'] ) ) : ?>
+						<p class="text-sm text-gray-600">Chi nhánh: <?php echo esc_html( $bank['branch'] ); ?></p>
+						<?php endif; ?>
+					</div>
+					<?php
+						endforeach;
+					else :
+					?>
+					<p class="text-gray-600">Vui lòng liên hệ hotline <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> để nhận thông tin tài khoản.</p>
+					<?php endif; ?>
+				</div>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Nội dung chuyển khoản</h2>
+				<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+					<p class="font-medium text-yellow-800">Ghi rõ nội dung: <span class="font-mono">TEN_KHACH_HANG + SDT + MA_DON_HANG</span></p>
+					<p class="text-sm text-yellow-700 mt-1">Ví dụ: Nguyen Van A 0901234567 DH12345</p>
+				</div>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Các bước thực hiện</h2>
+				<ol class="list-decimal pl-6 space-y-3">
+					<li>Đặt hàng trên website và nhận mã đơn hàng</li>
+					<li>Chuyển khoản đúng số tiền theo đơn hàng</li>
+					<li>Ghi đúng nội dung chuyển khoản (tên + SĐT + mã đơn)</li>
+					<li>Chụp màn hình biên lai và gửi qua Zalo/email để xác nhận nhanh hơn</li>
+					<li>Đơn hàng sẽ được xử lý trong vòng 1 – 2 giờ làm việc sau khi nhận được thanh toán</li>
+				</ol>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Lưu ý</h2>
+				<ul class="list-disc pl-6 space-y-2 text-gray-700">
+					<li>Chuyển đúng số tiền — không làm tròn</li>
+					<li>Giao dịch ngoài giờ làm việc sẽ được xử lý vào ngày làm việc tiếp theo</li>
+					<li>Liên hệ ngay nếu chuyển khoản nhưng chưa nhận được xác nhận sau 2 giờ</li>
+				</ul>
+			</section>
+
+			<div class="bg-primary/5 rounded-xl p-5 mt-8">
+				<p class="font-medium">Cần hỗ trợ?</p>
+				<p class="text-sm text-gray-600 mt-1">
+					Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> &bull;
+					Email: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a>
+				</p>
+			</div>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

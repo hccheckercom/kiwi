@@ -1,0 +1,100 @@
+<?php
+/**
+ * Template Name: Order Failed
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+		<?php
+		$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
+		$reason   = isset( $_GET['reason'] ) ? sanitize_text_field( wp_unslash( $_GET['reason'] ) ) : '';
+		?>
+
+		<div class="max-w-2xl mx-auto text-center py-12">
+			<div class="w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
+				<svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+				</svg>
+			</div>
+
+			<h1 class="text-3xl font-bold mb-4">Đặt hàng không thành công</h1>
+			<p class="text-gray-600 mb-2">Rất tiếc, đơn hàng của bạn chưa được xử lý.</p>
+
+			<?php if ( $reason ) : ?>
+				<div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 text-left">
+					<p class="text-red-700 text-sm">
+						<strong>Lý do:</strong> <?php echo esc_html( $reason ); ?>
+					</p>
+				</div>
+			<?php else : ?>
+				<p class="text-gray-600 mb-8">Vui lòng thử lại hoặc chọn phương thức thanh toán khác.</p>
+			<?php endif; ?>
+
+			<div class="bg-white rounded-lg shadow-sm p-6 mb-8 text-left">
+				<h2 class="text-lg font-bold mb-4">Bạn có thể thử:</h2>
+				<ul class="space-y-3 text-gray-700">
+					<li class="flex items-start gap-3">
+						<svg class="w-5 h-5 text-gray-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+						</svg>
+						<span>Kiểm tra lại thông tin thanh toán (số thẻ, ngày hết hạn)</span>
+					</li>
+					<li class="flex items-start gap-3">
+						<svg class="w-5 h-5 text-gray-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+						</svg>
+						<span>Chọn phương thức thanh toán khác (COD, chuyển khoản)</span>
+					</li>
+					<li class="flex items-start gap-3">
+						<svg class="w-5 h-5 text-gray-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+						</svg>
+						<span>Liên hệ ngân hàng nếu giao dịch bị từ chối</span>
+					</li>
+				</ul>
+			</div>
+
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<?php if ( $order_id ) : ?>
+					<a href="<?php echo esc_url( home_url( '/checkout?retry=' . $order_id ) ); ?>"
+					   class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-center">
+						Thử lại thanh toán
+					</a>
+				<?php else : ?>
+					<a href="<?php echo esc_url( home_url( '/checkout' ) ); ?>"
+					   class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-center">
+						Quay lại thanh toán
+					</a>
+				<?php endif; ?>
+
+				<a href="<?php echo esc_url( home_url( '/cart' ) ); ?>"
+				   class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center">
+					Xem giỏ hàng
+				</a>
+			</div>
+
+			<!-- Contact support -->
+			<div class="mt-12 pt-8 border-t border-gray-200">
+				<p class="text-gray-600 text-sm">
+					Cần hỗ trợ? Liên hệ
+					<?php if ( function_exists( 'wz_config' ) ) : ?>
+						<a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline">
+							<?php echo esc_html( wz_config( 'phone' ) ); ?>
+						</a>
+					<?php else : ?>
+						<span>hotline của chúng tôi</span>
+					<?php endif; ?>
+				</p>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

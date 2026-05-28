@@ -1,0 +1,145 @@
+{
+  "name": "kiwi-lsp",
+  "displayName": "Kiwi",
+  "description": "Real-time code quality scanning powered by 726+ learned patterns",
+  "version": "0.1.0",
+  "publisher": "wezone",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Linters", "Programming Languages"],
+  "keywords": ["php", "wordpress", "security", "linter", "code-quality"],
+  "activationEvents": [
+    "onLanguage:php",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:css",
+    "onLanguage:html",
+    "workspaceContains:**/*.php"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "kiwi.restart",
+        "title": "Kiwi: Restart Server"
+      },
+      {
+        "command": "kiwi.scanProject",
+        "title": "Kiwi: Scan Project"
+      },
+      {
+        "command": "kiwi.viewLesson",
+        "title": "Kiwi: View Lesson"
+      },
+      {
+        "command": "kiwi.dismissFile",
+        "title": "Kiwi: Dismiss (this file)"
+      },
+      {
+        "command": "kiwi.dismissProject",
+        "title": "Kiwi: Dismiss (project)"
+      },
+      {
+        "command": "kiwi.refreshViolations",
+        "title": "Kiwi: Refresh Violations",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "kiwi.openDashboard",
+        "title": "Kiwi: Open Dashboard"
+      },
+      {
+        "command": "kiwi.scanUncommitted",
+        "title": "Kiwi: Scan Uncommitted Changes"
+      },
+      {
+        "command": "kiwi.editorGuide",
+        "title": "Kiwi: Editor Setup Guide"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "kiwi",
+          "title": "Kiwi",
+          "icon": "$(shield)"
+        }
+      ]
+    },
+    "views": {
+      "kiwi": [
+        {
+          "id": "kiwiViolations",
+          "name": "Violations"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "kiwi.refreshViolations",
+          "when": "view == kiwiViolations",
+          "group": "navigation"
+        },
+        {
+          "command": "kiwi.scanProject",
+          "when": "view == kiwiViolations"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Kiwi",
+      "properties": {
+        "kiwi.severity": {
+          "type": "string",
+          "default": "ALL",
+          "enum": ["CRITICAL", "HIGH", "SUGGEST", "ALL"],
+          "description": "Minimum severity level to report"
+        },
+        "kiwi.scanOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan files when opened"
+        },
+        "kiwi.scanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan files when saved"
+        },
+        "kiwi.scanOnChange": {
+          "type": "boolean",
+          "default": false,
+          "description": "Scan files on every change (may impact performance)"
+        },
+        "kiwi.platform": {
+          "type": "string",
+          "default": "wp",
+          "enum": ["wp", "nextjs"],
+          "description": "Target platform for pattern matching"
+        },
+        "kiwi.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Python interpreter (auto-detected if empty)"
+        },
+        "kiwi.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Kiwi LSP server directory (auto-detected if empty)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --watch",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": 

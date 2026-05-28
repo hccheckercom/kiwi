@@ -1,0 +1,150 @@
+<?php
+/**
+ * Account Profile
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user    = wp_get_current_user();
+$user_id = get_current_user_id();
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<a href="<?php echo esc_url( home_url( '/tai-khoan' ) ); ?>" class="text-gray-600 hover:text-primary">Tài khoản</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Thông tin cá nhân</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'profile' ) ); ?>
+			</aside>
+
+			<div class="lg:col-span-3">
+				<div class="bg-white rounded-xl shadow-sm p-6">
+					<h1 class="text-xl font-semibold mb-6">Thông tin cá nhân</h1>
+
+					<div id="wz-profile-message" class="hidden rounded-lg p-4 text-sm mb-4" role="alert" aria-live="polite"></div>
+
+					<form id="wz-profile-form" class="space-y-5" novalidate>
+						<?php wp_nonce_field( 'wz_update_profile', 'wz_profile_nonce' ); ?>
+
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+							<div>
+								<label for="profile-first-name" class="block text-sm font-medium mb-1">Họ</label>
+								<input type="text" id="profile-first-name" name="first_name"
+								       value="<?php echo esc_attr( $user->first_name ); ?>"
+								       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+							</div>
+							<div>
+								<label for="profile-last-name" class="block text-sm font-medium mb-1">Tên</label>
+								<input type="text" id="profile-last-name" name="last_name"
+								       value="<?php echo esc_attr( $user->last_name ); ?>"
+								       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+							</div>
+						</div>
+
+						<div>
+							<label for="profile-display-name" class="block text-sm font-medium mb-1">Tên hiển thị <span class="text-red-500" aria-hidden="true">*</span></label>
+							<input type="text" id="profile-display-name" name="display_name" required
+							       value="<?php echo esc_attr( $user->display_name ); ?>"
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+						</div>
+
+						<div>
+							<label for="profile-email" class="block text-sm font-medium mb-1">Email <span class="text-red-500" aria-hidden="true">*</span></label>
+							<input type="email" id="profile-email" name="email" required
+							       value="<?php echo esc_attr( $user->user_email ); ?>"
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+						</div>
+
+						<div>
+							<label for="profile-phone" class="block text-sm font-medium mb-1">Số điện thoại</label>
+							<input type="tel" id="profile-phone" name="phone"
+							       value="<?php echo esc_attr( get_user_meta( $user_id, 'phone', true ) ); ?>"
+							       pattern="0[0-9]{9,10}"
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+							       placeholder="0901234567">
+						</div>
+
+						<div>
+							<label for="profile-birthday" class="block text-sm font-medium mb-1">Ngày sinh</label>
+							<input type="date" id="profile-birthday" name="birthday"
+							       value="<?php echo esc_attr( get_user_meta( $user_id, 'birthday', true ) ); ?>"
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+						</div>
+
+						<div>
+							<label class="block text-sm font-medium mb-2">Giới tính</label>
+							<?php $gender = get_user_meta( $user_id, 'gender', true ); ?>
+							<div class="flex gap-6">
+								<label class="flex items-center gap-2 cursor-pointer">
+									<input type="radio" name="gender" value="male" <?php checked( $gender, 'male' ); ?> class="text-primary">
+									<span class="text-sm">Nam</span>
+								</label>
+								<label class="flex items-center gap-2 cursor-pointer">
+									<input type="radio" name="gender" value="female" <?php checked( $gender, 'female' ); ?> class="text-primary">
+									<span class="text-sm">Nữ</span>
+								</label>
+								<label class="flex items-center gap-2 cursor-pointer">
+									<input type="radio" name="gender" value="other" <?php checked( $gender, 'other' ); ?> class="text-primary">
+									<span class="text-sm">Khác</span>
+								</label>
+							</div>
+						</div>
+
+						<div class="pt-2">
+							<button type="submit" id="wz-profile-submit"
+							        class="px-8 py-2.5 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50">
+								Lưu thay đổi
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+<script>
+(function() {
+	var form = document.getElementById('wz-profile-form');
+	if (!form) return;
+	form.addEventListener('submit', function(e) {
+		e.preventDefault();
+		var btn = document.getElementById('wz-profile-submit');
+		var msg = document.getElementById('wz-profile-message');
+		btn.disabled = true;
+		var data = new FormData(form);
+		data.append('action', 'wz_update_profile');
+		fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', { method: 'POST', body: data, credentials: 'same-origin' })
+			.then(function(r) { return r.json(); })
+			.then(function(res) {
+				msg.className = 'rounded-lg p-4 text-sm mb-4 ' + (res.success ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700');
+				msg.textContent = res.success ? 'Đã cập nhật thông tin thành công.' : (res.data || 'Có lỗi xảy ra.');
+			})
+			.catch(function() {
+				msg.className = 'rounded-lg p-4 text-sm mb-4 bg-red-50 text-red-700';
+				msg.textContent = 'Có lỗi xảy ra. Vui lòng thử lại.';
+			})
+			.finally(function() { btn.disabled = false; });
+	});
+})();
+</script>
+
+<?php get_footer(); ?>

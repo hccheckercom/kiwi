@@ -1,0 +1,150 @@
+<?php
+/**
+ * Account Dashboard
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user    = wp_get_current_user();
+$user_id = get_current_user_id();
+$orders  = function_exists( 'wz_get_user_orders' ) ? wz_get_user_orders( $user_id, array( 'limit' => 5 ) ) : array();
+$points  = function_exists( 'wz_get_user_points' ) ? wz_get_user_points( $user_id ) : 0;
+$wishlist_count = function_exists( 'wz_get_wishlist_count' ) ? wz_get_wishlist_count( $user_id ) : 0;
+$voucher_count  = function_exists( 'wz_get_user_vouchers' ) ? count( wz_get_user_vouchers( $user_id ) ) : 0;
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Tài khoản</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<!-- Sidebar -->
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'dashboard' ) ); ?>
+			</aside>
+
+			<!-- Content -->
+			<div class="lg:col-span-3 space-y-6">
+
+				<!-- Welcome Card -->
+				<div class="bg-white rounded-xl shadow-sm p-6 flex items-center gap-4">
+					<img src="<?php echo esc_url( get_avatar_url( $user_id, array( 'size' => 64 ) ) ); ?>"
+					     alt="<?php echo esc_attr( $user->display_name ); ?>"
+					     class="w-16 h-16 rounded-full object-cover"
+					     width="64" height="64">
+					<div>
+						<h1 class="text-xl font-bold">Xin chào, <?php echo esc_html( $user->display_name ); ?>!</h1>
+						<p class="text-sm text-gray-500">Thành viên từ <?php echo esc_html( date_i18n( 'd/m/Y', strtotime( $user->user_registered ) ) ); ?></p>
+						<?php if ( $points ) : ?>
+							<p class="text-sm text-primary font-medium mt-1"><?php echo esc_html( number_format( (int) $points ) ); ?> điểm thưởng</p>
+						<?php endif; ?>
+					</div>
+				</div>
+
+				<!-- Quick Stats -->
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+					<?php
+					$pending_count = function_exists( 'wz_get_user_orders' ) ? count( wz_get_user_orders( $user_id, array( 'status' => array( 'pending', 'processing' ) ) ) ) : 0;
+					$total_orders  = function_exists( 'wz_get_user_orders' ) ? count( wz_get_user_orders( $user_id ) ) : 0;
+					$stats = array(
+						array( 'label' => 'Tổng đơn hàng', 'value' => $total_orders, 'icon' => 'shopping_bag' ),
+						array( 'label' => 'Đang xử lý', 'value' => $pending_count, 'icon' => 'pending' ),
+						array( 'label' => 'Yêu thích', 'value' => $wishlist_count, 'icon' => 'favorite' ),
+						array( 'label' => 'Mã giảm giá', 'value' => $voucher_count, 'icon' => 'local_offer' ),
+					);
+					foreach ( $stats as $stat ) :
+					?>
+					<div class="bg-white rounded-xl shadow-sm p-5 text-center">
+						<span class="material-icons text-primary text-2xl mb-2 block" aria-hidden="true"><?php echo esc_html( $stat['icon'] ); ?></span>
+						<div class="text-2xl font-bold"><?php echo esc_html( (string) (int) $stat['value'] ); ?></div>
+						<div class="text-sm text-gray-500 mt-1"><?php echo esc_html( $stat['label'] ); ?></div>
+					</div>
+					<?php endforeach; ?>
+				</div>
+
+				<!-- Recent Orders -->
+				<div class="bg-white rounded-xl shadow-sm p-6">
+					<div class="flex items-center justify-between mb-4">
+						<h2 class="text-lg font-semibold">Đơn hàng gần đây</h2>
+						<a href="<?php echo esc_url( home_url( '/tai-khoan/don-hang' ) ); ?>" class="text-sm text-primary hover:underline">Xem tất cả</a>
+					</div>
+
+					<?php if ( ! empty( $orders ) ) : ?>
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead>
+								<tr class="border-b border-gray-100">
+									<th class="pb-3 text-left font-medium text-gray-600">Mã đơn</th>
+									<th class="pb-3 text-left font-medium text-gray-600">Ngày</th>
+									<th class="pb-3 text-left font-medium text-gray-600">Trạng thái</th>
+									<th class="pb-3 text-right font-medium text-gray-600">Tổng tiền</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-gray-50">
+								<?php foreach ( $orders as $order ) : ?>
+								<tr>
+									<td class="py-3 font-mono text-xs">#<?php echo esc_html( $order['id'] ); ?></td>
+									<td class="py-3 text-gray-600"><?php echo esc_html( date_i18n( 'd/m/Y', strtotime( $order['date_created'] ) ) ); ?></td>
+									<td class="py-3">
+										<span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium
+											<?php echo esc_attr( wz_order_status_class( $order['status'] ) ); ?>">
+											<?php echo esc_html( wz_order_status_label( $order['status'] ) ); ?>
+										</span>
+									</td>
+									<td class="py-3 text-right font-medium"><?php echo esc_html( wz_format_price( $order['total'] ) ); ?></td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<?php else : ?>
+					<div class="text-center py-8 text-gray-500">
+						<span class="material-icons text-4xl mb-2 block text-gray-300" aria-hidden="true">shopping_bag</span>
+						<p>Chưa có đơn hàng nào</p>
+					</div>
+					<?php endif; ?>
+				</div>
+
+				<!-- Quick Actions -->
+				<div class="bg-white rounded-xl shadow-sm p-6">
+					<h2 class="text-lg font-semibold mb-4">Thao tác nhanh</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+						<?php
+						$actions = array(
+							array( 'label' => 'Đặt hàng mới', 'icon' => 'add_shopping_cart', 'url' => home_url( '/shop' ) ),
+							array( 'label' => 'Theo dõi đơn', 'icon' => 'local_shipping', 'url' => home_url( '/tai-khoan/theo-doi-don' ) ),
+							array( 'label' => 'Đổi mật khẩu', 'icon' => 'lock', 'url' => home_url( '/tai-khoan/doi-mat-khau' ) ),
+							array( 'label' => 'Liên hệ hỗ trợ', 'icon' => 'support_agent', 'url' => home_url( '/lien-he' ) ),
+						);
+						foreach ( $actions as $action ) :
+						?>
+						<a href="<?php echo esc_url( $action['url'] ); ?>"
+						   class="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 hover:border-primary hover:text-primary transition-colors text-center">
+							<span class="material-icons text-2xl" aria-hidden="true"><?php echo esc_html( $action['icon'] ); ?></span>
+							<span class="text-sm font-medium"><?php echo esc_html( $action['label'] ); ?></span>
+						</a>
+						<?php endforeach; ?>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

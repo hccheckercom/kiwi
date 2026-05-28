@@ -1,0 +1,238 @@
+import * as vscode from 'vscode';
+import { LanguageClient } from 'vscode-languageclient/node';
+
+let dashboardPanel: vscode.WebviewPanel | undefined;
+
+interface StatsResponse {
+    total_files: number;
+    total_violations: number;
+    by_severity: { CRITICAL: number; HIGH: number; SUGGEST: number };
+    top_lessons: Array<{ id: string; count: number }>;
+    total_patterns: number;
+}
+
+interface ProgressData {
+    lessonsEncountered: string[];
+    lessonsFixed: string[];
+    lessonsDismissed: string[];
+    scansToday: number;
+    lastScanTime: string;
+}
+
+const SAVINGS_PER_SEVERITY = {
+    CRITICAL: 4.0,
+    HIGH: 1.5,
+    SUGGEST: 0.3,
+};
+
+export class DashboardProvider implements vscode.Disposable {
+    private progress: ProgressData;
+    private storageKey = 'kiwi.dashboard.progress';
+
+    constructor(
+        private readonly context: vscode.ExtensionContext,
+        private readonly getClient: () => LanguageClient | undefined,
+    ) {
+        this.progress = this.loadProgress();
+    }
+
+    async openDashboard(): Promise<void> {
+        if (dashboardPanel) {
+            dashboardPanel.reveal();
+        } else {
+            dashboardPanel = vscode.window.createWebviewPanel(
+                'kiwiDashboard',
+                'Kiwi Dashboard',
+                vscode.ViewColumn.One,
+                { enableScripts: true },
+            );
+            dashboardPanel.onDidDispose(() => { dashboardPanel = undefined; });
+        }
+
+        await this.refreshDashboard();
+    }
+
+    async refreshDashboard(): Promise<void> {
+        if (!dashboardPanel) return;
+
+        const stats = await this.fetchStats();
+        const savings = this.calculateSavings(stats);
+        const progress = this.progress;
+
+        dashboardPanel.webview.html = this.buildHtml(stats, savings, progress);
+    }
+
+    recordScan(): void {
+        this.progress.scansToday++;
+        this.progress.lastScanTime = new Date().toISOString();
+        this.saveProgress();
+    }
+
+    recordLessonEncountered(lessonId: string): void {
+        if (!this.progress.lessonsEncountered.includes(lessonId)) {
+            this.progress.lessonsEncountered.push(lessonId);
+            this.saveProgress();
+        }
+    }
+
+    recordLessonFixed(lessonId: string): void {
+        if (!this.progress.lessonsFixed.includes(lessonId)) {
+            this.progress.lessonsFixed.push(lessonId);
+            this.saveProgress();
+        }
+    }
+
+    recordLessonDismissed(lessonId: string): void {
+        if (!this.progress.lessonsDismissed.includes(lessonId)) {
+            this.progress.lessonsDismissed.push(lessonId);
+            this.saveProgress();
+        }
+    }
+
+    private async fetchStats(): Promise<StatsResponse | null> {
+        const client = this.getClient();
+        if (!client || !client.isRunning()) return null;
+
+        try {
+            return await client.sendRequest('kiwi/stats', {});
+        } catch {
+            return null;
+        }
+    }
+
+    private calculateSavings(stats: StatsResponse | null): { hours: number; bugs: number } {
+        if (!stats) return { hours: 0, bugs: 0 };
+
+        const hours =
+            stats.by_severity.CRITICAL * SAVINGS_PER_SEVERITY.CRITICAL +
+            stats.by_severity.HIGH * SAVINGS_PER_SEVERITY.HIGH +
+            stats.by_severity.SUGGEST * SAVINGS_PER_SEVERITY.SUGGEST;
+
+        return { hours: Math.round(hours * 10) / 10, bugs: stats.total_violations };
+    }
+
+    private loadProgress(): ProgressData {
+        const stored = this.context.workspaceState.get<ProgressData>(this.storageKey);
+        if (stored) return stored;
+        return {
+            lessonsEncountered: [],
+            lessonsFixed: [],
+            lessonsDismissed: [],
+            scansToday: 0,
+            lastScanTime: '',
+        };
+    }
+
+    private saveProgress(): void {
+        this.context.workspaceState.update(this.storageKey, this.progress);
+    }
+
+    private buildHtml(stats: StatsResponse | null, savings: { hours: number; bugs: number }, progress: ProgressData): string {
+        const totalPatterns = stats?.total_patterns || 726;
+        const encountered = progress.lessonsEncountered.length;
+        const fixed = progress.lessonsFixed.length;
+        const dismissed = progress.lessonsDismissed.length;
+        const addressed = fixed + dismissed;
+        const progressPct = encountered > 0 ? Math.round((addressed / encountered) * 100) : 0;
+
+        const topLessonsHtml = (stats?.top_lessons || [])
+            .map(l => `<tr><td>${l.id}</td><td>${l.count}</td></tr>`)
+            .join('');
+
+        return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: var(--vscode-font-family);
+            padding: 20px;
+            color: var(--vscode-foreground);
+            background: var(--vscode-editor-background);
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .card {
+            background: var(--vscode-editorWidget-background);
+            border: 1px solid var(--vscode-editorWidget-border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .card h3 { margin: 0 0 8px 0; font-size: 0.85em; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card .value { font-size: 2em; font-weight: bold; }
+        .card .sub { font-size: 0.85em; opacity: 0.7; margin-top: 4px; }
+        .severity-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+        .severity-bar .critical { background: var(--vscode-errorForeground); }
+        .severity-bar .high { background: var(--vscode-editorWarning-foreground); }
+        .severity-bar .suggest { background: var(--vscode-editorInfo-foreground); }
+        .progress-bar { background: var(--vscode-progressBar-background); height: 6px; border-radius: 3px; margin: 8px 0; }
+        .progress-fill { background: var(--vscode-progressBar-background); height: 100%; border-radius: 3px; transition: width 0.3s; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--vscode-editorWidget-border); }
+        th { opacity: 0.7; font-size: 0.85em; }
+        h2 { margin-top: 24px; font-size: 1.1em; }
+        .empty { opacity: 0.5; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1>Kiwi Dashboard</h1>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Bugs Caught</h3>
+            <div class="value">${savings.bugs}</div>
+            <div class="sub">across ${stats?.total_files || 0} files</div>
+        </div>
+        <div class="card">
+            <h3>Time Saved</h3>
+            <div class="value">${savings.hours}h</div>
+            <div class="sub">estimated debugging time</div>
+        </div>
+        <div class="card">
+            <h3>Patterns Active</h3>
+            <div class="value">${totalPatterns}</div>
+            <div class="sub">learned from past bugs</div>
+        </div>
+        <div class="card">
+            <h3>Scans Today</h3>
+            <div class="value">${progress.scansToday}</div>
+            <div class="sub">${progress.lastScanTime ? 'last: ' + new Date(progress.lastScanTime).toLocaleTimeString() : 'no scans yet'}</div>
+        </div>
+    </div>
+
+    <h2>Severity Breakdown</h2>
+    ${stats ? `
+    <div class="severity-bar">
+        <div class="critical" style="flex: ${stats.by_severity.CRITICAL}"></div>
+        <div class="high" style="flex: ${stats.by_severity.HIGH}"></div>
+        <div class="suggest" style="flex: ${stats.by_severity.SUGGEST}"></div>
+    </div>
+    <p>
+        <span style="color: var(--vscode-errorForeground)">CRITICAL: ${stats.by_severity.CRITICAL}</span> &nbsp;
+        <span style="color: var(--vscode-editorWarning-foreground)">HIGH: ${stats.by_severity.HIGH}</span> &nbsp;
+        <span style="color: var(--vscode-editorInfo-foreground)">SUGGEST: ${stats.by_severity.SUGGEST}</span>
+    </p>` : '<p class="empty">Run a scan to see severity breakdown</p>'}
+
+    <h2>Learning Progress</h2>
+    <p>Patterns encountered: <strong>${encountered}</strong> | Fixed: <strong>${fixed}</strong> | Dismissed: <strong>${dismissed}</strong></p>
+    <div style="background: var(--vscode-editorWidget-border); height: 6px; border-radius: 3px; overflow: hidden;">
+        <div style="background: var(--vscode-progressBar-background); height: 100%; width: ${progressPct}%; border-radius: 3px;"></div>
+    </div>
+    <p class="sub">${progressPct}% of encountered patterns addressed</p>
+
+    ${topLessonsHtml ? `
+    <h2>Top Violations</h2>
+    <table>
+        <tr><th>Lesson</th><th>Count</th></tr>
+        ${topLessonsHtml}
+    </table>` : ''}
+</body>
+</html>`;
+    }
+
+    dispose(): void {
+        if (dashboardPanel) {
+            dashboardPanel.dispose();
+            dashboardPanel = undefined;
+        }
+    }
+}

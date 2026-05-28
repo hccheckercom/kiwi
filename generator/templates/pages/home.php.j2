@@ -1,0 +1,89 @@
+<?php
+/**
+ * Blog Archive
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+$paged = max( 1, (int) ( get_query_var( 'paged' ) ?: 1 ) );
+$posts = new WP_Query( array(
+	'post_type'      => 'post',
+	'posts_per_page' => 12,
+	'paged'          => $paged,
+	'post_status'    => 'publish',
+) );
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Blog</span>
+		</nav>
+
+		<h1 class="text-3xl font-bold mb-8">Blog</h1>
+
+		<?php if ( $posts->have_posts() ) : ?>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<?php while ( $posts->have_posts() ) : $posts->the_post(); ?>
+			<article class="bg-white rounded-xl shadow-sm overflow-hidden group">
+				<?php if ( has_post_thumbnail() ) : ?>
+				<a href="<?php the_permalink(); ?>">
+					<?php the_post_thumbnail( 'medium_large', array(
+						'class'   => 'w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300',
+						'loading' => 'lazy',
+					) ); ?>
+				</a>
+				<?php endif; ?>
+				<div class="p-5">
+					<div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+						<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date( 'd/m/Y' ) ); ?></time>
+						<?php
+						$cats = get_the_category();
+						if ( $cats ) :
+						?>
+						<span aria-hidden="true">·</span>
+						<a href="<?php echo esc_url( get_category_link( $cats[0]->term_id ) ); ?>"
+						   class="text-primary hover:underline"><?php echo esc_html( $cats[0]->name ); ?></a>
+						<?php endif; ?>
+					</div>
+					<h2 class="font-semibold mb-2 line-clamp-2">
+						<a href="<?php the_permalink(); ?>" class="hover:text-primary transition-colors"><?php the_title(); ?></a>
+					</h2>
+					<p class="text-sm text-gray-600 line-clamp-3"><?php echo esc_html( get_the_excerpt() ); ?></p>
+					<a href="<?php the_permalink(); ?>"
+					   class="inline-block mt-4 text-sm text-primary font-medium hover:underline">
+						Đọc tiếp →
+					</a>
+				</div>
+			</article>
+			<?php endwhile; wp_reset_postdata(); ?>
+		</div>
+
+		<div class="mt-8">
+			<?php
+			echo wp_kses_post( paginate_links( array(
+				'total'   => $posts->max_num_pages,
+				'current' => $paged,
+				'prev_text' => '← Trước',
+				'next_text' => 'Tiếp →',
+			) );
+			?>
+		</div>
+		<?php else : ?>
+		<div class="text-center py-16 text-gray-500">
+			<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">article</span>
+			<p class="font-medium">Chưa có bài viết nào</p>
+		</div>
+		<?php endif; ?>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

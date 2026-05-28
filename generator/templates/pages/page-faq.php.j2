@@ -1,0 +1,77 @@
+<?php
+/**
+ * Page: FAQ
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Câu hỏi thường gặp</span>
+		</nav>
+
+		<h1 class="text-3xl font-bold mb-8">Câu hỏi thường gặp (FAQ)</h1>
+
+		<?php
+		$faq_groups = array(
+			'Đặt hàng & Thanh toán' => array(
+				array( 'q' => 'Tôi có thể đặt hàng mà không cần tài khoản không?', 'a' => 'Có, bạn có thể đặt hàng với tư cách khách. Tuy nhiên, tạo tài khoản giúp bạn theo dõi đơn hàng và tích điểm thưởng dễ dàng hơn.' ),
+				array( 'q' => 'Các phương thức thanh toán nào được chấp nhận?', 'a' => 'Chúng tôi chấp nhận COD (tiền mặt khi nhận hàng), chuyển khoản ngân hàng, ví điện tử (MoMo, ZaloPay) và thẻ tín dụng/ghi nợ.' ),
+				array( 'q' => 'Tôi có thể hủy đơn hàng không?', 'a' => 'Bạn có thể hủy đơn trong vòng 1 giờ sau khi đặt, trước khi đơn được xử lý. Liên hệ hotline để được hỗ trợ.' ),
+			),
+			'Vận chuyển & Giao hàng' => array(
+				array( 'q' => 'Thời gian giao hàng là bao lâu?', 'a' => 'Nội thành: 1-2 ngày. Ngoại thành: 3-5 ngày. Vùng sâu/xa: 5-7 ngày làm việc.' ),
+				array( 'q' => 'Phí vận chuyển được tính như thế nào?', 'a' => 'Phí vận chuyển phụ thuộc vào khu vực và trọng lượng đơn hàng. Miễn phí vận chuyển cho đơn hàng đạt ngưỡng tối thiểu.' ),
+				array( 'q' => 'Làm sao để theo dõi đơn hàng?', 'a' => 'Bạn sẽ nhận SMS/email kèm mã vận đơn sau khi đơn được giao cho đơn vị vận chuyển. Theo dõi tại trang quản lý đơn hàng.' ),
+			),
+			'Đổi trả & Hoàn tiền' => array(
+				array( 'q' => 'Chính sách đổi trả như thế nào?', 'a' => 'Chúng tôi chấp nhận đổi trả trong vòng 7 ngày kể từ ngày nhận hàng, với điều kiện sản phẩm còn nguyên vẹn và có hóa đơn.' ),
+				array( 'q' => 'Thời gian hoàn tiền là bao lâu?', 'a' => '3-7 ngày làm việc sau khi xác nhận yêu cầu hoàn tiền hợp lệ.' ),
+			),
+			'Tài khoản' => array(
+				array( 'q' => 'Tôi quên mật khẩu, phải làm gì?', 'a' => 'Nhấn "Quên mật khẩu" trên trang đăng nhập, nhập email và làm theo hướng dẫn trong email được gửi đến.' ),
+				array( 'q' => 'Điểm thưởng được tính như thế nào?', 'a' => 'Bạn tích lũy điểm thưởng với mỗi đơn hàng hoàn thành. Điểm có thể dùng để giảm giá cho đơn hàng tiếp theo.' ),
+			),
+		);
+		?>
+
+		<div class="space-y-8">
+			<?php foreach ( $faq_groups as $group_title => $faqs ) : ?>
+			<section>
+				<h2 class="text-xl font-semibold mb-4 text-primary"><?php echo esc_html( $group_title ); ?></h2>
+				<div class="space-y-2">
+					<?php foreach ( $faqs as $faq ) : ?>
+					<details class="border border-gray-200 rounded-xl group">
+						<summary class="px-5 py-4 font-medium cursor-pointer hover:bg-gray-50 rounded-xl list-none flex items-center justify-between">
+							<span><?php echo esc_html( $faq['q'] ); ?></span>
+							<span class="material-icons text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+						</summary>
+						<div class="px-5 pb-4 text-sm text-gray-600 leading-relaxed"><?php echo esc_html( $faq['a'] ); ?></div>
+					</details>
+					<?php endforeach; ?>
+				</div>
+			</section>
+			<?php endforeach; ?>
+		</div>
+
+		<div class="bg-primary/5 rounded-xl p-5 mt-10">
+			<p class="font-medium">Không tìm thấy câu trả lời?</p>
+			<p class="text-sm text-gray-600 mt-1">
+				Liên hệ hotline <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> hoặc
+				<a href="<?php echo esc_url( home_url( '/lien-he' ) ); ?>" class="text-primary hover:underline">gửi tin nhắn</a> cho chúng tôi.
+			</p>
+		</div>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

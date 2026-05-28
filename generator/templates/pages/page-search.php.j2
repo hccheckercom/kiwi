@@ -1,0 +1,103 @@
+<?php
+/**
+ * Template Name: Search Results
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+		<?php
+		$query = get_search_query();
+		?>
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2">/</span>
+			<span class="text-gray-900">Tìm kiếm</span>
+		</nav>
+
+		<h1 class="text-2xl font-bold mb-6">
+			<?php
+			if ( $query ) {
+				printf( 'Kết quả tìm kiếm cho: <span class="text-primary">%s</span>', esc_html( $query ) );
+			} else {
+				echo 'Tìm kiếm sản phẩm';
+			}
+			?>
+		</h1>
+
+		<!-- Search form -->
+		<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="mb-8">
+			<div class="flex gap-2 max-w-xl">
+				<input type="search" name="s" value="<?php echo esc_attr( $query ); ?>"
+				       placeholder="Tìm kiếm sản phẩm..."
+				       class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+				       aria-label="Tìm kiếm">
+				<input type="hidden" name="post_type" value="wz_product">
+				<button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+					Tìm kiếm
+				</button>
+			</div>
+		</form>
+
+		<?php if ( function_exists( 'wz_search_products' ) && $query ) : ?>
+			<?php
+			$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+			$results = wz_search_products( [
+				'keyword' => $query,
+				'page'    => $paged,
+				'limit'   => 12,
+			] );
+			$products = $results['items'] ?? [];
+			$total    = $results['total'] ?? 0;
+			?>
+
+			<?php if ( ! empty( $products ) ) : ?>
+				<p class="text-gray-600 mb-6">
+					<?php printf( 'Tìm thấy <strong>%d</strong> sản phẩm', (int) $total ); ?>
+				</p>
+
+				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+					<?php foreach ( $products as $product ) : ?>
+						<?php wz_component( 'product-card', [ 'product' => $product ] ); ?>
+					<?php endforeach; ?>
+				</div>
+
+				<?php if ( $total > 12 ) : ?>
+					<nav class="mt-8 flex justify-center" aria-label="Pagination">
+						<?php
+						echo wp_kses_post( paginate_links( [
+							'total'   => ceil( $total / 12 ),
+							'current' => $paged,
+							'format'  => '?paged=%#%',
+						] ) );
+						?>
+					</nav>
+				<?php endif; ?>
+
+			<?php else : ?>
+				<div class="text-center py-16">
+					<div class="text-6xl mb-4" aria-hidden="true">&#128269;</div>
+					<h2 class="text-xl font-bold mb-2">Không tìm thấy sản phẩm</h2>
+					<p class="text-gray-600 mb-6">Thử tìm kiếm với từ khóa khác hoặc xem các danh mục bên dưới.</p>
+					<a href="<?php echo esc_url( home_url( '/shop' ) ); ?>" class="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+						Xem tất cả sản phẩm
+					</a>
+				</div>
+			<?php endif; ?>
+
+		<?php elseif ( ! $query ) : ?>
+			<div class="text-center py-16">
+				<p class="text-gray-600">Nhập từ khóa để tìm kiếm sản phẩm.</p>
+			</div>
+		<?php endif; ?>
+	</div>
+</main>
+
+<?php get_footer(); ?>

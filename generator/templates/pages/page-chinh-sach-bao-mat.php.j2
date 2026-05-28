@@ -1,0 +1,99 @@
+<?php
+/**
+ * Template Name: Chính sách bảo mật
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Chính sách bảo mật</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-2">Chính sách bảo mật</h1>
+			<p class="text-sm text-gray-500 mb-8">Cập nhật lần cuối: <?php echo esc_html( date_i18n( 'd/m/Y' ) ); ?></p>
+
+			<p class="mb-6"><?php echo esc_html( wz_config( 'name' ) ); ?> cam kết bảo vệ thông tin cá nhân của khách hàng. Chính sách này mô tả cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn.</p>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Thông tin chúng tôi thu thập</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li><strong>Thông tin cá nhân:</strong> Họ tên, địa chỉ email, số điện thoại, địa chỉ giao hàng</li>
+					<li><strong>Thông tin đơn hàng:</strong> Sản phẩm đã mua, lịch sử giao dịch, phương thức thanh toán</li>
+					<li><strong>Thông tin kỹ thuật:</strong> Địa chỉ IP, loại trình duyệt, thiết bị, cookies và dữ liệu phiên</li>
+				</ul>
+				<p class="mt-3 text-sm text-gray-600">Thông tin được thu thập khi bạn: đăng ký tài khoản, đặt hàng, liên hệ hỗ trợ, hoặc đăng ký nhận bản tin.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Mục đích sử dụng thông tin</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Xử lý đơn hàng và sắp xếp giao hàng</li>
+					<li>Liên hệ xác nhận đơn hàng và hỗ trợ khách hàng</li>
+					<li>Gửi thông tin khuyến mãi (chỉ khi bạn đồng ý)</li>
+					<li>Cải thiện trải nghiệm mua sắm trên website</li>
+					<li>Tuân thủ các quy định pháp luật hiện hành</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Bảo vệ thông tin</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Toàn bộ dữ liệu được mã hóa qua giao thức SSL/TLS</li>
+					<li>Không chia sẻ thông tin cho bên thứ ba, ngoại trừ đối tác vận chuyển và cổng thanh toán</li>
+					<li>Lưu trữ an toàn trên máy chủ bảo mật với quyền truy cập hạn chế</li>
+					<li>Nhân viên ký cam kết bảo mật thông tin khách hàng</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Quyền của bạn</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li><strong>Quyền truy cập:</strong> Yêu cầu xem thông tin cá nhân chúng tôi đang lưu trữ</li>
+					<li><strong>Quyền chỉnh sửa:</strong> Cập nhật thông tin không chính xác</li>
+					<li><strong>Quyền xóa:</strong> Yêu cầu xóa dữ liệu cá nhân (trừ dữ liệu cần thiết theo pháp luật)</li>
+					<li><strong>Từ chối marketing:</strong> Hủy đăng ký nhận email khuyến mãi bất kỳ lúc nào</li>
+				</ul>
+				<p class="mt-3">Để thực hiện các quyền trên, liên hệ: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a> hoặc hotline <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a>.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Cookies</h2>
+				<p>Website sử dụng cookies để:</p>
+				<ul class="list-disc pl-6 mt-2 space-y-1">
+					<li>Ghi nhớ giỏ hàng và phiên đăng nhập</li>
+					<li>Phân tích lưu lượng truy cập (Google Analytics)</li>
+					<li>Cải thiện trải nghiệm người dùng</li>
+				</ul>
+				<p class="mt-3 text-sm text-gray-600">Bạn có thể tắt cookies trong cài đặt trình duyệt, tuy nhiên một số tính năng của website có thể bị ảnh hưởng.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Thay đổi chính sách</h2>
+				<p>Chúng tôi có quyền cập nhật chính sách bảo mật này. Khi có thay đổi lớn, chúng tôi sẽ thông báo qua email hoặc thông báo nổi bật trên website. Ngày hiệu lực sẽ được ghi rõ ở đầu trang.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Liên hệ</h2>
+				<ul class="list-none space-y-2">
+					<li>Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline font-medium"><?php echo esc_html( wz_config( 'phone' ) ); ?></a></li>
+					<li>Email: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a></li>
+					<li>Địa chỉ: <?php echo esc_html( wz_config( 'address' ) ); ?></li>
+				</ul>
+			</section>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

@@ -1,0 +1,100 @@
+<?php
+/**
+ * Account Order Tracking
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user_id  = get_current_user_id();
+$order_id = isset( $_GET['order'] ) ? absint( $_GET['order'] ) : 0;
+$order    = $order_id && function_exists( 'wz_get_order' ) ? wz_get_order( $order_id ) : null;
+if ( $order && (int) $order['user_id'] !== $user_id ) {
+	$order = null;
+}
+$tracking = $order && function_exists( 'wz_get_order_tracking' ) ? wz_get_order_tracking( $order_id ) : array();
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<a href="<?php echo esc_url( home_url( '/tai-khoan/don-hang' ) ); ?>" class="text-gray-600 hover:text-primary">Đơn hàng</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Theo dõi đơn hàng</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'orders' ) ); ?>
+			</aside>
+
+			<div class="lg:col-span-3">
+				<h1 class="text-xl font-semibold mb-6">Theo dõi đơn hàng</h1>
+
+				<?php if ( $order ) : ?>
+
+				<div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+					<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+						<div>
+							<p class="font-mono font-bold">#<?php echo esc_html( $order_id ); ?></p>
+							<p class="text-sm text-gray-500 mt-0.5"><?php echo esc_html( date_i18n( 'd/m/Y H:i', strtotime( $order['date_created'] ) ) ); ?></p>
+						</div>
+						<?php if ( ! empty( $order['tracking_code'] ) ) : ?>
+						<div class="text-right">
+							<p class="text-xs text-gray-500">Mã vận đơn</p>
+							<p class="font-mono font-bold"><?php echo esc_html( $order['tracking_code'] ); ?></p>
+						</div>
+						<?php endif; ?>
+					</div>
+
+					<?php if ( ! empty( $tracking ) ) : ?>
+					<div class="relative">
+						<div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" aria-hidden="true"></div>
+						<ol class="space-y-6 pl-10">
+							<?php foreach ( $tracking as $i => $step ) : ?>
+							<li class="relative">
+								<div class="absolute -left-6 w-4 h-4 rounded-full border-2 flex items-center justify-center
+									<?php echo esc_attr( $i === 0 ? 'bg-primary border-primary' : 'bg-white border-gray-300' ); ?>">
+								</div>
+								<p class="font-medium text-sm <?php echo esc_attr( $i === 0 ? 'text-primary' : 'text-gray-700' ); ?>">
+									<?php echo esc_html( $step['status'] ); ?>
+								</p>
+								<p class="text-xs text-gray-500 mt-0.5"><?php echo esc_html( $step['description'] ); ?></p>
+								<p class="text-xs text-gray-400 mt-0.5"><?php echo esc_html( date_i18n( 'd/m/Y H:i', strtotime( $step['time'] ) ) ); ?></p>
+							</li>
+							<?php endforeach; ?>
+						</ol>
+					</div>
+					<?php else : ?>
+					<p class="text-gray-500 text-sm">Chưa có thông tin vận chuyển.</p>
+					<?php endif; ?>
+				</div>
+
+				<?php else : ?>
+				<div class="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500">
+					<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">local_shipping</span>
+					<p class="font-medium">Không tìm thấy đơn hàng</p>
+					<a href="<?php echo esc_url( home_url( '/tai-khoan/don-hang' ) ); ?>"
+					   class="inline-block mt-4 text-sm text-primary hover:underline">
+						Xem tất cả đơn hàng
+					</a>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

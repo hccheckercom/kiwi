@@ -1,0 +1,94 @@
+<?php
+/**
+ * Single Post
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<div class="max-w-3xl mx-auto">
+
+			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+			<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+				<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+				<span class="mx-2" aria-hidden="true">/</span>
+				<a href="<?php echo esc_url( home_url( '/blog' ) ); ?>" class="text-gray-600 hover:text-primary">Blog</a>
+				<span class="mx-2" aria-hidden="true">/</span>
+				<span class="text-gray-900 line-clamp-1"><?php the_title(); ?></span>
+			</nav>
+
+			<article>
+				<header class="mb-8">
+					<div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+						<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date( 'd/m/Y' ) ); ?></time>
+						<?php
+						$cats = get_the_category();
+						if ( $cats ) :
+						?>
+						<span aria-hidden="true">·</span>
+						<a href="<?php echo esc_url( get_category_link( $cats[0]->term_id ) ); ?>"
+						   class="text-primary hover:underline"><?php echo esc_html( $cats[0]->name ); ?></a>
+						<?php endif; ?>
+					</div>
+					<h1 class="text-3xl font-bold mb-4"><?php the_title(); ?></h1>
+					<?php if ( has_post_thumbnail() ) : ?>
+					<?php the_post_thumbnail( 'large', array(
+						'class'   => 'w-full rounded-xl object-cover mb-6',
+						'loading' => 'eager',
+					) ); ?>
+					<?php endif; ?>
+				</header>
+
+				<div class="prose max-w-none">
+					<?php the_content(); ?>
+				</div>
+
+				<?php
+				$tags = get_the_tags();
+				if ( $tags ) :
+				?>
+				<div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-100">
+					<?php foreach ( $tags as $tag ) : ?>
+					<a href="<?php echo esc_url( get_tag_link( $tag->term_id ) ); ?>"
+					   class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors">
+						#<?php echo esc_html( $tag->name ); ?>
+					</a>
+					<?php endforeach; ?>
+				</div>
+				<?php endif; ?>
+			</article>
+
+			<nav class="flex justify-between gap-4 mt-10 pt-6 border-t border-gray-100" aria-label="Bài viết liên quan">
+				<?php
+				$prev = get_previous_post();
+				$next = get_next_post();
+				if ( $prev ) :
+				?>
+				<a href="<?php echo esc_url( get_permalink( $prev ) ); ?>"
+				   class="flex-1 text-sm text-gray-600 hover:text-primary">
+					← <?php echo esc_html( get_the_title( $prev ) ); ?>
+				</a>
+				<?php endif; ?>
+				<?php if ( $next ) : ?>
+				<a href="<?php echo esc_url( get_permalink( $next ) ); ?>"
+				   class="flex-1 text-sm text-gray-600 hover:text-primary text-right">
+					<?php echo esc_html( get_the_title( $next ) ); ?> →
+				</a>
+				<?php endif; ?>
+			</nav>
+
+			<?php endwhile; endif; ?>
+
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

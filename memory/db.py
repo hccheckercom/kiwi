@@ -338,6 +338,28 @@ CREATE TABLE IF NOT EXISTS ab_results (
 
 CREATE INDEX IF NOT EXISTS idx_ab_results_test ON ab_results(test_id);
 CREATE INDEX IF NOT EXISTS idx_ab_results_version ON ab_results(version);
+
+CREATE TABLE IF NOT EXISTS generation_history (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme_slug          TEXT NOT NULL,
+    file_path           TEXT NOT NULL,
+    template_used       TEXT,
+    generated_at        TEXT NOT NULL,
+    violations_at_gen   INTEGER DEFAULT 0,
+    fix_count           INTEGER DEFAULT 0,
+    quality_score       REAL DEFAULT 1.0,
+    pipeline            TEXT,
+    phase               TEXT,
+    duration_ms         INTEGER DEFAULT 0,
+    auto_reverted       BOOLEAN DEFAULT 0,
+    last_patch_at       TEXT,
+    patch_commit        TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_genhistory_theme ON generation_history(theme_slug);
+CREATE INDEX IF NOT EXISTS idx_genhistory_file ON generation_history(file_path);
+CREATE INDEX IF NOT EXISTS idx_genhistory_time ON generation_history(generated_at);
+CREATE INDEX IF NOT EXISTS idx_genhistory_quality ON generation_history(quality_score);
 """
 
 
@@ -368,6 +390,44 @@ def init_db():
         conn.commit()
     except Exception as e:
         print(f"Migration warning: {e}")
+
+    # Migration: Add quarantine_until + confidence_score to suggested_lessons
+    try:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(suggested_lessons)")
+        columns = [row[1] for row in cursor.fetchall()]
+
+        if 'quarantine_until' not in columns:
+            cursor.execute("ALTER TABLE suggested_lessons ADD COLUMN quarantine_until TEXT")
+        if 'confidence_score' not in columns:
+            cursor.execute("ALTER TABLE suggested_lessons ADD COLUMN confidence_score REAL DEFAULT 0.0")
+        if 'frequency' not in columns:
+            cursor.execute("ALTER TABLE suggested_lessons ADD COLUMN frequency INTEGER DEFAULT 1")
+        if 'good_code' not in columns:
+            cursor.execute("ALTER TABLE suggested_lessons ADD COLUMN good_code TEXT")
+        if 'clean_scan_count' not in columns:
+            cursor.execute("ALTER TABLE suggested_lessons ADD COLUMN clean_scan_count INTEGER DEFAULT 0")
+
+        conn.commit()
+    except Exception as e:
+        print(f"Migration warning (suggested_lessons): {e}")
+
+    # Migration: Add auto_reverted + last_patch_at to generation_history (Phase 5)
+    try:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(generation_history)")
+        columns = [row[1] for row in cursor.fetchall()]
+
+        if 'auto_reverted' not in columns:
+            cursor.execute("ALTER TABLE generation_history ADD COLUMN auto_reverted BOOLEAN DEFAULT 0")
+        if 'last_patch_at' not in columns:
+            cursor.execute("ALTER TABLE generation_history ADD COLUMN last_patch_at TEXT")
+        if 'patch_commit' not in columns:
+            cursor.execute("ALTER TABLE generation_history ADD COLUMN patch_commit TEXT")
+
+        conn.commit()
+    except Exception as e:
+        print(f"Migration warning (generation_history phase5): {e}")
 
     conn.close()
 
@@ -469,15 +529,29 @@ def is_dismissed(lesson_id, file, line=None):
         conn.close()
         return True
 
+    # Check project-scope dismissals (file is a directory prefix)
     row = conn.execute(
-        "SELECT 1 FROM false_positives WHERE lesson_id=? AND file=? AND active=1",
-        (lesson_id, file)
+        "SELECT 1 FROM false_positives WHERE lesson_id=? AND scope='project' AND active=1",
+        (lesson_id,)
     ).fetchone()
     if row:
         conn.close()
         return True
 
+    # Normalize paths for comparison (handle both absolute and relative)
+    import os
+    abs_file = os.path.abspath(file) if file else file
+    rows = conn.execute(
+        "SELECT file FROM false_positives WHERE lesson_id=? AND scope='file' AND active=1",
+        (lesson_id,)
+    ).fetchall()
     conn.close()
+    for r in rows:
+        stored = r[0]
+        stored_abs = os.path.abspath(stored) if stored else stored
+        if stored == file or stored_abs == abs_file or stored_abs.endswith(os.sep + os.path.basename(file)):
+            return True
+
     return False
 
 
@@ -655,6 +729,106 @@ def update_suggested_lesson_status(suggestion_id, status, lesson_id=None):
                     (status, lesson_id, suggestion_id))
     else:
         conn.execute("UPDATE suggested_lessons SET status = ? WHERE id = ?", (status, suggestion_id))
+    conn.commit()
+    conn.close()
+
+
+def get_generation_quality(theme_slug: str = None) -> dict:
+    """Return generation quality metrics for a theme (or all themes)."""
+    conn = get_connection()
+    if theme_slug:
+        rows = conn.execute(
+            """SELECT quality_score, fix_count, violations_at_gen, generated_at
+               FROM generation_history WHERE theme_slug = ?
+               ORDER BY generated_at DESC""",
+            (theme_slug,),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            """SELECT quality_score, fix_count, violations_at_gen, generated_at
+               FROM generation_history ORDER BY generated_at DESC"""
+        ).fetchall()
+    conn.close()
+
+    if not rows:
+        return {"quality_score": 1.0, "fix_count": 0, "violations_at_gen": 0, "total_files": 0, "trend": "no_data"}
+
+    rows = [dict(r) for r in rows]
+    total = len(rows)
+    avg_quality = sum(r["quality_score"] for r in rows) / total
+    total_fixes = sum(r["fix_count"] for r in rows)
+    total_violations = sum(r["violations_at_gen"] for r in rows)
+
+    trend = "stable"
+    if total >= 4:
+        half = total // 2
+        recent_avg = sum(r["quality_score"] for r in rows[:half]) / half
+        older_avg = sum(r["quality_score"] for r in rows[half:]) / half
+        if recent_avg > older_avg + 0.05:
+            trend = "improving"
+        elif recent_avg < older_avg - 0.05:
+            trend = "degrading"
+
+    return {
+        "quality_score": round(avg_quality, 3),
+        "fix_count": total_fixes,
+        "violations_at_gen": total_violations,
+        "total_files": total,
+        "trend": trend,
+    }
+
+
+def get_generation_count(theme_slug: str = None) -> int:
+    """Return total number of generation_history rows."""
+    conn = get_connection()
+    if theme_slug:
+        row = conn.execute(
+            "SELECT COUNT(*) FROM generation_history WHERE theme_slug = ?", (theme_slug,)
+        ).fetchone()
+    else:
+        row = conn.execute("SELECT COUNT(*) FROM generation_history").fetchone()
+    conn.close()
+    return row[0] if row else 0
+
+
+def get_high_risk_sections(theme_slug: str = None, top_n: int = 5) -> list:
+    """Return sections with highest cumulative fix_count for feedback loop injection."""
+    conn = get_connection()
+    if theme_slug:
+        rows = conn.execute(
+            """SELECT template_used, SUM(fix_count) as total_fixes,
+                      AVG(quality_score) as avg_quality, COUNT(*) as gen_count
+               FROM generation_history
+               WHERE theme_slug = ? AND template_used IS NOT NULL
+               GROUP BY template_used ORDER BY total_fixes DESC LIMIT ?""",
+            (theme_slug, top_n),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            """SELECT template_used, SUM(fix_count) as total_fixes,
+                      AVG(quality_score) as avg_quality, COUNT(*) as gen_count
+               FROM generation_history WHERE template_used IS NOT NULL
+               GROUP BY template_used ORDER BY total_fixes DESC LIMIT ?""",
+            (top_n,),
+        ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def increment_fix_count(theme_slug: str, file_path: str):
+    """Increment fix_count for the most recent generation_history row for this file."""
+    conn = get_connection()
+    conn.execute(
+        """UPDATE generation_history
+           SET fix_count = fix_count + 1,
+               quality_score = MAX(0.0, quality_score - 0.1)
+           WHERE id = (
+               SELECT id FROM generation_history
+               WHERE theme_slug = ? AND file_path = ?
+               ORDER BY generated_at DESC LIMIT 1
+           )""",
+        (theme_slug, file_path),
+    )
     conn.commit()
     conn.close()
 

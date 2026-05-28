@@ -1,0 +1,1 @@
+"""Wezone WordPress plugin — wraps existing 740 lessons + checkers."""

@@ -169,7 +169,15 @@ def gap_detect(scan_path: str = None, file_types: List[str] = None) -> Dict:
 
     invalidate_cache()
     existing = load_patterns(include_disabled=True)
-    existing_patterns = {l.get('pattern', '').strip() for l in existing if l.get('pattern')}
+    existing_patterns = set()
+    for l in existing:
+        p = l.get('pattern', '')
+        if p:
+            if isinstance(p, list):
+                for item in p:
+                    existing_patterns.add(str(item).strip())
+            else:
+                existing_patterns.add(p.strip())
     existing_titles = {l.get('description', '').strip().lower() for l in existing if l.get('description')}
 
     languages = file_types or ['python', 'php', 'js']
@@ -319,7 +327,11 @@ def learn_from_folder(
         for lesson in existing_lessons:
             p = lesson.get('pattern', '')
             if p:
-                existing_patterns.add(p.strip())
+                if isinstance(p, list):
+                    for item in p:
+                        existing_patterns.add(str(item).strip())
+                else:
+                    existing_patterns.add(p.strip())
             t = lesson.get('description', '')
             if t:
                 existing_titles.add(t.strip().lower())

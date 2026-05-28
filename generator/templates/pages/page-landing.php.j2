@@ -1,0 +1,75 @@
+<?php
+/**
+ * Template Name: Landing Page
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+
+	<!-- Hero Section -->
+	<section class="bg-gradient-to-br from-primary/10 to-secondary/10 py-16 md:py-24">
+		<div class="container mx-auto px-4 text-center">
+			<h1 class="text-4xl md:text-5xl font-bold mb-4">
+				<?php echo esc_html( get_the_title() ?: wz_config( 'name' ) ); ?>
+			</h1>
+			<p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+				<?php echo esc_html( wz_config( 'tagline' ) ?: 'Sản phẩm chất lượng, giá tốt nhất' ); ?>
+			</p>
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="<?php echo esc_url( function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop' ) ); ?>"
+				   class="px-8 py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity">
+					Mua sắm ngay
+				</a>
+				<a href="<?php echo esc_url( home_url( '/lien-he' ) ); ?>"
+				   class="px-8 py-4 border-2 border-primary text-primary rounded-xl font-semibold text-lg hover:bg-primary hover:text-white transition-colors">
+					Liên hệ tư vấn
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Features -->
+	<section class="py-16">
+		<div class="container mx-auto px-4">
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+				<?php
+				$features = array(
+					array( 'icon' => 'verified', 'title' => 'Hàng chính hãng 100%', 'desc' => 'Cam kết sản phẩm chính hãng, có tem bảo hành đầy đủ' ),
+					array( 'icon' => 'local_shipping', 'title' => 'Giao hàng toàn quốc', 'desc' => 'Nội thành 1-2 ngày, miễn phí ship cho đơn đủ điều kiện' ),
+					array( 'icon' => 'replay', 'title' => 'Đổi trả dễ dàng', 'desc' => 'Chính sách đổi trả trong 7 ngày, không cần lý do' ),
+				);
+				foreach ( $features as $f ) :
+				?>
+				<div class="text-center p-6">
+					<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+						<span class="material-icons text-primary text-3xl" aria-hidden="true"><?php echo esc_html( $f['icon'] ); ?></span>
+					</div>
+					<h3 class="text-lg font-semibold mb-2"><?php echo esc_html( $f['title'] ); ?></h3>
+					<p class="text-gray-600 text-sm"><?php echo esc_html( $f['desc'] ); ?></p>
+				</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA -->
+	<section class="bg-primary py-16">
+		<div class="container mx-auto px-4 text-center text-white">
+			<h2 class="text-3xl font-bold mb-4">Bắt đầu mua sắm ngay hôm nay</h2>
+			<p class="text-white/80 mb-8">Hàng ngàn sản phẩm chất lượng đang chờ bạn</p>
+			<a href="<?php echo esc_url( function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop' ) ); ?>"
+			   class="inline-block px-10 py-4 bg-white text-primary rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors">
+				Xem tất cả sản phẩm
+			</a>
+		</div>
+	</section>
+
+</main>
+
+<?php get_footer(); ?>

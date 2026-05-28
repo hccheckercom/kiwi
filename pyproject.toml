@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kiwi-ai"
+version = "1.0.0"
+description = "AI-powered code quality scanner that learns your codebase patterns"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Wezone", email = "dev@wezone.vn"}]
+keywords = ["code-quality", "scanner", "ai", "mcp", "claude"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Quality Assurance",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "click>=8.0",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+kiwi = "cli.main:cli"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+server = [
+    "fastapi>=0.100",
+    "uvicorn[standard]>=0.20",
+    "watchdog>=3.0",
+    "websockets>=11.0",
+    "pydantic>=2.0",
+]
+lsp = [
+    "pygls>=1.3.0",
+    "lsprotocol>=2023.0.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["cli*", "core*", "scanner*", "tracking*", "plugins*", "server*", "lsp*"]

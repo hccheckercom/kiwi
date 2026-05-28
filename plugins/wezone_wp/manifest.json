@@ -1,0 +1,14 @@
+{
+  "name": "wezone-wp",
+  "version": "3.0.0",
+  "description": "Wezone WordPress — 740 pre-built lessons for PHP/WP/Tailwind",
+  "author": "Wezone",
+  "homepage": "https://wezone.vn",
+  "languages": ["php", "js", "css"],
+  "frameworks": ["wordpress", "tailwind", "wezone-commer"],
+  "platforms": ["wp"],
+  "scope_types": ["theme", "plugin"],
+  "checkers": ["presence", "absence", "cross-check", "bom-check", "ast", "semgrep"],
+  "lessons_count": 740,
+  "categories": 39
+}

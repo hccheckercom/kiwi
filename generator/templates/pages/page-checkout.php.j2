@@ -196,28 +196,28 @@
 											<div class="text-xs text-gray-600">SL: <?php echo esc_html( $item['quantity'] ?? 1 ); ?></div>
 										</div>
 										<div class="text-sm font-medium">
-											<?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $item['price'] ?? 0 ) : '0đ'; ?>
+											<?php echo esc_html( function_exists( 'wz_format_price' ) ? wz_format_price( $item['price'] ?? 0 ) : '0đ' ); ?>
 										</div>
 									</div>
 								<?php endforeach; ?>
 
 								<?php if ( count( $items ) > 3 ) : ?>
-									<div class="text-sm text-gray-600">+<?php echo count( $items ) - 3; ?> sản phẩm khác</div>
+									<div class="text-sm text-gray-600">+<?php echo esc_html( count( $items ) - 3 ); ?> sản phẩm khác</div>
 								<?php endif; ?>
 							</div>
 
 							<div class="border-t pt-4 space-y-2">
 								<div class="flex justify-between text-sm">
 									<span>Tạm tính</span>
-									<span><?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $subtotal ) : '0đ'; ?></span>
+									<span><?php echo esc_html( function_exists( 'wz_format_price' ) ? wz_format_price( $subtotal ) : '0đ' ); ?></span>
 								</div>
 								<div class="flex justify-between text-sm">
 									<span>Phí vận chuyển</span>
-									<span class="shipping-fee"><?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $shipping_fee ) : '30.000đ'; ?></span>
+									<span class="shipping-fee"><?php echo esc_html( function_exists( 'wz_format_price' ) ? wz_format_price( $shipping_fee ) : '30.000đ' ); ?></span>
 								</div>
 								<div class="flex justify-between text-lg font-bold border-t pt-2">
 									<span>Tổng cộng</span>
-									<span class="text-primary total-amount"><?php echo function_exists( 'wz_format_price' ) ? wz_format_price( $total ) : '0đ'; ?></span>
+									<span class="text-primary total-amount"><?php echo esc_html( function_exists( 'wz_format_price' ) ? wz_format_price( $total ) : '0đ' ); ?></span>
 								</div>
 							</div>
 

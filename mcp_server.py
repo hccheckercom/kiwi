@@ -1892,6 +1892,38 @@ def _handle_impact(args: dict) -> str:
     return "\n".join(lines)
 
 
+def _handle_learn_session(args: dict) -> str:
+    """
+    Trigger Kiwi learning from session logs. Extracts patterns Claude used.
+
+    Args:
+        session_id: Specific session to learn from (optional, learns all unprocessed if omitted)
+
+    Returns:
+        Learning results: patterns extracted, styles learned, bindings recorded
+    """
+    try:
+        from agent.reasoning.learner import learn_from_session, learn_all_unprocessed
+
+        session_id = args.get("session_id")
+        if session_id:
+            result = learn_from_session(session_id)
+            return json.dumps(result, indent=2, ensure_ascii=False)
+        else:
+            results = learn_all_unprocessed()
+            if not results:
+                return "No unprocessed sessions found."
+            lines = [f"Processed {len(results)} session(s):"]
+            for r in results:
+                lines.append(f"  {r['session_id']}: {r.get('status', '?')} "
+                             f"(ctx:{r.get('context_patterns', 0)}, "
+                             f"style:{r.get('style_updates', 0)}, "
+                             f"bind:{r.get('bindings', 0)})")
+            return "\n".join(lines)
+    except Exception as e:
+        return f"ERROR: Learning failed: {e}"
+
+
 def _handle_scan_learn(args: dict) -> str:
     """
     Scan file and auto-detect patterns for new lessons.
@@ -2224,6 +2256,16 @@ TOOL_DEFS = [
         },
     },
     {
+        "name": "kiwi_learn_session",
+        "description": "Trigger Kiwi learning from Claude session logs. Extracts patterns (styles, bindings, context) that Claude used while coding themes. Run after coding sessions to make Kiwi smarter for next time. 0 LLM token.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "session_id": {"type": "string", "description": "Specific session ID to learn from. Omit to learn from all unprocessed sessions."}
+            }
+        },
+    },
+    {
         "name": "kiwi_review_suggestions",
         "description": "Review suggested lessons pending approval. List patterns đã mine để user approve.",
         "inputSchema": {
@@ -2408,6 +2450,11 @@ TOOL_DEFS = [
                     "type": "number",
                     "default": 0.7,
                     "description": "Min confidence to auto-apply components (0.0-1.0)"
+                },
+                "industry": {
+                    "type": "string",
+                    "enum": ["beauty", "tech", "fashion", "food", "furniture", "pharma", "mom-baby", "pet", "b2b", "luxury", "unknown"],
+                    "description": "Target industry for auto-populating knowledge base after generation"
                 }
             },
             "required": ["demo_path", "theme_name"]
@@ -2479,6 +2526,16 @@ TOOL_DEFS = [
         },
     },
     {
+        "name": "kiwi_generation_quality",
+        "description": "Get generation quality metrics: quality score, fix count, violations at gen, trend (improving/degrading/stable). Tracks how well generated files hold up after post-edit fixes.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "theme_slug": {"type": "string", "description": "Filter by theme slug (optional — omit for all themes)"}
+            },
+        },
+    },
+    {
         "name": "kiwi_suggest_base",
         "description": "Suggest best base theme for new project based on learned knowledge. Query theme_knowledge.db by industry, rank by quality + industry match. Fallback to DNA defaults when no data.",
         "inputSchema": {
@@ -2492,6 +2549,40 @@ TOOL_DEFS = [
                 "description": {"type": "string", "description": "Brief project description (optional)"}
             },
             "required": ["industry"]
+        },
+    },
+    {
+        "name": "kiwi_reason",
+        "description": "Context Assembly + Trust Score. Nhận task description + theme path → trả structured brief (files_needed, spec, lessons, bindings, style_patterns) + trust score (0-1) + recommendation (trust/verify_partial/re_research). 0 LLM token, ~50ms. Dùng TRƯỚC khi code để biết cần đọc gì, verify gì.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "task": {"type": "string", "description": "Task description (e.g. 'Tạo trang checkout', 'Fix CSS responsive header')"},
+                "theme_path": {"type": "string", "description": "Theme path relative to project root or absolute (e.g. 'themes/sfvn')"},
+            },
+            "required": ["task", "theme_path"]
+        },
+    },
+    {
+        "name": "kiwi_propose_template_patch",
+        "description": "Propose auto-patches for Jinja2 templates based on recurring fix patterns in generation history. Analyzes templates with fix_count >= 3 and returns patch candidates with confidence scores. Does NOT apply patches — use kiwi_apply_template_patch to apply.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "template_path": {"type": "string", "description": "Specific template path to analyze (e.g. 'foundation/header.php.j2'). Omit to scan all templates with fix history."},
+            },
+        },
+    },
+    {
+        "name": "kiwi_apply_template_patch",
+        "description": "Apply a proposed template patch through the staging pipeline. Generates a test theme, runs Kiwi scan, and only commits if 0 CRITICAL violations. Auto-reverts if quality score drops > 5%. Rate limit: 1 patch per template per day.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "template_path": {"type": "string", "description": "Template path to patch (same as used in propose)"},
+                "dry_run": {"type": "boolean", "default": True, "description": "true = validate only, don't write (default). false = apply + commit."},
+            },
+            "required": ["template_path"],
         },
     },
 ]
@@ -2524,7 +2615,7 @@ def _handle_generate_theme(args: dict) -> str:
         )
     """
     sys.path.insert(0, str(KIWI_DIR))
-    from generator.orchestrator import ThemeGenerator, format_generation_report
+    from generator.pipelines import NewThemePipeline
 
     theme_name = args.get("theme_name", "")
     input_spec = args.get("input_spec", {})
@@ -2540,6 +2631,7 @@ def _handle_generate_theme(args: dict) -> str:
 
     # Auto-suggest from knowledge base if industry provided
     suggestions_note = ""
+    base_theme_used = None
     if industry:
         suggestion_result = _handle_suggest_base({"industry": industry})
         try:
@@ -2548,6 +2640,8 @@ def _handle_generate_theme(args: dict) -> str:
             suggestions_note += f"  Base theme: {suggestions.get('base_theme', 'None')}\n"
             suggestions_note += f"  Match score: {suggestions.get('match_score', 0)}\n"
             suggestions_note += f"  Reasoning: {suggestions.get('reasoning', 'N/A')}\n"
+
+            base_theme_used = suggestions.get("base_theme")
 
             # Apply suggestions if user didn't provide colors/fonts
             if not input_spec.get("primary_color") and suggestions.get("suggested_colors"):
@@ -2566,33 +2660,56 @@ def _handle_generate_theme(args: dict) -> str:
         return f"ERROR: Missing required fields in input_spec: {', '.join(missing)}"
 
     try:
-        generator = ThemeGenerator(
+        pipeline = NewThemePipeline(dry_run=dry_run, auto_fix=True)
+        result = pipeline.run(
             theme_name=theme_name,
             input_spec=input_spec,
-            auto_fix=True,
-            dry_run=dry_run
+            phases=phases,
+            industry=industry,
         )
 
-        report = generator.generate(phases=phases)
-        formatted_report = format_generation_report(report)
+        formatted_report = _format_pipeline_result(result)
 
         # Auto-populate knowledge base after successful generation
-        if not dry_run and report.get("success") and industry:
+        if not dry_run and report.success and industry:
             try:
-                from learning.theme_analyzer import analyze_theme, save_theme_profile
+                import uuid
+                import sqlite3 as _sqlite3
+                sys.path.insert(0, str(KIWI_DIR / "tools"))
+                from migrate_themes import ThemeMigrator
 
-                # Determine theme path
                 theme_slug = theme_name.lower().replace(" ", "-")
-                theme_path = os.path.join(os.getcwd(), "themes", theme_slug)
+                theme_path = Path(os.getcwd()) / "themes" / theme_slug
 
-                # Analyze and save
-                profile = analyze_theme(theme_path, theme_slug, industry)
-                if "error" not in profile:
-                    db_path = os.path.join(KIWI_DIR, "memory", "theme_knowledge.db")
-                    if save_theme_profile(profile, db_path):
-                        formatted_report += f"\n\n[Knowledge Base] Theme profile saved for future suggestions"
+                migrator = ThemeMigrator()
+                result = migrator.migrate_theme(theme_path, industry, dry_run=False)
+
+                # Increment generation_count on base theme if one was used
+                if base_theme_used:
+                    migrator.conn.execute("""
+                        UPDATE themes
+                        SET generation_count = generation_count + 1,
+                            last_used_at = CURRENT_TIMESTAMP,
+                            updated_at = CURRENT_TIMESTAMP
+                        WHERE theme_name = ?
+                    """, (base_theme_used,))
+                    migrator.conn.commit()
+
+                # Record generation in history for feedback linkage
+                gen_id = f"gen_{uuid.uuid4().hex[:12]}"
+                migrator.conn.execute("""
+                    INSERT INTO generation_history (gen_id, theme_name, base_theme, industry)
+                    VALUES (?, ?, ?, ?)
+                """, (gen_id, theme_slug, base_theme_used, industry))
+                migrator.conn.commit()
+                migrator.close()
+
+                kb_note = f"\n\n[Knowledge Base] Theme '{theme_slug}' saved (quality: {result['quality_score']}/100)"
+                kb_note += f"\n[Knowledge Base] Generation ID: {gen_id}"
+                if base_theme_used:
+                    kb_note += f"\n[Knowledge Base] Base theme '{base_theme_used}' usage count incremented"
+                formatted_report += kb_note
             except Exception as kb_error:
-                # Don't fail generation if KB save fails
                 formatted_report += f"\n\n[Knowledge Base] Warning: Could not save profile: {kb_error}"
 
         # Prepend suggestions note if available
@@ -2603,6 +2720,22 @@ def _handle_generate_theme(args: dict) -> str:
 
     except Exception as e:
         return f"ERROR: Generation failed: {e}"
+
+
+def _format_pipeline_result(result) -> str:
+    """Format PipelineResult into human-readable report."""
+    lines = []
+    status = "SUCCESS" if result.success else "FAILED"
+    lines.append(f"[Generation {status}] Theme: {result.theme_slug}")
+    lines.append(f"  Files created: {len(result.files_created)}")
+    if result.files_failed:
+        lines.append(f"  Files failed: {len(result.files_failed)}")
+        for f in result.files_failed[:5]:
+            lines.append(f"    - {f.get('file', 'unknown')}: {f.get('template', '')}")
+    lines.append(f"  Duration: {result.duration_seconds:.1f}s")
+    if result.error:
+        lines.append(f"  Error: {result.error}")
+    return "\n".join(lines)
 
 
 def _handle_generate_from_demo(args: dict) -> str:
@@ -2619,12 +2752,13 @@ def _handle_generate_from_demo(args: dict) -> str:
         Generation report with files created, components detected, violations
     """
     sys.path.insert(0, str(KIWI_DIR))
-    from generator.demo_orchestrator import DemoThemeGenerator, format_generation_report
+    from generator.pipelines import CloneThemePipeline
 
     demo_path = args.get("demo_path", "")
     theme_name = args.get("theme_name", "")
     mode = args.get("mode", "tokens-only")
     confidence_threshold = float(args.get("confidence_threshold", 0.7))
+    industry = args.get("industry", "unknown")
 
     if not demo_path:
         return "ERROR: demo_path is required"
@@ -2636,14 +2770,34 @@ def _handle_generate_from_demo(args: dict) -> str:
         return f"ERROR: Invalid mode '{mode}'. Must be: tokens-only, foundation, or full"
 
     try:
-        generator = DemoThemeGenerator()
-        report = generator.generate_from_demo(
+        pipeline = CloneThemePipeline(dry_run=False, auto_fix=True)
+        result = pipeline.run(
             demo_path=demo_path,
             theme_name=theme_name,
             mode=mode,
-            confidence_threshold=confidence_threshold
+            confidence_threshold=confidence_threshold,
         )
-        return format_generation_report(report)
+        formatted_report = _format_pipeline_result(result)
+
+        # Auto-populate knowledge base after successful generation
+        if result.success and mode != "tokens-only":
+            try:
+                sys.path.insert(0, str(KIWI_DIR / "tools"))
+                from migrate_themes import ThemeMigrator
+
+                theme_slug = theme_name.lower().replace(" ", "-")
+                theme_path = Path(os.getcwd()) / "themes" / theme_slug
+                industry = args.get("industry", "unknown")
+
+                if theme_path.exists():
+                    migrator = ThemeMigrator()
+                    result = migrator.migrate_theme(theme_path, industry, dry_run=False)
+                    migrator.close()
+                    formatted_report += f"\n\n[Knowledge Base] Theme '{theme_slug}' saved (quality: {result['quality_score']}/100)"
+            except Exception as kb_error:
+                formatted_report += f"\n\n[Knowledge Base] Warning: Could not save profile: {kb_error}"
+
+        return formatted_report
 
     except Exception as e:
         import traceback
@@ -2677,26 +2831,60 @@ def _handle_feedback(args: dict) -> str:
     if accepted is None:
         return "ERROR: accepted (True/False) is required"
 
-    # Check if generation exists
+    # Check if generation exists in UI feedback DB
     existing = get_generator_feedback(gen_id=gen_id)
-    if not existing:
-        return f"ERROR: Generation ID '{gen_id}' not found. Use gen_id from kiwi_generate_from_demo output."
 
-    # Update main feedback
-    update_generator_feedback(gen_id, accepted, corrections)
+    # Also check generation_history table (from kiwi_generate_theme)
+    import sqlite3 as _sqlite3
+    kb_db_path = KIWI_DIR / "memory" / "theme_knowledge.db"
+    theme_name_from_history = None
+    quality_delta = 0
 
-    # Update per-component feedback if provided
-    if component_feedback:
-        from memory.db import get_connection, _now
-        conn = get_connection()
-        for comp in component_feedback:
-            conn.execute("""
-                UPDATE component_patterns
-                SET user_accepted = ?, correction = ?
-                WHERE gen_id = ? AND component_type = ?
-            """, (comp["accepted"], comp.get("correction", ""), gen_id, comp["component_type"]))
-        conn.commit()
-        conn.close()
+    if kb_db_path.exists():
+        try:
+            _conn = _sqlite3.connect(kb_db_path)
+            row = _conn.execute(
+                "SELECT theme_name FROM generation_history WHERE gen_id = ?", (gen_id,)
+            ).fetchone()
+            if row:
+                theme_name_from_history = row[0]
+
+            if theme_name_from_history:
+                quality_delta = 5 if accepted else -3
+                _conn.execute("""
+                    UPDATE themes
+                    SET quality_score = MAX(0, MIN(100, quality_score + ?)),
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE theme_name = ?
+                """, (quality_delta, theme_name_from_history))
+                _conn.execute("""
+                    UPDATE generation_history
+                    SET accepted = ?, quality_delta = ?
+                    WHERE gen_id = ?
+                """, (1 if accepted else 0, quality_delta, gen_id))
+                _conn.commit()
+            _conn.close()
+        except Exception:
+            pass
+
+    if not existing and not theme_name_from_history:
+        return f"ERROR: Generation ID '{gen_id}' not found. Use gen_id from kiwi_generate_from_demo or kiwi_generate_theme output."
+
+    # Update UI feedback DB if record exists there
+    if existing:
+        update_generator_feedback(gen_id, accepted, corrections)
+
+        if component_feedback:
+            from memory.db import get_connection, _now
+            conn = get_connection()
+            for comp in component_feedback:
+                conn.execute("""
+                    UPDATE component_patterns
+                    SET user_accepted = ?, correction = ?
+                    WHERE gen_id = ? AND component_type = ?
+                """, (comp["accepted"], comp.get("correction", ""), gen_id, comp["component_type"]))
+            conn.commit()
+            conn.close()
 
     # Get updated stats
     stats = get_pattern_stats()
@@ -2710,6 +2898,12 @@ def _handle_feedback(args: dict) -> str:
 
     if corrections:
         lines.append(f"Corrections: {corrections}")
+
+    if theme_name_from_history:
+        lines.append(f"")
+        lines.append(f"Quality Score Update:")
+        lines.append(f"  Theme: {theme_name_from_history}")
+        lines.append(f"  Delta: {'+' if quality_delta >= 0 else ''}{quality_delta} points")
 
     if component_feedback:
         lines.append(f"")
@@ -2805,8 +2999,8 @@ def _handle_mine_ui_patterns(args: dict) -> str:
     sys.path.insert(0, str(KIWI_DIR))
     from generator.learning import PatternMiner, format_pattern_report
 
-    lookback_days = args.get("lookback_days", 30)
-    min_occurrences = args.get("min_occurrences", 3)
+    lookback_days = int(args.get("lookback_days", 30))
+    min_occurrences = int(args.get("min_occurrences", 3))
 
     try:
         miner = PatternMiner(min_occurrences=min_occurrences)
@@ -2839,6 +3033,45 @@ def _handle_confidence_analysis(args: dict) -> str:
     except Exception as e:
         import traceback
         return f"ERROR: Confidence analysis failed: {e}\n{traceback.format_exc()}"
+
+
+def _handle_generation_quality(args: dict) -> str:
+    """Return generation quality metrics for a theme or all themes."""
+    sys.path.insert(0, str(KIWI_DIR))
+    from memory.db import get_generation_quality, get_high_risk_sections
+
+    theme_slug = args.get("theme_slug")
+
+    try:
+        metrics = get_generation_quality(theme_slug=theme_slug)
+        high_risk = get_high_risk_sections(theme_slug=theme_slug, top_n=5)
+
+        lines = ["## Generation Quality Report"]
+        if theme_slug:
+            lines.append(f"Theme: {theme_slug}")
+        else:
+            lines.append("Scope: all themes")
+        lines.append("")
+        lines.append(f"Quality score : {metrics['quality_score']:.1%}")
+        lines.append(f"Total files   : {metrics['total_files']}")
+        lines.append(f"Total fixes   : {metrics['fix_count']}")
+        lines.append(f"Violations    : {metrics['violations_at_gen']}")
+        lines.append(f"Trend         : {metrics['trend']}")
+
+        if high_risk:
+            lines.append("")
+            lines.append("### High-risk sections (most post-gen fixes)")
+            for r in high_risk:
+                lines.append(
+                    f"  {r['template_used']}: {r['total_fixes']} fixes, "
+                    f"avg quality {r['avg_quality']:.1%} ({r['gen_count']} gens)"
+                )
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: {e}\n{traceback.format_exc()}"
 
 
 def _handle_retrain_classifier(args: dict) -> str:
@@ -2892,7 +3125,7 @@ def _handle_suggest_base(args: dict) -> str:
     industry = args.get("industry", "unknown")
     description = args.get("description", "")
 
-    db_path = KIWI_DIR / "theme_knowledge.db"
+    db_path = KIWI_DIR / "memory" / "theme_knowledge.db"
 
     if not db_path.exists():
         return json.dumps({
@@ -2903,11 +3136,23 @@ def _handle_suggest_base(args: dict) -> str:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
+    # Auto-demote stale themes: -1/day for themes unused in 30+ days
+    cursor.execute("""
+        UPDATE themes
+        SET quality_score = MAX(0, quality_score - CAST(
+                (julianday('now') - julianday(COALESCE(last_used_at, updated_at))) - 30
+            AS INTEGER)),
+            updated_at = CURRENT_TIMESTAMP
+        WHERE (julianday('now') - julianday(COALESCE(last_used_at, updated_at))) > 30
+          AND quality_score > 0
+    """)
+    conn.commit()
+
     # First try exact industry match
     cursor.execute("""
-        SELECT theme_slug, industry, quality_score, design_tokens,
-               components_used, layout_recipe, generation_count
-        FROM theme_profiles
+        SELECT theme_name, industry, quality_score, tokens,
+               components, layout, generation_count
+        FROM themes
         WHERE industry = ?
         ORDER BY quality_score DESC, generation_count ASC
         LIMIT 5
@@ -2915,12 +3160,19 @@ def _handle_suggest_base(args: dict) -> str:
 
     themes = cursor.fetchall()
 
-    cursor.execute("SELECT COUNT(*) FROM golden_patterns WHERE auto_apply = 1")
-    golden_count = cursor.fetchone()[0]
+    # Check if golden_patterns table exists (Phase 2 feature)
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='golden_patterns'")
+    has_golden_patterns = cursor.fetchone() is not None
+
+    if has_golden_patterns:
+        cursor.execute("SELECT COUNT(*) FROM golden_patterns WHERE auto_apply = 1")
+        golden_count = cursor.fetchone()[0]
+    else:
+        golden_count = 0
 
     cursor.execute("""
         SELECT AVG(quality_score), COUNT(*)
-        FROM theme_profiles
+        FROM themes
         WHERE industry = ?
     """, (industry,))
     industry_stats = cursor.fetchone()
@@ -3026,6 +3278,208 @@ def _get_default_fonts_for_industry(industry: str) -> dict:
     return defaults.get(industry, {"primary": "Inter, sans-serif", "body": "Inter, sans-serif"})
 
 
+def _handle_reason(args: dict) -> str:
+    from agent.reasoning import kiwi_reason
+    import json as _json
+    task = args.get("task", "")
+    theme_path = args.get("theme_path", "")
+    if not task or not theme_path:
+        return "Error: task and theme_path are required"
+    output = kiwi_reason(task, theme_path)
+    return _json.dumps({
+        "trust_score": round(output.trust_score, 3),
+        "recommendation": output.recommendation,
+        "verify_hint": output.verify_hint,
+        "trust_breakdown": {k: round(v, 2) for k, v in output.trust_breakdown.items()},
+        "content": output.content,
+    }, ensure_ascii=False, indent=2)
+
+
+def _handle_metrics(args: dict) -> str:
+    import json as _json
+    weeks = args.get("weeks", 8)
+    fmt = args.get("format", "summary")
+
+    if fmt == "alert":
+        from agent.reasoning.alerts import check_stagnation
+        alert = check_stagnation()
+        return _json.dumps(alert or {'status': 'ok', 'message': 'Kiwi is improving normally'}, indent=2)
+
+    from agent.reasoning.dashboard import generate_dashboard
+    from agent.reasoning.alerts import check_stagnation
+    dashboard = generate_dashboard(weeks)
+
+    if fmt == "summary":
+        return _json.dumps({
+            'intelligence_score': dashboard['intelligence_score'],
+            'latest_week': dashboard['weekly_trends'][-1] if dashboard['weekly_trends'] else None,
+            'autonomy': dashboard['autonomy_progression'],
+            'stagnation': check_stagnation(),
+        }, indent=2)
+
+    return _json.dumps(dashboard, indent=2)
+
+
+def _handle_propose_template_patch(args: dict) -> str:
+    """Propose auto-patches for templates based on recurring fix patterns."""
+    sys.path.insert(0, str(KIWI_DIR))
+    from generator.learning.improver import TemplateImprover
+
+    template_path = args.get("template_path")
+
+    try:
+        imp = TemplateImprover()
+
+        if template_path:
+            patch = imp.propose_patch(template_path)
+            if not patch:
+                return f"No patch warranted for '{template_path}' (insufficient fix history or rate-limited)."
+            patches = [patch]
+        else:
+            patches = imp.propose_all()
+            if not patches:
+                return "No patch candidates found. Templates need >= 3 cumulative fixes to qualify."
+
+        lines = [f"## Template Patch Proposals ({len(patches)} candidate(s))", ""]
+        for i, p in enumerate(patches, 1):
+            lines.append(f"### {i}. {Path(p['template_path']).name}")
+            lines.append(f"- Template : {p['template_key']}")
+            lines.append(f"- Confidence: {p['confidence']:.1%}")
+            lines.append(f"- Summary  : {p['pattern_summary']}")
+            if p.get("annotations"):
+                lines.append("- Annotations:")
+                for ann in p["annotations"]:
+                    lines.append(f"    line {ann['line']}: {ann['suggestion']}")
+            lines.append("")
+            lines.append("```diff")
+            lines.append(p["diff"][:800])
+            lines.append("```")
+            lines.append("")
+
+        lines.append("To apply: `kiwi_apply_template_patch(template_path=..., dry_run=False)`")
+        return "\n".join(lines)
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: {e}\n{traceback.format_exc()}"
+
+
+def _handle_apply_template_patch(args: dict) -> str:
+    """Apply a template patch through the staging pipeline."""
+    sys.path.insert(0, str(KIWI_DIR))
+    from generator.learning.improver import TemplateImprover
+
+    template_path = args.get("template_path")
+    dry_run = args.get("dry_run", True)
+
+    if not template_path:
+        return "ERROR: template_path is required."
+
+    try:
+        imp = TemplateImprover()
+        patch = imp.propose_patch(template_path)
+
+        if not patch:
+            return f"No patch candidate for '{template_path}' (insufficient fix history or rate-limited)."
+
+        passed = imp.apply_patch(patch, dry_run=dry_run)
+
+        if dry_run:
+            status = "PASSED" if passed else "FAILED"
+            return (
+                f"Staging {status} for '{template_path}'.\n"
+                f"Pattern: {patch['pattern_summary']}\n"
+                f"Confidence: {patch['confidence']:.1%}\n"
+                + ("Run with dry_run=False to apply." if passed else "Fix violations before applying.")
+            )
+        else:
+            if passed:
+                return (
+                    f"Patch applied and committed for '{template_path}'.\n"
+                    f"Pattern: {patch['pattern_summary']}\n"
+                    f"Confidence: {patch['confidence']:.1%}"
+                )
+            else:
+                return (
+                    f"Patch REJECTED for '{template_path}' — staging failed or quality regression detected.\n"
+                    f"Check logs above for details."
+                )
+
+    except Exception as e:
+        import traceback
+        return f"ERROR: {e}\n{traceback.format_exc()}"
+
+
+def _handle_tier(args: dict) -> str:
+    """View or manage Kiwi tier status."""
+    sys.path.insert(0, str(KIWI_DIR))
+    from core.tier_manager import get_tier_manager
+    from core.tier_config import TIER_LIMITS
+    from core.upgrade_prompts import format_tier_status
+
+    mgr = get_tier_manager()
+    action = args.get("action", "status")
+
+    if action == "activate":
+        key = args.get("key", "")
+        tier = args.get("tier", "starter")
+        result = mgr.activate_license(key, tier)
+        if result["success"]:
+            return f"License activated: {result['tier'].upper()} tier"
+        return f"Activation failed: {result['error']}"
+
+    tier = mgr.get_current_tier()
+    counts = mgr.get_usage_counts()
+    return format_tier_status(tier.name, counts, tier.limits)
+
+
+def _handle_dashboard(args: dict) -> str:
+    """View usage stats and cost savings."""
+    sys.path.insert(0, str(KIWI_DIR))
+    from tracking.dashboard import dashboard
+    period = args.get("period", "week")
+    detail = args.get("detail", False)
+    return dashboard(period=period, detail=detail)
+
+
+# --- Usage tracking integration ---
+
+_tracker = None
+
+
+def _get_tracker():
+    global _tracker
+    if _tracker is None:
+        try:
+            sys.path.insert(0, str(KIWI_DIR))
+            from tracking.usage_tracker import get_tracker
+            _tracker = get_tracker()
+        except Exception:
+            _tracker = None
+    return _tracker
+
+
+def _track_call(tool_name: str, args: dict, latency_ms: int, success: bool):
+    tracker = _get_tracker()
+    if tracker is None:
+        return
+    op = tool_name.replace("kiwi_", "")
+    target = args.get("path") or args.get("file") or args.get("files", [None])[0] if isinstance(args.get("files"), list) else args.get("path") or args.get("file")
+    files_processed = 1
+    if "files" in args and isinstance(args["files"], list):
+        files_processed = len(args["files"])
+    try:
+        tracker.record(
+            operation=op,
+            target_path=target,
+            latency_ms=latency_ms,
+            files_processed=files_processed,
+            success=success,
+        )
+    except Exception:
+        pass
+
+
 HANDLERS = {
     "kiwi_scan": _handle_scan,
     "kiwi_query": _handle_query,
@@ -3046,6 +3500,7 @@ HANDLERS = {
     "kiwi_deploy_history": _handle_deploy_history,
     "kiwi_impact": _handle_impact,
     "kiwi_scan_learn": _handle_scan_learn,
+    "kiwi_learn_session": _handle_learn_session,
     "kiwi_mine_patterns": _handle_mine_patterns,
     "kiwi_learn_from_folder": _handle_learn_from_folder,
     "kiwi_review_suggestions": _handle_review_suggestions,
@@ -3067,7 +3522,27 @@ HANDLERS = {
     "kiwi_confidence_analysis": _handle_confidence_analysis,
     "kiwi_retrain_classifier": _handle_retrain_classifier,
     "kiwi_suggest_base": _handle_suggest_base,
+    "kiwi_reason": _handle_reason,
+    "kiwi_metrics": _handle_metrics,
+    "kiwi_generation_quality": _handle_generation_quality,
+    "kiwi_propose_template_patch": _handle_propose_template_patch,
+    "kiwi_apply_template_patch": _handle_apply_template_patch,
+    "kiwi_dashboard": _handle_dashboard,
+    "kiwi_tier": _handle_tier,
 }
+
+
+def _check_tier_gate(tool_name: str):
+    """Returns message string if blocked, None if allowed."""
+    try:
+        sys.path.insert(0, str(KIWI_DIR))
+        from core.gating import gate_tool
+        result = gate_tool(tool_name)
+        if not result.allowed:
+            return f"GATED: {result.message}"
+    except Exception:
+        pass
+    return None
 
 
 def handle_request(req: dict) -> dict:
@@ -3098,10 +3573,19 @@ def handle_request(req: dict) -> dict:
             return {"jsonrpc": "2.0", "id": req_id,
                     "error": {"code": -32602, "message": f"Unknown tool: {tool}"}}
         try:
+            gate_result = _check_tier_gate(tool)
+            if gate_result:
+                return {"jsonrpc": "2.0", "id": req_id,
+                        "result": {"content": [{"type": "text", "text": gate_result}]}}
+            import time as _time
+            _t0 = _time.time()
             text = handler(args)
+            _latency = int((_time.time() - _t0) * 1000)
+            _track_call(tool, args, _latency, True)
             return {"jsonrpc": "2.0", "id": req_id,
                     "result": {"content": [{"type": "text", "text": text}]}}
         except Exception as e:
+            _track_call(tool, args, 0, False)
             return {"jsonrpc": "2.0", "id": req_id,
                     "error": {"code": -32000, "message": str(e)}}
 

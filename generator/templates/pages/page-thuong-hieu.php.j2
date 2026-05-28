@@ -1,0 +1,54 @@
+<?php
+/**
+ * Page: Thương hiệu
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+$brands = function_exists( 'wz_get_brands' ) ? wz_get_brands() : array();
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Thương hiệu</span>
+		</nav>
+
+		<h1 class="text-3xl font-bold mb-8">Thương hiệu</h1>
+
+		<?php if ( ! empty( $brands ) ) : ?>
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+			<?php foreach ( $brands as $brand ) : ?>
+			<a href="<?php echo esc_url( wz_get_brand_url( $brand ) ); ?>"
+			   class="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center gap-3 hover:shadow-md hover:border-primary border border-transparent transition-all group">
+				<?php if ( ! empty( $brand['logo'] ) ) : ?>
+				<img src="<?php echo esc_url( $brand['logo'] ); ?>"
+				     alt="<?php echo esc_attr( $brand['name'] ); ?>"
+				     class="h-12 w-auto object-contain grayscale group-hover:grayscale-0 transition-all"
+				     loading="lazy">
+				<?php endif; ?>
+				<span class="text-sm font-medium text-center"><?php echo esc_html( $brand['name'] ); ?></span>
+				<?php if ( ! empty( $brand['product_count'] ) ) : ?>
+				<span class="text-xs text-gray-500"><?php echo esc_html( (string) (int) $brand['product_count'] ); ?> sản phẩm</span>
+				<?php endif; ?>
+			</a>
+			<?php endforeach; ?>
+		</div>
+		<?php else : ?>
+		<div class="text-center py-16 text-gray-500">
+			<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">storefront</span>
+			<p class="font-medium">Chưa có thương hiệu nào</p>
+		</div>
+		<?php endif; ?>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

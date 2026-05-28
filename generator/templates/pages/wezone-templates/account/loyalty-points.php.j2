@@ -1,0 +1,91 @@
+<?php
+/**
+ * Account Loyalty Points
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user_id = get_current_user_id();
+$points  = function_exists( 'wz_get_user_points' ) ? wz_get_user_points( $user_id ) : 0;
+$history = function_exists( 'wz_get_points_history' ) ? wz_get_points_history( $user_id, array( 'limit' => 20 ) ) : array();
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<a href="<?php echo esc_url( home_url( '/tai-khoan' ) ); ?>" class="text-gray-600 hover:text-primary">Tài khoản</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Điểm thưởng</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'loyalty' ) ); ?>
+			</aside>
+
+			<div class="lg:col-span-3 space-y-6">
+
+				<div class="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl p-6 text-white">
+					<p class="text-sm text-white/80 mb-1">Điểm thưởng hiện có</p>
+					<p class="text-4xl font-bold"><?php echo esc_html( number_format( (int) $points ) ); ?> <span class="text-2xl">điểm</span></p>
+					<p class="text-sm text-white/80 mt-2">Dùng để đổi voucher giảm giá</p>
+				</div>
+
+				<div class="bg-white rounded-xl shadow-sm p-6">
+					<h2 class="font-semibold mb-4">Cách tích điểm</h2>
+					<ul class="space-y-3 text-sm">
+						<li class="flex items-start gap-3">
+							<span class="material-icons text-primary text-lg mt-0.5" aria-hidden="true">shopping_bag</span>
+							<span>Mua hàng: tích 1 điểm cho mỗi 10.000đ chi tiêu</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-icons text-primary text-lg mt-0.5" aria-hidden="true">rate_review</span>
+							<span>Đánh giá sản phẩm: +10 điểm mỗi đánh giá có ảnh</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-icons text-primary text-lg mt-0.5" aria-hidden="true">person_add</span>
+							<span>Giới thiệu bạn bè: +50 điểm khi bạn bè đặt đơn đầu tiên</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class="bg-white rounded-xl shadow-sm p-6">
+					<h2 class="font-semibold mb-4">Lịch sử điểm thưởng</h2>
+					<?php if ( ! empty( $history ) ) : ?>
+					<div class="divide-y divide-gray-100">
+						<?php foreach ( $history as $entry ) : ?>
+						<div class="flex items-center justify-between py-3">
+							<div>
+								<p class="font-medium text-sm"><?php echo esc_html( $entry['description'] ); ?></p>
+								<p class="text-xs text-gray-500 mt-0.5"><?php echo esc_html( date_i18n( 'd/m/Y', strtotime( $entry['created_at'] ) ) ); ?></p>
+							</div>
+							<span class="font-bold <?php echo esc_attr( $entry['points'] > 0 ? 'text-green-600' : 'text-red-500' ); ?>">
+								<?php echo esc_html( ( $entry['points'] > 0 ? '+' : '' ) . number_format( (int) $entry['points'] ) . ' điểm' ); ?>
+							</span>
+						</div>
+						<?php endforeach; ?>
+					</div>
+					<?php else : ?>
+					<p class="text-gray-500 text-sm text-center py-8">Chưa có lịch sử điểm thưởng</p>
+					<?php endif; ?>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

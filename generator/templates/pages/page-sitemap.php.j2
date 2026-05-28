@@ -1,0 +1,99 @@
+<?php
+/**
+ * Page: Sitemap
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-4xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Sơ đồ trang</span>
+		</nav>
+
+		<h1 class="text-3xl font-bold mb-8">Sơ đồ trang</h1>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+			<section>
+				<h2 class="text-lg font-semibold mb-3 text-primary">Mua sắm</h2>
+				<ul class="space-y-2 text-sm">
+					<li><a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-700 hover:text-primary">Trang chủ</a></li>
+					<li><a href="<?php echo esc_url( function_exists( 'wz_get_shop_url' ) ? wz_get_shop_url() : home_url( '/shop' ) ); ?>" class="text-gray-700 hover:text-primary">Tất cả sản phẩm</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/gio-hang' ) ); ?>" class="text-gray-700 hover:text-primary">Giỏ hàng</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/thanh-toan' ) ); ?>" class="text-gray-700 hover:text-primary">Thanh toán</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/flash-sale' ) ); ?>" class="text-gray-700 hover:text-primary">Flash Sale</a></li>
+				</ul>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold mb-3 text-primary">Tài khoản</h2>
+				<ul class="space-y-2 text-sm">
+					<li><a href="<?php echo esc_url( home_url( '/dang-nhap' ) ); ?>" class="text-gray-700 hover:text-primary">Đăng nhập</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/dang-ky' ) ); ?>" class="text-gray-700 hover:text-primary">Đăng ký</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/tai-khoan' ) ); ?>" class="text-gray-700 hover:text-primary">Tổng quan tài khoản</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/tai-khoan/don-hang' ) ); ?>" class="text-gray-700 hover:text-primary">Đơn hàng của tôi</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/tai-khoan/yeu-thich' ) ); ?>" class="text-gray-700 hover:text-primary">Sản phẩm yêu thích</a></li>
+				</ul>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold mb-3 text-primary">Chính sách</h2>
+				<ul class="space-y-2 text-sm">
+					<li><a href="<?php echo esc_url( home_url( '/chinh-sach-van-chuyen' ) ); ?>" class="text-gray-700 hover:text-primary">Chính sách vận chuyển</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/chinh-sach-doi-tra' ) ); ?>" class="text-gray-700 hover:text-primary">Chính sách đổi trả</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/chinh-sach-bao-mat' ) ); ?>" class="text-gray-700 hover:text-primary">Chính sách bảo mật</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/dieu-khoan' ) ); ?>" class="text-gray-700 hover:text-primary">Điều khoản sử dụng</a></li>
+				</ul>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold mb-3 text-primary">Hỗ trợ</h2>
+				<ul class="space-y-2 text-sm">
+					<li><a href="<?php echo esc_url( home_url( '/lien-he' ) ); ?>" class="text-gray-700 hover:text-primary">Liên hệ</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/faq' ) ); ?>" class="text-gray-700 hover:text-primary">Câu hỏi thường gặp</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/huong-dan-mua-hang' ) ); ?>" class="text-gray-700 hover:text-primary">Hướng dẫn mua hàng</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/huong-dan-chuyen-khoan' ) ); ?>" class="text-gray-700 hover:text-primary">Hướng dẫn chuyển khoản</a></li>
+				</ul>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold mb-3 text-primary">Về chúng tôi</h2>
+				<ul class="space-y-2 text-sm">
+					<li><a href="<?php echo esc_url( home_url( '/gioi-thieu' ) ); ?>" class="text-gray-700 hover:text-primary">Giới thiệu</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/thuong-hieu' ) ); ?>" class="text-gray-700 hover:text-primary">Thương hiệu</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/blog' ) ); ?>" class="text-gray-700 hover:text-primary">Blog</a></li>
+				</ul>
+			</section>
+
+			<?php
+			$categories = function_exists( 'wz_get_categories' ) ? wz_get_categories( array( 'parent' => 0 ) ) : array();
+			if ( ! empty( $categories ) ) :
+			?>
+			<section>
+				<h2 class="text-lg font-semibold mb-3 text-primary">Danh mục sản phẩm</h2>
+				<ul class="space-y-2 text-sm">
+					<?php foreach ( $categories as $cat ) : ?>
+					<li>
+						<a href="<?php echo esc_url( wz_get_category_url( $cat ) ); ?>" class="text-gray-700 hover:text-primary">
+							<?php echo esc_html( $cat['name'] ); ?>
+						</a>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</section>
+			<?php endif; ?>
+
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

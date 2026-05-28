@@ -1,0 +1,69 @@
+<?php
+/**
+ * Template Name: Login
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-12">
+		<div class="max-w-md mx-auto">
+			<h1 class="text-2xl font-bold text-center mb-8">Đăng nhập</h1>
+
+			<?php if ( is_user_logged_in() ) : ?>
+				<div class="text-center">
+					<p class="text-gray-600 mb-4">Bạn đã đăng nhập.</p>
+					<a href="<?php echo esc_url( home_url( '/account' ) ); ?>"
+					   class="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+						Vào tài khoản
+					</a>
+				</div>
+			<?php else : ?>
+				<form method="POST" action="<?php echo esc_url( home_url( '/api/auth/login' ) ); ?>" class="space-y-4">
+					<?php wp_nonce_field( 'wz_login_nonce' ); ?>
+
+					<div>
+						<label for="login_email" class="block text-sm font-medium mb-1">Email hoặc số điện thoại</label>
+						<input type="text" id="login_email" name="login" required
+						       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+						       placeholder="email@example.com">
+					</div>
+
+					<div>
+						<label for="login_password" class="block text-sm font-medium mb-1">Mật khẩu</label>
+						<input type="password" id="login_password" name="password" required
+						       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+						       placeholder="Nhập mật khẩu">
+					</div>
+
+					<div class="flex items-center justify-between">
+						<label class="flex items-center gap-2 text-sm">
+							<input type="checkbox" name="remember" class="rounded border-gray-300">
+							<span>Ghi nhớ đăng nhập</span>
+						</label>
+						<a href="<?php echo esc_url( home_url( '/forgot-password' ) ); ?>" class="text-sm text-primary hover:underline">
+							Quên mật khẩu?
+						</a>
+					</div>
+
+					<button type="submit"
+					        class="w-full px-6 py-3 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
+						Đăng nhập
+					</button>
+				</form>
+
+				<p class="text-center text-sm text-gray-600 mt-6">
+					Chưa có tài khoản?
+					<a href="<?php echo esc_url( home_url( '/register' ) ); ?>" class="text-primary hover:underline">Đăng ký ngay</a>
+				</p>
+			<?php endif; ?>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

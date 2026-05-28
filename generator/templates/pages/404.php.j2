@@ -1,0 +1,45 @@
+<?php
+/**
+ * Template: 404 Not Found
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-16">
+		<div class="max-w-lg mx-auto text-center">
+			<div class="text-8xl font-bold text-gray-200 mb-4">404</div>
+			<h1 class="text-2xl font-bold mb-4">Trang không tồn tại</h1>
+			<p class="text-gray-600 mb-8">Trang bạn tìm kiếm không tồn tại hoặc đã bị di chuyển.</p>
+
+			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="mb-8">
+				<div class="flex gap-2 max-w-md mx-auto">
+					<input type="search" name="s" placeholder="Tìm kiếm..."
+					       class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+					       aria-label="Tìm kiếm">
+					<button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+						Tìm
+					</button>
+				</div>
+			</form>
+
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="<?php echo esc_url( home_url() ); ?>"
+				   class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-center">
+					Về trang chủ
+				</a>
+				<a href="<?php echo esc_url( home_url( '/shop' ) ); ?>"
+				   class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center">
+					Xem sản phẩm
+				</a>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

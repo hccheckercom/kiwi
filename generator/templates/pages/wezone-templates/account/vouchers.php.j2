@@ -1,0 +1,122 @@
+<?php
+/**
+ * Account Vouchers
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user_id  = get_current_user_id();
+$vouchers = function_exists( 'wz_get_user_vouchers' ) ? wz_get_user_vouchers( $user_id ) : array();
+$active   = array_filter( $vouchers, fn( $v ) => $v['status'] === 'active' );
+$used     = array_filter( $vouchers, fn( $v ) => $v['status'] === 'used' );
+$expired  = array_filter( $vouchers, fn( $v ) => $v['status'] === 'expired' );
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<a href="<?php echo esc_url( home_url( '/tai-khoan' ) ); ?>" class="text-gray-600 hover:text-primary">Tài khoản</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Mã giảm giá</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'vouchers' ) ); ?>
+			</aside>
+
+			<div class="lg:col-span-3">
+				<h1 class="text-xl font-semibold mb-6">Mã giảm giá của tôi</h1>
+
+				<?php
+				$tabs = array(
+					'active'  => array( 'label' => 'Khả dụng', 'items' => $active ),
+					'used'    => array( 'label' => 'Đã dùng', 'items' => $used ),
+					'expired' => array( 'label' => 'Hết hạn', 'items' => $expired ),
+				);
+				$current_tab = isset( $_GET['tab'] ) && array_key_exists( sanitize_key( $_GET['tab'] ), $tabs ) ? sanitize_key( $_GET['tab'] ) : 'active';
+				?>
+
+				<div class="flex gap-1 mb-6 border-b border-gray-200">
+					<?php foreach ( $tabs as $key => $tab ) : ?>
+					<a href="?tab=<?php echo esc_attr( $key ); ?>"
+					   class="px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors
+					          <?php echo esc_attr( $current_tab === $key ? 'border-primary text-primary' : 'border-transparent text-gray-600 hover:text-gray-900' ); ?>">
+						<?php echo esc_html( $tab['label'] ); ?>
+						<span class="ml-1 text-xs">(<?php echo esc_html( (string) count( $tab['items'] ) ); ?>)</span>
+					</a>
+					<?php endforeach; ?>
+				</div>
+
+				<?php $current_items = $tabs[ $current_tab ]['items']; ?>
+
+				<?php if ( ! empty( $current_items ) ) : ?>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<?php foreach ( $current_items as $voucher ) : ?>
+					<div class="bg-white rounded-xl shadow-sm overflow-hidden flex <?php echo esc_attr( $current_tab !== 'active' ? 'opacity-60' : '' ); ?>">
+						<div class="w-2 bg-primary flex-shrink-0"></div>
+						<div class="p-4 flex-1">
+							<div class="flex items-start justify-between gap-2">
+								<div>
+									<p class="font-mono font-bold text-lg text-primary"><?php echo esc_html( $voucher['code'] ); ?></p>
+									<p class="text-sm text-gray-600 mt-0.5"><?php echo esc_html( $voucher['description'] ); ?></p>
+								</div>
+								<div class="text-right flex-shrink-0">
+									<p class="font-bold text-lg">
+										<?php if ( $voucher['type'] === 'percent' ) : ?>
+											-<?php echo esc_html( (string) (int) $voucher['value'] ); ?>%
+										<?php else : ?>
+											-<?php echo esc_html( wz_format_price( $voucher['value'] ) ); ?>
+										<?php endif; ?>
+									</p>
+								</div>
+							</div>
+							<div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+								<span>HSD: <?php echo esc_html( date_i18n( 'd/m/Y', strtotime( $voucher['expires_at'] ) ) ); ?></span>
+								<?php if ( $current_tab === 'active' ) : ?>
+								<button type="button" class="text-primary hover:underline font-medium wz-copy-voucher"
+								        data-code="<?php echo esc_attr( $voucher['code'] ); ?>">
+									Sao chép
+								</button>
+								<?php endif; ?>
+							</div>
+						</div>
+					</div>
+					<?php endforeach; ?>
+				</div>
+				<?php else : ?>
+				<div class="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500">
+					<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">local_offer</span>
+					<p class="font-medium">Không có mã giảm giá nào</p>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</main>
+
+<script>
+document.querySelectorAll('.wz-copy-voucher').forEach(function(btn) {
+	btn.addEventListener('click', function() {
+		navigator.clipboard.writeText(this.dataset.code).then(function() {
+			btn.textContent = 'Đã sao chép!';
+			setTimeout(function() { btn.textContent = 'Sao chép'; }, 2000);
+		});
+	});
+});
+</script>
+
+<?php get_footer(); ?>

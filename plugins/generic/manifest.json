@@ -1,0 +1,32 @@
+{
+  "name": "generic",
+  "version": "1.0.0",
+  "description": "Universal code quality — 379 lessons for any project",
+  "author": "Kiwi",
+  "languages": [
+    "php",
+    "js",
+    "ts",
+    "python",
+    "css"
+  ],
+  "frameworks": [],
+  "platforms": [
+    "wp",
+    "nextjs",
+    "python"
+  ],
+  "scope_types": [
+    "theme",
+    "plugin",
+    "app"
+  ],
+  "checkers": [
+    "presence",
+    "absence",
+    "cross-check",
+    "bom-check"
+  ],
+  "lessons_count": 379,
+  "categories": 36
+}

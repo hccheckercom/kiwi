@@ -1,0 +1,176 @@
+<?php
+/**
+ * Template Name: Liên hệ
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Liên hệ</span>
+		</nav>
+
+		<div class="max-w-5xl mx-auto">
+			<h1 class="text-3xl font-bold mb-2">Liên hệ với chúng tôi</h1>
+			<p class="text-gray-600 mb-8">Chúng tôi luôn sẵn sàng hỗ trợ bạn</p>
+
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+				<!-- Contact Info -->
+				<div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+						<div class="bg-gray-50 rounded-xl p-5">
+							<span class="material-icons text-primary text-2xl mb-2 block" aria-hidden="true">call</span>
+							<h3 class="font-semibold mb-1">Hotline</h3>
+							<a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline font-medium"><?php echo esc_html( wz_config( 'phone' ) ); ?></a>
+							<p class="text-sm text-gray-500 mt-1">Hỗ trợ 8:00 – 21:00</p>
+						</div>
+						<div class="bg-gray-50 rounded-xl p-5">
+							<span class="material-icons text-primary text-2xl mb-2 block" aria-hidden="true">email</span>
+							<h3 class="font-semibold mb-1">Email</h3>
+							<a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline break-all"><?php echo esc_html( wz_config( 'email' ) ); ?></a>
+						</div>
+						<div class="bg-gray-50 rounded-xl p-5">
+							<span class="material-icons text-primary text-2xl mb-2 block" aria-hidden="true">location_on</span>
+							<h3 class="font-semibold mb-1">Địa chỉ</h3>
+							<p class="text-sm"><?php echo esc_html( wz_config( 'address' ) ); ?></p>
+						</div>
+						<?php if ( function_exists( 'wz_config' ) && wz_config( 'zalo_url' ) ) : ?>
+						<div class="bg-gray-50 rounded-xl p-5">
+							<span class="material-icons text-primary text-2xl mb-2 block" aria-hidden="true">chat</span>
+							<h3 class="font-semibold mb-1">Zalo</h3>
+							<a href="<?php echo esc_url( wz_config( 'zalo_url' ) ); ?>" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Chat Zalo</a>
+						</div>
+						<?php endif; ?>
+					</div>
+
+					<div class="bg-gray-50 rounded-xl p-5">
+						<h3 class="font-semibold mb-3">Giờ làm việc</h3>
+						<?php
+						$hours = function_exists( 'wz_config' ) ? wz_config( 'business_hours' ) : null;
+						if ( $hours ) :
+							echo wp_kses_post( $hours );
+						else :
+						?>
+						<ul class="text-sm space-y-1">
+							<li class="flex justify-between"><span>Thứ 2 – Thứ 7</span><span class="font-medium">8:00 – 21:00</span></li>
+							<li class="flex justify-between"><span>Chủ nhật</span><span class="font-medium">9:00 – 17:00</span></li>
+						</ul>
+						<?php endif; ?>
+					</div>
+				</div>
+
+				<!-- Contact Form -->
+				<div>
+					<h2 class="text-xl font-semibold mb-4">Gửi tin nhắn</h2>
+					<form id="wz-contact-form" class="space-y-4" novalidate>
+						<?php wp_nonce_field( 'wz_contact_form', 'wz_contact_nonce' ); ?>
+
+						<div>
+							<label for="contact-name" class="block text-sm font-medium mb-1">Họ và tên <span class="text-red-500" aria-hidden="true">*</span></label>
+							<input type="text" id="contact-name" name="name" required minlength="2"
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+							       placeholder="Nguyễn Văn A">
+						</div>
+
+						<div>
+							<label for="contact-email" class="block text-sm font-medium mb-1">Email <span class="text-red-500" aria-hidden="true">*</span></label>
+							<input type="email" id="contact-email" name="email" required
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+							       placeholder="email@example.com">
+						</div>
+
+						<div>
+							<label for="contact-phone" class="block text-sm font-medium mb-1">Số điện thoại <span class="text-red-500" aria-hidden="true">*</span></label>
+							<input type="tel" id="contact-phone" name="phone" required pattern="0[0-9]{9,10}"
+							       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+							       placeholder="0901234567">
+						</div>
+
+						<div>
+							<label for="contact-subject" class="block text-sm font-medium mb-1">Chủ đề</label>
+							<select id="contact-subject" name="subject"
+							        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+								<option value="">-- Chọn chủ đề --</option>
+								<option value="order">Hỗ trợ đơn hàng</option>
+								<option value="product">Tư vấn sản phẩm</option>
+								<option value="feedback">Góp ý</option>
+								<option value="other">Khác</option>
+							</select>
+						</div>
+
+						<div>
+							<label for="contact-message" class="block text-sm font-medium mb-1">Nội dung <span class="text-red-500" aria-hidden="true">*</span></label>
+							<textarea id="contact-message" name="message" required minlength="10" rows="5"
+							          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+							          placeholder="Nội dung tin nhắn..."></textarea>
+						</div>
+
+						<div id="wz-contact-message" class="hidden rounded-lg p-4 text-sm" role="alert" aria-live="polite"></div>
+
+						<button type="submit" id="wz-contact-submit"
+						        class="w-full px-6 py-3 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50">
+							Gửi tin nhắn
+						</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</main>
+
+<script>
+(function() {
+	var form = document.getElementById('wz-contact-form');
+	if (!form) return;
+
+	form.addEventListener('submit', function(e) {
+		e.preventDefault();
+		var btn = document.getElementById('wz-contact-submit');
+		var msg = document.getElementById('wz-contact-message');
+		btn.disabled = true;
+		btn.textContent = 'Đang gửi...';
+		msg.className = 'hidden rounded-lg p-4 text-sm';
+
+		var data = new FormData(form);
+		data.append('action', 'wz_contact_form');
+
+		fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin',
+		})
+		.then(function(r) { return r.json(); })
+		.then(function(res) {
+			if (res.success) {
+				msg.className = 'rounded-lg p-4 text-sm bg-green-50 text-green-700';
+				msg.textContent = res.data.message || 'Đã gửi thành công! Chúng tôi sẽ phản hồi trong 24h.';
+				form.reset();
+			} else {
+				msg.className = 'rounded-lg p-4 text-sm bg-red-50 text-red-700';
+				msg.textContent = res.data || 'Có lỗi xảy ra. Vui lòng thử lại.';
+			}
+		})
+		.catch(function() {
+			msg.className = 'rounded-lg p-4 text-sm bg-red-50 text-red-700';
+			msg.textContent = 'Có lỗi xảy ra. Vui lòng thử lại.';
+		})
+		.finally(function() {
+			btn.disabled = false;
+			btn.textContent = 'Gửi tin nhắn';
+		});
+	});
+})();
+</script>
+
+<?php get_footer(); ?>

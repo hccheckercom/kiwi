@@ -11,6 +11,9 @@
 (function() {
 	'use strict';
 
+	// Cookie consent check
+	var cookieConsent = localStorage.getItem('wz_consent');
+
 	// Wait for DOM ready
 	document.addEventListener('DOMContentLoaded', function() {
 		initMobileMenu();
@@ -69,6 +72,7 @@
 
 		fetch(wzTheme.ajaxUrl, {
 			method: 'POST',
+			headers: { 'X-WP-Nonce': wzTheme.nonce },
 			body: data
 		})
 		.then(response => response.json())

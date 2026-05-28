@@ -1,0 +1,82 @@
+<?php
+/**
+ * Page: Đánh giá sản phẩm
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+$paged    = max( 1, (int) ( get_query_var( 'paged' ) ?: 1 ) );
+$reviews  = function_exists( 'wz_get_reviews' ) ? wz_get_reviews( array( 'page' => $paged, 'per_page' => 12, 'status' => 'approved' ) ) : array();
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Đánh giá</span>
+		</nav>
+
+		<h1 class="text-3xl font-bold mb-8">Đánh giá từ khách hàng</h1>
+
+		<?php if ( ! empty( $reviews ) ) : ?>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<?php foreach ( $reviews as $review ) : ?>
+			<article class="bg-white rounded-xl shadow-sm p-5">
+				<div class="flex items-center gap-3 mb-3">
+					<img src="<?php echo esc_url( get_avatar_url( $review['user_id'] ?? 0, array( 'size' => 40 ) ) ); ?>"
+					     alt="<?php echo esc_attr( $review['author'] ); ?>"
+					     class="w-10 h-10 rounded-full object-cover"
+					     width="40" height="40">
+					<div>
+						<p class="font-medium text-sm"><?php echo esc_html( $review['author'] ); ?></p>
+						<div class="flex gap-0.5" aria-label="<?php echo esc_attr( $review['rating'] ); ?> sao">
+							<?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+							<span class="material-icons text-sm <?php echo esc_attr( $i <= $review['rating'] ? 'text-yellow-400' : 'text-gray-200' ); ?>" aria-hidden="true">star</span>
+							<?php endfor; ?>
+						</div>
+					</div>
+					<time class="ml-auto text-xs text-gray-400" datetime="<?php echo esc_attr( $review['created_at'] ); ?>">
+						<?php echo esc_html( date_i18n( 'd/m/Y', strtotime( $review['created_at'] ) ) ); ?>
+					</time>
+				</div>
+
+				<?php if ( ! empty( $review['product'] ) ) : ?>
+				<a href="<?php echo esc_url( wz_get_permalink( $review['product'] ) ); ?>"
+				   class="text-xs text-primary hover:underline mb-2 block">
+					<?php echo esc_html( $review['product']['name'] ); ?>
+				</a>
+				<?php endif; ?>
+
+				<p class="text-sm text-gray-700 line-clamp-4"><?php echo esc_html( $review['content'] ); ?></p>
+
+				<?php if ( ! empty( $review['images'] ) ) : ?>
+				<div class="flex gap-2 mt-3">
+					<?php foreach ( array_slice( $review['images'], 0, 3 ) as $img ) : ?>
+					<img src="<?php echo esc_url( $img ); ?>"
+					     alt="Ảnh đánh giá"
+					     class="w-16 h-16 rounded-lg object-cover"
+					     loading="lazy"
+					     width="64" height="64">
+					<?php endforeach; ?>
+				</div>
+				<?php endif; ?>
+			</article>
+			<?php endforeach; ?>
+		</div>
+		<?php else : ?>
+		<div class="text-center py-16 text-gray-500">
+			<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">rate_review</span>
+			<p class="font-medium">Chưa có đánh giá nào</p>
+		</div>
+		<?php endif; ?>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

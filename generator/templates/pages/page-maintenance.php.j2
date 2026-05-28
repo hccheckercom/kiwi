@@ -1,0 +1,48 @@
+<?php
+/**
+ * Template Name: Maintenance
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - Bảo trì</title>
+	<?php wp_head(); ?>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+	<div class="container mx-auto px-4">
+		<div class="max-w-lg mx-auto text-center py-16">
+			<div class="w-24 h-24 mx-auto mb-8 bg-yellow-100 rounded-full flex items-center justify-center">
+				<svg class="w-12 h-12 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+				</svg>
+			</div>
+
+			<h1 class="text-3xl font-bold mb-4">Đang bảo trì</h1>
+			<p class="text-gray-600 text-lg mb-8">
+				Chúng tôi đang nâng cấp hệ thống để phục vụ bạn tốt hơn. Vui lòng quay lại sau ít phút.
+			</p>
+
+			<?php if ( function_exists( 'wz_config' ) ) : ?>
+				<div class="bg-white rounded-lg shadow-sm p-6 inline-block">
+					<p class="text-gray-700 text-sm">
+						Liên hệ hỗ trợ:
+						<a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline">
+							<?php echo esc_html( wz_config( 'phone' ) ); ?>
+						</a>
+					</p>
+				</div>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<?php wp_footer(); ?>
+</body>
+</html>

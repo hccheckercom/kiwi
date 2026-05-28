@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "next_id": 727,
+  "next_id": 728,
   "next_fea_id": 31,
   "last_updated": "2026-05-27",
   "projects": {
@@ -162,7 +162,7 @@
       "desc": ""
     },
     "python": {
-      "count": 52,
+      "count": 53,
       "desc": "Type hints, exceptions, async/await, context managers, mutable defaults, string concat, is vs ==, dict.get(), len() checks, pathlib, staticmethod, print vs logging, hardcoded credentials, SQL injection, global mutation, HTTP timeouts, enums, list comprehensions, f-strings, dataclasses, generators, decorators, metaclasses, descriptors, slots, weakref, abc, typing protocols, contextlib, functools, itertools, collections, heapq, bisect, array, struct, pickle, json, csv, xml, html, urllib, socket, threading, multiprocessing, subprocess, signal, os, sys, argparse, configparser, logging config"
     },
     "python-windows": {
@@ -218,9 +218,9 @@
     "self_healing": false
   },
   "stats": {
-    "total": 120,
+    "total": 121,
     "critical": 50,
-    "high": 46,
+    "high": 47,
     "suggest": 24
   }
 }

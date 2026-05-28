@@ -1,0 +1,95 @@
+<?php
+/**
+ * Template Name: Chính sách đổi trả
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Chính sách đổi trả</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-2">Chính sách đổi trả &amp; hoàn tiền</h1>
+			<p class="text-sm text-gray-500 mb-8">Cập nhật lần cuối: <?php echo esc_html( date_i18n( 'd/m/Y' ) ); ?></p>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Điều kiện đổi trả</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<?php
+					$return_days = function_exists( 'wz_config' ) ? wz_config( 'return_policy.days' ) : 7;
+					$return_days = $return_days ?: 7;
+					?>
+					<li>Trong vòng <strong><?php echo esc_html( (string) (int) $return_days ); ?> ngày</strong> kể từ ngày nhận hàng</li>
+					<li>Sản phẩm còn nguyên tem, nhãn, bao bì gốc</li>
+					<li>Chưa qua sử dụng hoặc lỗi do nhà sản xuất</li>
+					<li>Có hóa đơn hoặc biên nhận mua hàng</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Trường hợp được đổi trả</h2>
+				<ul class="list-disc pl-6 space-y-2 text-green-700">
+					<li>Sản phẩm bị lỗi kỹ thuật từ nhà sản xuất</li>
+					<li>Giao sai sản phẩm (sai màu, sai size, sai model)</li>
+					<li>Sản phẩm bị hư hỏng trong quá trình vận chuyển</li>
+					<li>Sản phẩm không đúng mô tả trên website</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Trường hợp không được đổi trả</h2>
+				<ul class="list-disc pl-6 space-y-2 text-red-700">
+					<li>Sản phẩm đã qua sử dụng, có dấu hiệu hư hỏng do người dùng</li>
+					<li>Quá thời hạn đổi trả <?php echo esc_html( (string) (int) $return_days ); ?> ngày</li>
+					<li>Không có hóa đơn hoặc biên nhận mua hàng</li>
+					<li>Sản phẩm trong chương trình giảm giá đặc biệt (có ghi chú rõ)</li>
+					<li>Hư hỏng do người dùng gây ra (va đập, ngấm nước, v.v.)</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Quy trình đổi trả</h2>
+				<ol class="list-decimal pl-6 space-y-3">
+					<li><strong>Liên hệ:</strong> Gọi hotline <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> hoặc email <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a></li>
+					<li><strong>Gửi bằng chứng:</strong> Chụp ảnh/quay video sản phẩm lỗi và gửi cho chúng tôi</li>
+					<li><strong>Xác nhận:</strong> Chúng tôi xác nhận yêu cầu trong 1 ngày làm việc</li>
+					<li><strong>Gửi hàng về:</strong> Đóng gói cẩn thận và gửi về địa chỉ: <?php echo esc_html( wz_config( 'address' ) ); ?></li>
+					<li><strong>Xử lý:</strong> Kiểm tra và xử lý trong 3 – 5 ngày làm việc</li>
+					<li><strong>Hoàn tất:</strong> Đổi sản phẩm mới hoặc hoàn tiền theo yêu cầu</li>
+				</ol>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Chính sách hoàn tiền</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li><strong>Thời gian hoàn tiền:</strong> 3 – 7 ngày làm việc sau khi xác nhận</li>
+					<li><strong>Phương thức:</strong> Chuyển khoản ngân hàng, hoàn về ví điện tử, hoặc hoàn qua cổng thanh toán gốc</li>
+					<li><strong>Phí vận chuyển hoàn:</strong> Shop chịu nếu lỗi từ phía shop; khách chịu nếu đổi ý</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Liên hệ đổi trả</h2>
+				<ul class="list-none space-y-2">
+					<li>Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline font-medium"><?php echo esc_html( wz_config( 'phone' ) ); ?></a></li>
+					<li>Email: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a></li>
+					<li>Địa chỉ gửi hàng: <?php echo esc_html( wz_config( 'address' ) ); ?></li>
+				</ul>
+			</section>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

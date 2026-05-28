@@ -1,0 +1,92 @@
+<?php
+/**
+ * Page: Hướng dẫn mua hàng
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Hướng dẫn mua hàng</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-8">Hướng dẫn mua hàng</h1>
+
+			<section class="mb-10">
+				<h2 class="text-xl font-semibold mb-6">Quy trình đặt hàng</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<?php
+					$steps = array(
+						array( 'num' => '01', 'title' => 'Chọn sản phẩm', 'desc' => 'Tìm kiếm hoặc duyệt danh mục, chọn sản phẩm phù hợp, xem chi tiết và đánh giá.' ),
+						array( 'num' => '02', 'title' => 'Thêm vào giỏ hàng', 'desc' => 'Chọn số lượng, màu sắc, kích thước (nếu có) rồi nhấn "Thêm vào giỏ hàng".' ),
+						array( 'num' => '03', 'title' => 'Thanh toán', 'desc' => 'Kiểm tra giỏ hàng, nhập địa chỉ giao hàng, chọn phương thức thanh toán và xác nhận đơn.' ),
+						array( 'num' => '04', 'title' => 'Nhận hàng', 'desc' => 'Theo dõi đơn hàng qua email/SMS. Kiểm tra hàng kỹ trước khi ký nhận.' ),
+					);
+					foreach ( $steps as $step ) :
+					?>
+					<div class="bg-gray-50 rounded-xl p-5">
+						<div class="text-3xl font-bold text-primary/30 mb-2"><?php echo esc_html( $step['num'] ); ?></div>
+						<h3 class="font-semibold mb-1"><?php echo esc_html( $step['title'] ); ?></h3>
+						<p class="text-sm text-gray-600"><?php echo esc_html( $step['desc'] ); ?></p>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Phương thức thanh toán</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li><strong>COD (Thanh toán khi nhận hàng):</strong> Trả tiền mặt cho shipper khi nhận hàng</li>
+					<li><strong>Chuyển khoản ngân hàng:</strong> Chuyển khoản trước, đơn được xử lý sau khi nhận tiền</li>
+					<li><strong>Ví điện tử:</strong> MoMo, ZaloPay, VNPay (nếu có)</li>
+					<li><strong>Thẻ tín dụng/ghi nợ:</strong> Visa, Mastercard qua cổng thanh toán bảo mật</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Theo dõi đơn hàng</h2>
+				<p>Sau khi đặt hàng thành công, bạn sẽ nhận email xác nhận. Khi đơn được giao cho đơn vị vận chuyển, bạn nhận thêm SMS/email kèm mã vận đơn.</p>
+				<p class="mt-2">Theo dõi trực tiếp tại <a href="<?php echo esc_url( home_url( '/tai-khoan/don-hang' ) ); ?>" class="text-primary hover:underline">trang quản lý đơn hàng</a>.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Câu hỏi thường gặp</h2>
+				<div class="space-y-4">
+					<details class="border border-gray-200 rounded-lg">
+						<summary class="px-4 py-3 font-medium cursor-pointer hover:bg-gray-50">Tôi có thể hủy đơn hàng không?</summary>
+						<div class="px-4 pb-4 text-sm text-gray-600">Bạn có thể hủy đơn trong vòng 1 giờ sau khi đặt, trước khi đơn được xử lý. Liên hệ hotline để được hỗ trợ.</div>
+					</details>
+					<details class="border border-gray-200 rounded-lg">
+						<summary class="px-4 py-3 font-medium cursor-pointer hover:bg-gray-50">Đặt hàng không cần tài khoản được không?</summary>
+						<div class="px-4 pb-4 text-sm text-gray-600">Có, bạn có thể đặt hàng với tư cách khách. Tuy nhiên, tạo tài khoản giúp bạn theo dõi đơn hàng và tích điểm thưởng dễ dàng hơn.</div>
+					</details>
+					<details class="border border-gray-200 rounded-lg">
+						<summary class="px-4 py-3 font-medium cursor-pointer hover:bg-gray-50">Sản phẩm có bảo hành không?</summary>
+						<div class="px-4 pb-4 text-sm text-gray-600">Thông tin bảo hành được ghi rõ trên trang chi tiết từng sản phẩm. Liên hệ chúng tôi nếu cần hỗ trợ bảo hành.</div>
+					</details>
+				</div>
+			</section>
+
+			<div class="bg-primary/5 rounded-xl p-5 mt-8">
+				<p class="font-medium">Cần hỗ trợ thêm?</p>
+				<p class="text-sm text-gray-600 mt-1">
+					Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> &bull;
+					<a href="<?php echo esc_url( home_url( '/lien-he' ) ); ?>" class="text-primary hover:underline">Trang liên hệ</a>
+				</p>
+			</div>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

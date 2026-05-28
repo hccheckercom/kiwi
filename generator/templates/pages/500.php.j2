@@ -1,0 +1,38 @@
+<?php
+/**
+ * 500 Server Error
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+status_header( 500 );
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-16 text-center">
+		<div class="max-w-md mx-auto">
+			<p class="text-8xl font-bold text-gray-200 mb-4" aria-hidden="true">500</p>
+			<h1 class="text-2xl font-bold mb-3">Lỗi máy chủ</h1>
+			<p class="text-gray-600 mb-8">Đã xảy ra lỗi không mong muốn. Chúng tôi đang khắc phục sự cố. Vui lòng thử lại sau ít phút.</p>
+			<div class="flex flex-col sm:flex-row gap-3 justify-center">
+				<button type="button" onclick="window.location.reload()"
+				        class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
+					Thử lại
+				</button>
+				<a href="<?php echo esc_url( home_url() ); ?>"
+				   class="px-6 py-3 border border-gray-300 rounded-lg font-medium hover:border-primary hover:text-primary transition-colors">
+					Về trang chủ
+				</a>
+			</div>
+			<p class="text-sm text-gray-500 mt-6">
+				Nếu lỗi tiếp tục, liên hệ <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a>
+			</p>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

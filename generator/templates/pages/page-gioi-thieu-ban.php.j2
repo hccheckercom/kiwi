@@ -1,0 +1,80 @@
+<?php
+/**
+ * Page: Giới thiệu bạn
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+$user_id  = get_current_user_id();
+$ref_code = $user_id && function_exists( 'wz_get_referral_code' ) ? wz_get_referral_code( $user_id ) : '';
+$ref_url  = $ref_code ? add_query_arg( 'ref', $ref_code, home_url( '/dang-ky' ) ) : '';
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Giới thiệu bạn</span>
+		</nav>
+
+		<div class="max-w-2xl mx-auto text-center">
+			<h1 class="text-3xl font-bold mb-3">Giới thiệu bạn bè</h1>
+			<p class="text-gray-600 mb-10">Giới thiệu bạn bè mua sắm — cả hai cùng nhận ưu đãi!</p>
+
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+				<?php
+				$steps = array(
+					array( 'icon' => 'share', 'title' => 'Chia sẻ link', 'desc' => 'Sao chép link giới thiệu của bạn và chia sẻ cho bạn bè' ),
+					array( 'icon' => 'person_add', 'title' => 'Bạn đăng ký', 'desc' => 'Bạn bè đăng ký tài khoản qua link của bạn' ),
+					array( 'icon' => 'card_giftcard', 'title' => 'Nhận thưởng', 'desc' => 'Cả hai nhận 50 điểm thưởng khi bạn bè đặt đơn đầu tiên' ),
+				);
+				foreach ( $steps as $step ) :
+				?>
+				<div class="bg-gray-50 rounded-xl p-5">
+					<span class="material-icons text-primary text-3xl mb-3 block" aria-hidden="true"><?php echo esc_html( $step['icon'] ); ?></span>
+					<h3 class="font-semibold mb-1"><?php echo esc_html( $step['title'] ); ?></h3>
+					<p class="text-sm text-gray-600"><?php echo esc_html( $step['desc'] ); ?></p>
+				</div>
+				<?php endforeach; ?>
+			</div>
+
+			<?php if ( is_user_logged_in() && $ref_url ) : ?>
+			<div class="bg-white rounded-xl shadow-sm p-6">
+				<p class="font-medium mb-3">Link giới thiệu của bạn</p>
+				<div class="flex gap-2">
+					<input type="text" id="wz-ref-url" value="<?php echo esc_attr( $ref_url ); ?>" readonly
+					       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:outline-none"
+					       aria-label="Link giới thiệu">
+					<button type="button" id="wz-copy-ref"
+					        class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+						Sao chép
+					</button>
+				</div>
+			</div>
+			<script>
+			document.getElementById('wz-copy-ref').addEventListener('click', function() {
+				var input = document.getElementById('wz-ref-url');
+				navigator.clipboard.writeText(input.value).then(function() {
+					var btn = document.getElementById('wz-copy-ref');
+					btn.textContent = 'Đã sao chép!';
+					setTimeout(function() { btn.textContent = 'Sao chép'; }, 2000);
+				});
+			});
+			</script>
+			<?php else : ?>
+			<a href="<?php echo esc_url( home_url( '/dang-nhap' ) ); ?>"
+			   class="inline-block px-8 py-3 bg-primary text-white rounded-xl font-semibold hover:opacity-90 transition-opacity">
+				Đăng nhập để lấy link giới thiệu
+			</a>
+			<?php endif; ?>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

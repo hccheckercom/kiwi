@@ -42,7 +42,8 @@ get_header();
 		<div class="bg-white rounded-lg shadow-lg p-8">
 			<?php
 			// Display error messages
-			if ( isset( $_GET['error'] ) ) {
+			$error_key = isset( $_GET['error'] ) ? sanitize_key( wp_unslash( $_GET['error'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( $error_key ) {
 				$error_messages = [
 					'email_exists' => 'Email này đã được đăng ký.',
 					'invalid_email' => 'Email không hợp lệ.',
@@ -52,8 +53,7 @@ get_header();
 					'terms_required' => 'Bạn phải đồng ý với điều khoản sử dụng.',
 					'registration_failed' => 'Đăng ký thất bại. Vui lòng thử lại.',
 				];
-				$error_code = sanitize_text_field( $_GET['error'] );
-				$error_message = $error_messages[ $error_code ] ?? 'Có lỗi xảy ra. Vui lòng thử lại.';
+				$error_message = $error_messages[ $error_key ] ?? 'Có lỗi xảy ra. Vui lòng thử lại.';
 				?>
 				<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
 					<?php echo esc_html( $error_message ); ?>

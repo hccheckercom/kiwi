@@ -1,0 +1,102 @@
+<?php
+/**
+ * Template Name: Điều khoản sử dụng
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Điều khoản sử dụng</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-2">Điều khoản sử dụng</h1>
+			<p class="text-sm text-gray-500 mb-8">Cập nhật lần cuối: <?php echo esc_html( date_i18n( 'd/m/Y' ) ); ?></p>
+
+			<p class="mb-6">Chào mừng bạn đến với <strong><?php echo esc_html( wz_config( 'name' ) ); ?></strong> tại <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="text-primary hover:underline"><?php echo esc_url( home_url( '/' ) ); ?></a>. Bằng việc truy cập và sử dụng website, bạn đồng ý tuân thủ các điều khoản dưới đây.</p>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Điều kiện sử dụng</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Bạn phải đủ 18 tuổi hoặc có sự đồng ý của phụ huynh/người giám hộ</li>
+					<li>Cung cấp thông tin chính xác, đầy đủ khi đăng ký và đặt hàng</li>
+					<li>Không sử dụng website cho mục đích bất hợp pháp hoặc gây hại</li>
+					<li>Không can thiệp vào hoạt động bình thường của website</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Tài khoản người dùng</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Bạn chịu trách nhiệm bảo mật thông tin đăng nhập tài khoản</li>
+					<li>Thông báo ngay cho chúng tôi khi phát hiện truy cập trái phép</li>
+					<li>Chúng tôi có quyền khóa tài khoản vi phạm điều khoản mà không cần báo trước</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Sản phẩm &amp; Giá cả</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Giá sản phẩm có thể thay đổi mà không cần thông báo trước</li>
+					<li>Hình ảnh sản phẩm mang tính minh họa, màu sắc thực tế có thể khác nhẹ</li>
+					<li>Chúng tôi có quyền từ chối đơn hàng trong trường hợp hết hàng hoặc lỗi giá</li>
+					<li>Giá hiển thị đã bao gồm VAT (trừ khi có ghi chú khác)</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Thanh toán</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Chúng tôi chấp nhận: chuyển khoản ngân hàng, ví điện tử, COD, thẻ tín dụng/ghi nợ</li>
+					<li>Tiền được trừ tại thời điểm xác nhận đơn hàng thành công</li>
+					<li>Đơn hàng thanh toán thất bại sẽ bị hủy sau 24 giờ nếu không thanh toán lại</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Sở hữu trí tuệ</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Toàn bộ nội dung website (hình ảnh, văn bản, logo) thuộc sở hữu của <?php echo esc_html( wz_config( 'name' ) ); ?></li>
+					<li>Không được sao chép, phân phối, hay sử dụng thương mại khi chưa được phép bằng văn bản</li>
+					<li>Logo và thương hiệu được bảo hộ theo pháp luật Việt Nam</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Giới hạn trách nhiệm</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Chúng tôi không chịu trách nhiệm cho các thiệt hại gián tiếp phát sinh từ việc sử dụng website</li>
+					<li>Không chịu trách nhiệm trong trường hợp bất khả kháng (thiên tai, dịch bệnh, sự cố kỹ thuật)</li>
+					<li>Mức bồi thường tối đa không vượt quá giá trị đơn hàng liên quan</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Luật áp dụng</h2>
+				<p>Các điều khoản này được điều chỉnh bởi pháp luật Việt Nam. Mọi tranh chấp sẽ được giải quyết theo thứ tự: thương lượng → hòa giải → tòa án có thẩm quyền tại Việt Nam.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Liên hệ</h2>
+				<ul class="list-none space-y-2">
+					<li>Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline font-medium"><?php echo esc_html( wz_config( 'phone' ) ); ?></a></li>
+					<li>Email: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a></li>
+					<li>Địa chỉ: <?php echo esc_html( wz_config( 'address' ) ); ?></li>
+				</ul>
+			</section>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

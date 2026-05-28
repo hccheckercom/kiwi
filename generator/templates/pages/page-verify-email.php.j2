@@ -1,0 +1,66 @@
+<?php
+/**
+ * Template Name: Verify Email
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-12">
+		<div class="max-w-md mx-auto text-center">
+			<?php
+			$token  = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
+			$status = '';
+
+			if ( $token && function_exists( 'wz_verify_email' ) ) {
+				$result = wz_verify_email( $token );
+				$status = $result ? 'success' : 'error';
+			}
+			?>
+
+			<?php if ( $status === 'success' ) : ?>
+				<div class="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+					<svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+					</svg>
+				</div>
+				<h1 class="text-2xl font-bold mb-4">Xác thực thành công!</h1>
+				<p class="text-gray-600 mb-6">Email của bạn đã được xác thực. Bạn có thể đăng nhập ngay.</p>
+				<a href="<?php echo esc_url( home_url( '/login' ) ); ?>"
+				   class="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+					Đăng nhập
+				</a>
+
+			<?php elseif ( $status === 'error' ) : ?>
+				<div class="w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
+					<svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+					</svg>
+				</div>
+				<h1 class="text-2xl font-bold mb-4">Xác thực thất bại</h1>
+				<p class="text-gray-600 mb-6">Link xác thực không hợp lệ hoặc đã hết hạn.</p>
+				<a href="<?php echo esc_url( home_url( '/register' ) ); ?>"
+				   class="inline-block px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+					Đăng ký lại
+				</a>
+
+			<?php else : ?>
+				<div class="w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center">
+					<svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+					</svg>
+				</div>
+				<h1 class="text-2xl font-bold mb-4">Kiểm tra email</h1>
+				<p class="text-gray-600 mb-6">Chúng tôi đã gửi email xác thực. Vui lòng kiểm tra hộp thư và nhấn vào link xác thực.</p>
+				<p class="text-sm text-gray-500">Không nhận được email? Kiểm tra thư mục spam hoặc thử đăng ký lại.</p>
+			<?php endif; ?>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

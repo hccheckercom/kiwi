@@ -2,7 +2,7 @@
 
 > Auto-generated. Do NOT edit manually. Run `python tools/rebuild_index.py`.
 
-**Total: 595** | CRITICAL: 144 | HIGH: 355 | INFO: 18 | MEDIUM: 3 | SUGGEST: 75
+**Total: 598** | CRITICAL: 146 | HIGH: 356 | INFO: 18 | MEDIUM: 3 | SUGGEST: 75
 
 ## accessibility
 
@@ -434,31 +434,32 @@
 |----|-----|---------|---------|
 | LES-001 | CRIT | `is_user_logged_in` | Account template thiếu is_user_logged_in() gate |
 | LES-002 | CRIT | `wz_get_order_customer|get_current_user_i...` | order-detail.php không verify order thuộc về current user |
-| LES-016 | CRIT | `\$_GET\['order_id'\]|\$_POST\['order_id'...` | Order-related page thiếu IDOR check (user_id !== current use |
+| LES-016 | CRIT | `$_GET[...]` | Order-related page thiếu IDOR check (user_id !== current use |
 | LES-017 | CRIT | `wz_get_shop_url\(|wz_get_myaccount_url\(...` | wz_* utility function gọi trực tiếp trong template không có  |
-| LES-030 | CRIT | `\$_POST\['password'\]\s*\?\?` | $_POST['password'] thiếu wp_unslash() trong AJAX handler |
-| LES-039 | CRIT | `fetch\s*\([^)]*cart|fetch\s*\([^)]*check...` | Cart/Checkout REST API thiếu nonce header — mọi action bị re |
+| LES-030 | CRIT | `[{'pattern': '$_POST[...]'}, {'pattern-n...` | $_POST['password'] thiếu wp_unslash() trong AJAX handler |
+| LES-039 | CRIT | `fetch(...)` | Cart/Checkout REST API thiếu nonce header — mọi action bị re |
 | LES-045 | CRIT | `\$_(GET|POST|REQUEST|COOKIE)\[` | Raw $_GET/$_POST without sanitization — injection risk |
 | LES-055 | CRIT | `wp_ajax_wz_change_password` | AJAX handler thiếu cho custom form (wp_ajax_* chưa đăng ký) |
 | LES-057 | CRIT | `^function\s+wezone_\w+` | Duplicate function declaration across multiple inc/*.php — P |
 | LES-064 | CRIT | `check_ajax_referer|wp_verify_nonce` | AJAX handler đăng ký nhưng thiếu check_ajax_referer() bên tr |
 | LES-071 | CRIT | `'permission_callback'\s*=>\s*'__return_t...` | Write REST endpoint (POST/PUT/DELETE) public không auth — ai |
-| LES-074 | CRIT | `WP_REST_Response\s*\([^)]*(?:password|se...` | REST response chứa sensitive data (password/secret/token) —  |
+| LES-074 | CRIT | `WP_REST_Response(...)` | REST response chứa sensitive data (password/secret/token) —  |
 | LES-075 | CRIT | `WP_REST_Server::CREATABLE|WP_REST_Server...` | Write REST route thiếu nonce verify trong handler — CSRF khi |
-| LES-076 | CRIT | `'\$wpdb->(?:query|get_results|get_row|ge...` | SQL query không dùng $wpdb->prepare() — SQL injection risk |
+| LES-076 | CRIT | `'$wpdb->(?:query|get_results|get_row|get...` | SQL query không dùng $wpdb->prepare() — SQL injection risk |
 | LES-078 | CRIT | `DROP TABLE|TRUNCATE TABLE` | DROP/TRUNCATE TABLE ngoài migration file — data loss risk nế |
 | LES-081 | CRIT | `verify_ipn|verify_signature|verify_hmac|...` | IPN/webhook handler thiếu verify signature/amount/status — f |
-| LES-213 | CRIT | `register_rest_route.*(?:'permission_call...` | WordPress plugin REST endpoint without permission callback — |
-| LES-214 | CRIT | `\$wpdb->(?:query|get_results|get_row|get...` | wpdb query without prepare — SQL injection vulnerability |
-| LES-309 | CRIT | `foreach.*\$ids.*\{[\s\S]*?\$wpdb->(?:upd...` | Admin bulk action without DB transaction — partial state on  |
-| LES-311 | CRIT | `get_option\s*\(\s*['"]wezone_admin_[^)]+...` | Admin settings stored XSS — unescaped output of admin-saved  |
+| LES-124 | CRIT | `` | AJAX nonce mismatch — read-only endpoint trả 403 vì JS không |
+| LES-213 | CRIT | `register_rest_route(...)` | WordPress plugin REST endpoint without permission callback — |
+| LES-214 | CRIT | `$wpdb->(?:query|get_results|get_row|get_...` | wpdb query without prepare — SQL injection vulnerability |
+| LES-309 | CRIT | `foreach.*$ids.*{[sS]*?$wpdb->(?:update|d...` | Admin bulk action without DB transaction — partial state on  |
+| LES-311 | CRIT | `get_option(...)` | Admin settings stored XSS — unescaped output of admin-saved  |
 | LES-319 | CRIT | `move_uploaded_file|wp_handle_upload|medi...` | Admin file upload MIME type bypass — extension check only |
 | LES-325 | CRIT | `setcookie|set_cookie|wp_set_auth_cookie|...` | Admin session fixation — cookie scope too broad or missing s |
 | LES-330 | CRIT | `if\s*\(\s*''\s*===\s*\$current_password\...` | REST API password endpoint must reject empty current_passwor |
 | LES-345 | CRIT | `sanitize_textarea_field.*\$_POST|sanitiz...` | sanitize_textarea_field() trên JSON payload làm hỏng dữ liệu |
 | LES-372 | CRIT | `max\s*\(\s*0.*\$.*rate|abs\s*\(\s*\$.*ra...` | Cart shipping rate must validate non-negative — negative rat |
 | LES-373 | CRIT | `MAX_CART|max_items|cart_limit|count\s*\(...` | Cart must enforce max items/qty limit — unbounded cart is Do |
-| LES-392 | CRIT | `\bwezone_is_active\s*\(` | wezone_is_active() must be wrapped in function_exists() — fa |
+| LES-392 | CRIT | `[{'pattern': 'bwezone_is_active(...)'}, ...` | wezone_is_active() must be wrapped in function_exists() — fa |
 | LES-395 | CRIT | `'note'\s*=>\s*\$note` | OrderHistory note stored without sanitization — stored XSS |
 | LES-400 | CRIT | `validate\(\s*\$code\s*,\s*\$subtotal\s*\...` | wz_apply_coupon() must forward user_id to validate() — per-u |
 | LES-401 | CRIT | `\$coupon_row\s*=\s*\$engine->getByCode` | wz_apply_coupon() TOCTOU — getByCode() can return null betwe |
@@ -471,42 +472,43 @@
 | LES-468 | CRIT | `class.*Controller.*\{[\s\S]{0,500}public...` | REST controller methods must verify current_user_can() even  |
 | LES-472 | CRIT | `get_option\([^)]*secret|get_option\([^)]...` | S3/API secrets must use constants or encryption, not plainte |
 | LES-475 | CRIT | `public function __construct\([^)]*string...` | Constructor path parameters must validate with realpath() to |
-| LES-484 | CRIT | `echo\s+wp_kses_post\s*\(\s*\$[a-z_]+\s*\...` | Tracking plugin custom code allows script injection via admi |
-| LES-509 | CRIT | `function\s+sideload\s*\([^)]*\$url[^)]*\...` | Image sideload thiáº¿u file type validation â€” arbitrary fi |
-| LES-510 | CRIT | `function\s+add\s*\([^)]*\$old_url[^)]*\$...` | Redirect add() thiáº¿u URL validation â€” open redirect vuln |
-| LES-514 | CRIT | `register_rest_route\([^)]+\)` | REST API Missing Permission Callback |
+| LES-484 | CRIT | `echos+wp_kses_post(...)` | Tracking plugin custom code allows script injection via admi |
+| LES-509 | CRIT | `functions+sideload(...)` | Image sideload thiáº¿u file type validation â€” arbitrary fi |
+| LES-510 | CRIT | `functions+add(...)` | Redirect add() thiáº¿u URL validation â€” open redirect vuln |
+| LES-514 | CRIT | `register_rest_route(...)` | REST API Missing Permission Callback |
 | LES-517 | CRIT | `class \w+Admin[^{]*\{(?:(?!current_user_...` | Admin Handler Missing Capability Check |
 | LES-521 | CRIT | `permission_callback.*__return_true` | REST API Public Endpoint Without Rate Limiting |
-| LES-031 | HIGH | `wp_mail\s*\(` | wp_mail() hardcoded subject/body không dùng wz_config() |
+| LES-TEST-SEMGREP | CRIT | `wp_mail(...)` | Test Semgrep Integration - wp_mail without nonce |
+| LES-031 | HIGH | `[{'pattern': 'wp_mail(...)'}, {'pattern-...` | wp_mail() hardcoded subject/body không dùng wz_config() |
 | LES-050 | HIGH | `new WP_Query` | WP_Query without wp_reset_postdata — corrupts global post da |
 | LES-066 | HIGH | `'defined\s*\(\s*[''']WEZONE_"` | Plugin constants `define()` thiếu `defined()` guard — Warnin |
-| LES-070 | HIGH | `register_rest_route` | REST route string arg thiếu sanitize_callback — raw user inp |
+| LES-070 | HIGH | `register_rest_route(...)` | REST route string arg thiếu sanitize_callback — raw user inp |
 | LES-072 | HIGH | `ApiRateLimit|rate_limit|throttle|X-RateL...` | Public REST endpoint thiếu rate limit — DDoS/brute-force ris |
-| LES-073 | HIGH | `\$request->get_param\s*\([^)]+\)\s*;` | REST get_param() dùng raw không cast type — type confusion r |
-| LES-077 | HIGH | `'\$wpdb->prepare\s*\([^)]*\'[^"]*\$"` | $wpdb->prepare() nhưng interpolate variable trong format str |
-| LES-079 | HIGH | `\$wpdb->(?:insert|update|delete|replace|...` | DB operation có thể thiếu $wpdb->prefix — multisite broken |
+| LES-073 | HIGH | `$request->get_param(...)` | REST get_param() dùng raw không cast type — type confusion r |
+| LES-077 | HIGH | `'$wpdb->prepare(...)` | $wpdb->prepare() nhưng interpolate variable trong format str |
+| LES-079 | HIGH | `$wpdb->(?:insert|update|delete|replace|q...` | DB operation có thể thiếu $wpdb->prefix — multisite broken |
 | LES-085 | HIGH | `(?:redirect|return_url|callback_url|ipn_...` | Payment redirect URL không esc_url() — open redirect risk sa |
-| LES-094 | HIGH | `catch\s*\([^)]*\)\s*\{\s*\}` | Empty catch block — exception bị nuốt, bug ẩn không debug đư |
+| LES-094 | HIGH | `catch(...)` | Empty catch block — exception bị nuốt, bug ẩn không debug đư |
 | LES-215 | HIGH | `check_ajax_referer|wp_verify_nonce|verif...` | AJAX handler without nonce verification — CSRF attack vector |
 | LES-312 | HIGH | `wp_create_nonce|wp_localize_script.*nonc...` | Admin SPA nonce expires after 24h — silent 403 on long sessi |
 | LES-314 | HIGH | `LIKE\s*['"]%.*\$|LIKE.*\$wpdb->prepare.*...` | Admin LIKE query injection — search input with % and _ wildc |
 | LES-323 | HIGH | `permission_callback.*manage_options` | Admin capability check too broad — manage_options for all ac |
-| LES-324 | HIGH | `wp_mail\s*\(|wz_send_notification|send_p...` | Admin notification rate limit missing — spam flood to custom |
+| LES-324 | HIGH | `wp_mail(...)` | Admin notification rate limit missing — spam flood to custom |
 | LES-326 | HIGH | `delete_option|drop_table|update.*payment...` | Admin sensitive actions without re-authentication — no 2FA/p |
 | LES-328 | HIGH | `dashboard/stats|dashboard/revenue|dashbo...` | Admin dashboard widget data leak — all stats visible regardl |
 | LES-331 | HIGH | `\$new_password\s*===\s*\$current_passwor...` | REST API password endpoint must reject new_password === curr |
 | LES-334 | HIGH | `->exists\(\)` | REST API must guard wp_get_current_user()->exists() after re |
 | LES-335 | HIGH | `wp_create_nonce` | REST API password endpoint must return fresh nonce after pas |
-| LES-346 | HIGH | `check_ajax_referer\s*\(\s*['"]wz_save_de...` | Nonce reuse — nhiều AJAX action dùng chung 1 nonce |
+| LES-346 | HIGH | `check_ajax_referer(...)` | Nonce reuse — nhiều AJAX action dùng chung 1 nonce |
 | LES-349 | HIGH | `\['tokens'\]\s*\?\?\s*array\(\)` | Missing type validation sau json_decode từ get_option |
 | LES-362 | HIGH | `mask_email|wz_mask_email|str_repeat.*\*|...` | REST API must not expose raw customer email in response |
 | LES-374 | HIGH | `cached_key\s*=\s*null` | SessionHandler destroy() must clear cached_key to prevent st |
 | LES-402 | HIGH | `qty\s*<=\s*0|qty\s*<\s*1|\$qty\s*<=\s*0|...` | wz_cart_add() must reject qty <= 0 — negative qty enables pr |
 | LES-403 | HIGH | `in_array\(\s*\$type|array\(\s*'info'\s*,...` | wz_add_notice() must whitelist $type — arbitrary type enable |
 | LES-411 | HIGH | `public static function (enable|disable|u...` | Static utility methods modifying state must check capabiliti |
-| LES-412 | HIGH | `update_option\s*\(\s*["']\w+_\{\$|delete...` | Option name injection via unsanitized string interpolation |
+| LES-412 | HIGH | `update_option(...)` | Option name injection via unsanitized string interpolation |
 | LES-434 | HIGH | `locate_template\(.*\$` | Template path traversal via locate_template() with DB-derive |
-| LES-438 | HIGH | `wz_log\s*\(.*\$.*email` | wz_log must mask PII (email, phone) before logging |
+| LES-438 | HIGH | `wz_log(...)` | wz_log must mask PII (email, phone) before logging |
 | LES-440 | HIGH | `'permission'\s*=>\s*'public'` | Public REST endpoints must have rate limiting for abuse prev |
 | LES-441 | HIGH | `\{\$\w+\}\s*=\s*\{\$\w+\}|UPDATE.*\{\$\w...` | SQL column name must use allowlist validation, never interpo |
 | LES-451 | HIGH | `'__return_true'` | Public REST endpoint __return_true without rate limiting — a |
@@ -514,17 +516,17 @@
 | LES-455 | HIGH | `get_param.*per_page|per_page.*get_param` | Missing per_page bounds check in REST list endpoint — allows |
 | LES-470 | HIGH | `strtotime\([^)]*get_option\(|strtotime\(...` | strtotime() with user input needs validation to prevent comm |
 | LES-485 | HIGH | `\$_COOKIE\[[^\]]+\]\s*\?\?` | $_COOKIE direct access without sanitization in consent check |
-| LES-486 | HIGH | `isset\s*\(\s*\$_GET\[[^\]]+consent[^\]]*...` | GDPR consent bypass via unsanitized $_GET parameter |
+| LES-486 | HIGH | `isset(...)` | GDPR consent bypass via unsanitized $_GET parameter |
 | LES-500 | HIGH | `permission_callback.*__return_true` | REST API public endpoint without rate limiting or nonce |
-| LES-503 | HIGH | `\$\w+\s*=\s*[^?]*\s*json_decode\s*\([^;]...` | JSON decode without error check causes silent data loss |
-| LES-512 | HIGH | `function\s+check_redirect\s*\([^)]*\).*?...` | Redirect check thiáº¿u rate limiting â€” DoS via redirect ta |
-| LES-513 | HIGH | `function\s+import_(?:products|posts)\s*\...` | Import batch size khÃ´ng validate â€” memory exhaustion via  |
+| LES-503 | HIGH | `$w+s*=s*[^?]*s*json_decode(...)` | JSON decode without error check causes silent data loss |
+| LES-512 | HIGH | `functions+check_redirect(...)` | Redirect check thiáº¿u rate limiting â€” DoS via redirect ta |
+| LES-513 | HIGH | `functions+import_(?:products|posts)(...)` | Import batch size khÃ´ng validate â€” memory exhaustion via  |
 | LES-523 | HIGH | `wp_remote_(get|post)\([^)]+\)(?![^;]*tim...` | HTTP Request Without Timeout |
-| LES-524 | HIGH | `\$\w+\s*=\s*[^?]*file_get_contents\s*\(\...` | file_get_contents Without Size/Existence Check |
-| LES-341 | SUGG | `extract\s*\(\s*\$data` | extract() in email template render — variable shadowing risk |
+| LES-524 | HIGH | `$w+s*=s*[^?]*file_get_contents(...)` | file_get_contents Without Size/Existence Check |
+| LES-341 | SUGG | `extract(...)` | extract() in email template render — variable shadowing risk |
 | LES-381 | MEDI | `wz_rate_limit|throttle|rate_limit.*cart` | Public GET /cart endpoint needs rate limiting — abuse vector |
 | LES-420 | INFO | `add_action\([^,]+,\s*array\(\s*\$this,\s...` | Hook callbacks don't need nonce checks (false positive exclu |
-| LES-444 | SUGG | `setcookie\s*\(.*,\s*false\s*\)\s*;` | Cookie set with httpOnly=false — accessible to XSS scripts |
+| LES-444 | SUGG | `setcookie(...)` | Cookie set with httpOnly=false — accessible to XSS scripts |
 
 ## placeholder
 
@@ -557,6 +559,7 @@
 | LES-630 | HIGH | `C:/Users/\w+|C:\\\\Users\\\\` | Hardcoded Windows user path |
 | LES-631 | HIGH | `args\.get\(\s*"[^"]*"\s*,\s*\d+\s*\)` | MCP/API args not cast to expected type |
 | LES-634 | HIGH | `except\s*:\s*$` | Bare except without exception type |
+| LES-727 | HIGH | `\.get\([\x27"]pattern[\x27"]\s*,\s*[\x27...` | Pattern field from YAML frontmatter may be list, not string |
 | LES-510 | SUGG | `def\s+\w+\s*\([^)]*\)\s*:` | Missing Type Hints in Function Signatures |
 | LES-513 | INFO | `(open\(|connect\(|acquire\().*\n(?!.*wit...` | Context Manager Not Used for Resource Cleanup |
 | LES-517 | SUGG | `try:\s*\n\s+\w+\[.*\]\s*\n\s+except\s+Ke...` | Dictionary Key Check with `in` Instead of Exception Handling |

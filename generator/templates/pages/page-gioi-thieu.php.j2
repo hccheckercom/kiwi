@@ -1,0 +1,73 @@
+<?php
+/**
+ * Page: Giới thiệu
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Giới thiệu</span>
+		</nav>
+
+		<div class="max-w-4xl mx-auto">
+			<h1 class="text-3xl font-bold mb-4">Về <?php echo esc_html( wz_config( 'name' ) ); ?></h1>
+
+			<div class="prose max-w-none">
+				<?php
+				$about_content = function_exists( 'wz_config' ) ? wz_config( 'about_content' ) : '';
+				if ( $about_content ) :
+					echo wp_kses_post( $about_content );
+				else :
+				?>
+				<p class="text-lg text-gray-600 mb-8"><?php echo esc_html( wz_config( 'tagline' ) ?: 'Chào mừng bạn đến với ' . wz_config( 'name' ) ); ?></p>
+
+				<section class="mb-10">
+					<h2 class="text-2xl font-semibold mb-4">Câu chuyện của chúng tôi</h2>
+					<p class="text-gray-700"><?php echo esc_html( wz_config( 'name' ) ); ?> được thành lập với sứ mệnh mang đến những sản phẩm chất lượng cao với giá cả hợp lý, phục vụ nhu cầu của khách hàng Việt Nam.</p>
+				</section>
+
+				<section class="mb-10">
+					<h2 class="text-2xl font-semibold mb-6">Tại sao chọn chúng tôi?</h2>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+						<?php
+						$reasons = array(
+							array( 'icon' => 'verified', 'title' => 'Sản phẩm chính hãng', 'desc' => '100% hàng chính hãng, có tem bảo hành rõ ràng' ),
+							array( 'icon' => 'local_shipping', 'title' => 'Giao hàng nhanh', 'desc' => 'Giao hàng toàn quốc, nội thành 1-2 ngày' ),
+							array( 'icon' => 'support_agent', 'title' => 'Hỗ trợ tận tâm', 'desc' => 'Đội ngũ hỗ trợ 8:00 - 21:00 mỗi ngày' ),
+						);
+						foreach ( $reasons as $reason ) :
+						?>
+						<div class="text-center p-6 bg-gray-50 rounded-xl">
+							<span class="material-icons text-primary text-4xl mb-3 block" aria-hidden="true"><?php echo esc_html( $reason['icon'] ); ?></span>
+							<h3 class="font-semibold mb-2"><?php echo esc_html( $reason['title'] ); ?></h3>
+							<p class="text-sm text-gray-600"><?php echo esc_html( $reason['desc'] ); ?></p>
+						</div>
+						<?php endforeach; ?>
+					</div>
+				</section>
+				<?php endif; ?>
+
+				<section class="mb-8">
+					<h2 class="text-2xl font-semibold mb-4">Thông tin liên hệ</h2>
+					<ul class="list-none space-y-2 text-gray-700">
+						<li>Địa chỉ: <?php echo esc_html( wz_config( 'address' ) ); ?></li>
+						<li>Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a></li>
+						<li>Email: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a></li>
+					</ul>
+				</section>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

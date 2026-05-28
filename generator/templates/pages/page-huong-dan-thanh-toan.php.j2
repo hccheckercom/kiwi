@@ -1,0 +1,76 @@
+<?php
+/**
+ * Page: Hướng dẫn thanh toán
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Hướng dẫn thanh toán</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-8">Hướng dẫn thanh toán</h1>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Các phương thức thanh toán</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<?php
+					$methods = array(
+						array( 'icon' => 'payments', 'title' => 'COD (Tiền mặt)', 'desc' => 'Thanh toán khi nhận hàng. Áp dụng cho tất cả đơn hàng trong nước.' ),
+						array( 'icon' => 'account_balance', 'title' => 'Chuyển khoản', 'desc' => 'Chuyển khoản ngân hàng trước khi giao hàng. Xem hướng dẫn chi tiết.' ),
+						array( 'icon' => 'phone_iphone', 'title' => 'Ví điện tử', 'desc' => 'MoMo, ZaloPay, VNPay — thanh toán nhanh, an toàn.' ),
+						array( 'icon' => 'credit_card', 'title' => 'Thẻ tín dụng', 'desc' => 'Visa, Mastercard qua cổng thanh toán bảo mật 3D Secure.' ),
+					);
+					foreach ( $methods as $m ) :
+					?>
+					<div class="bg-gray-50 rounded-xl p-4 flex gap-3">
+						<span class="material-icons text-primary text-2xl flex-shrink-0 mt-0.5" aria-hidden="true"><?php echo esc_html( $m['icon'] ); ?></span>
+						<div>
+							<h3 class="font-semibold text-sm"><?php echo esc_html( $m['title'] ); ?></h3>
+							<p class="text-sm text-gray-600 mt-0.5"><?php echo esc_html( $m['desc'] ); ?></p>
+						</div>
+					</div>
+					<?php endforeach; ?>
+				</div>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Quy trình thanh toán</h2>
+				<ol class="list-decimal pl-6 space-y-3">
+					<li>Thêm sản phẩm vào giỏ hàng và tiến hành thanh toán</li>
+					<li>Nhập địa chỉ giao hàng và chọn phương thức vận chuyển</li>
+					<li>Chọn phương thức thanh toán phù hợp</li>
+					<li>Kiểm tra lại đơn hàng và nhấn "Đặt hàng"</li>
+					<li>Nhận email xác nhận đơn hàng</li>
+				</ol>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Bảo mật thanh toán</h2>
+				<p>Mọi giao dịch đều được mã hóa SSL/TLS. Chúng tôi không lưu trữ thông tin thẻ tín dụng của bạn.</p>
+			</section>
+
+			<div class="bg-primary/5 rounded-xl p-5 mt-8">
+				<p class="font-medium">Cần hỗ trợ thanh toán?</p>
+				<p class="text-sm text-gray-600 mt-1">
+					Hotline: <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> &bull;
+					<a href="<?php echo esc_url( home_url( '/huong-dan-chuyen-khoan' ) ); ?>" class="text-primary hover:underline">Hướng dẫn chuyển khoản</a>
+				</p>
+			</div>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>

@@ -1,0 +1,78 @@
+<?php
+/**
+ * Page: Khách thân thiết
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Khách thân thiết</span>
+		</nav>
+
+		<div class="max-w-4xl mx-auto">
+			<div class="text-center mb-12">
+				<h1 class="text-3xl font-bold mb-3">Chương trình Khách thân thiết</h1>
+				<p class="text-gray-600">Mua sắm nhiều hơn, nhận ưu đãi nhiều hơn</p>
+			</div>
+
+			<!-- Membership Tiers -->
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+				<?php
+				$tiers = array(
+					array( 'name' => 'Bạc', 'icon' => 'star', 'color' => 'text-gray-500', 'bg' => 'bg-gray-50', 'min' => 0, 'max' => 5000000, 'perks' => array( 'Tích 1 điểm/10.000đ', 'Ưu đãi sinh nhật', 'Hỗ trợ ưu tiên' ) ),
+					array( 'name' => 'Vàng', 'icon' => 'star', 'color' => 'text-yellow-500', 'bg' => 'bg-yellow-50', 'min' => 5000000, 'max' => 20000000, 'perks' => array( 'Tích 1.5 điểm/10.000đ', 'Giảm 5% mọi đơn', 'Freeship không giới hạn', 'Ưu đãi sinh nhật x2' ) ),
+					array( 'name' => 'Kim cương', 'icon' => 'diamond', 'color' => 'text-blue-500', 'bg' => 'bg-blue-50', 'min' => 20000000, 'max' => null, 'perks' => array( 'Tích 2 điểm/10.000đ', 'Giảm 10% mọi đơn', 'Freeship không giới hạn', 'Ưu đãi sinh nhật x3', 'Hỗ trợ VIP 24/7' ) ),
+				);
+				foreach ( $tiers as $tier ) :
+				?>
+				<div class="<?php echo esc_attr( $tier['bg'] ); ?> rounded-2xl p-6 text-center">
+					<span class="material-icons <?php echo esc_attr( $tier['color'] ); ?> text-4xl mb-3 block" aria-hidden="true"><?php echo esc_html( $tier['icon'] ); ?></span>
+					<h2 class="text-xl font-bold mb-1"><?php echo esc_html( $tier['name'] ); ?></h2>
+					<p class="text-sm text-gray-500 mb-4">
+						<?php if ( $tier['max'] ) : ?>
+							<?php echo esc_html( wz_format_price( $tier['min'] ) ); ?> – <?php echo esc_html( wz_format_price( $tier['max'] ) ); ?>
+						<?php else : ?>
+							Từ <?php echo esc_html( wz_format_price( $tier['min'] ) ); ?>
+						<?php endif; ?>
+					</p>
+					<ul class="text-sm space-y-2 text-left">
+						<?php foreach ( $tier['perks'] as $perk ) : ?>
+						<li class="flex items-center gap-2">
+							<span class="material-icons text-green-500 text-base" aria-hidden="true">check_circle</span>
+							<?php echo esc_html( $perk ); ?>
+						</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+				<?php endforeach; ?>
+			</div>
+
+			<!-- CTA -->
+			<div class="text-center">
+				<?php if ( is_user_logged_in() ) : ?>
+				<a href="<?php echo esc_url( home_url( '/tai-khoan/diem-thuong' ) ); ?>"
+				   class="inline-block px-8 py-3 bg-primary text-white rounded-xl font-semibold hover:opacity-90 transition-opacity">
+					Xem điểm thưởng của tôi
+				</a>
+				<?php else : ?>
+				<a href="<?php echo esc_url( home_url( '/dang-ky' ) ); ?>"
+				   class="inline-block px-8 py-3 bg-primary text-white rounded-xl font-semibold hover:opacity-90 transition-opacity">
+					Đăng ký ngay để tích điểm
+				</a>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

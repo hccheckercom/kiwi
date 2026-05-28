@@ -1,0 +1,148 @@
+<?php
+/**
+ * Template Name: Cart
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2">/</span>
+			<span class="text-gray-900">Giỏ hàng</span>
+		</nav>
+
+		<h1 class="text-2xl font-bold mb-6">Giỏ hàng</h1>
+
+		<?php if ( function_exists( 'wz_cart' ) ) : ?>
+			<?php
+			$cart  = wz_cart();
+			$items = $cart->get_items();
+			?>
+
+			<?php if ( ! empty( $items ) ) : ?>
+				<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+					<!-- Cart items -->
+					<div class="lg:col-span-8">
+						<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+							<table class="w-full" aria-label="Giỏ hàng">
+								<thead class="hidden md:table-header-group bg-gray-50">
+									<tr>
+										<th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Sản phẩm</th>
+										<th class="px-6 py-3 text-center text-sm font-medium text-gray-600">Số lượng</th>
+										<th class="px-6 py-3 text-right text-sm font-medium text-gray-600">Thành tiền</th>
+										<th class="px-6 py-3 w-12"></th>
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-gray-200">
+									<?php foreach ( $items as $item ) : ?>
+										<tr class="flex flex-col md:table-row p-4 md:p-0">
+											<td class="px-6 py-4">
+												<div class="flex items-center gap-4">
+													<?php if ( ! empty( $item['thumbnail'] ) ) : ?>
+														<img src="<?php echo esc_url( $item['thumbnail'] ); ?>"
+														     alt="<?php echo esc_attr( $item['name'] ); ?>"
+														     class="w-16 h-16 object-cover rounded-lg"
+														     loading="lazy">
+													<?php endif; ?>
+													<div>
+														<a href="<?php echo esc_url( wz_get_permalink( $item ) ); ?>" class="font-medium hover:text-primary">
+															<?php echo esc_html( $item['name'] ); ?>
+														</a>
+														<p class="text-sm text-gray-500 mt-1">
+															<?php echo esc_html( wz_format_price( $item['price'] ) ); ?>
+														</p>
+													</div>
+												</div>
+											</td>
+											<td class="px-6 py-4 text-center">
+												<div class="inline-flex items-center border border-gray-300 rounded-lg">
+													<button type="button" class="px-3 py-1 hover:bg-gray-100" aria-label="Giảm số lượng"
+													        onclick="wzUpdateQty('<?php echo esc_attr( $item['id'] ); ?>', -1)">-</button>
+													<span class="px-3 py-1 min-w-[2rem] text-center"><?php echo esc_html( (string) (int) $item['quantity'] ); ?></span>
+													<button type="button" class="px-3 py-1 hover:bg-gray-100" aria-label="Tăng số lượng"
+													        onclick="wzUpdateQty('<?php echo esc_attr( $item['id'] ); ?>', 1)">+</button>
+												</div>
+											</td>
+											<td class="px-6 py-4 text-right font-medium">
+												<?php echo esc_html( wz_format_price( $item['price'] * $item['quantity'] ) ); ?>
+											</td>
+											<td class="px-6 py-4 text-center">
+												<button type="button" class="text-gray-400 hover:text-red-500 transition-colors" aria-label="Xóa sản phẩm"
+												        onclick="wzRemoveItem('<?php echo esc_attr( $item['id'] ); ?>')">
+													<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+														<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+													</svg>
+												</button>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<!-- Cart summary -->
+					<aside class="lg:col-span-4">
+						<div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+							<h2 class="text-lg font-bold mb-4">Tóm tắt đơn hàng</h2>
+
+							<div class="space-y-3 text-sm">
+								<div class="flex justify-between">
+									<span class="text-gray-600">Tạm tính</span>
+									<span><?php echo esc_html( wz_format_price( $cart->get_subtotal() ) ); ?></span>
+								</div>
+								<?php if ( $cart->get_discount() > 0 ) : ?>
+									<div class="flex justify-between text-green-600">
+										<span>Giảm giá</span>
+										<span>-<?php echo esc_html( wz_format_price( $cart->get_discount() ) ); ?></span>
+									</div>
+								<?php endif; ?>
+								<div class="flex justify-between">
+									<span class="text-gray-600">Phí vận chuyển</span>
+									<span class="text-gray-600">Tính khi thanh toán</span>
+								</div>
+							</div>
+
+							<hr class="my-4">
+
+							<div class="flex justify-between text-lg font-bold">
+								<span>Tổng cộng</span>
+								<span class="text-primary"><?php echo esc_html( wz_format_price( $cart->get_total() ) ); ?></span>
+							</div>
+
+							<a href="<?php echo esc_url( home_url( '/checkout' ) ); ?>"
+							   class="block w-full mt-6 px-6 py-3 bg-primary text-white text-center rounded-lg font-medium hover:opacity-90 transition-opacity">
+								Tiến hành thanh toán
+							</a>
+
+							<a href="<?php echo esc_url( home_url( '/shop' ) ); ?>"
+							   class="block w-full mt-3 text-center text-sm text-gray-600 hover:text-primary">
+								Tiếp tục mua sắm
+							</a>
+						</div>
+					</aside>
+				</div>
+
+			<?php else : ?>
+				<div class="text-center py-16">
+					<div class="text-6xl mb-4" aria-hidden="true">&#128722;</div>
+					<h2 class="text-xl font-bold mb-2">Giỏ hàng trống</h2>
+					<p class="text-gray-600 mb-6">Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
+					<a href="<?php echo esc_url( home_url( '/shop' ) ); ?>"
+					   class="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+						Khám phá sản phẩm
+					</a>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
+	</div>
+</main>
+
+<?php get_footer(); ?>

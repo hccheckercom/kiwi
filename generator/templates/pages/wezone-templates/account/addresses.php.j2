@@ -1,0 +1,82 @@
+<?php
+/**
+ * Account Addresses
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+
+if ( ! is_user_logged_in() ) {
+	wp_redirect( home_url( '/dang-nhap' ) );
+	exit;
+}
+
+$user_id   = get_current_user_id();
+$addresses = function_exists( 'wz_get_user_addresses' ) ? wz_get_user_addresses( $user_id ) : array();
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<a href="<?php echo esc_url( home_url( '/tai-khoan' ) ); ?>" class="text-gray-600 hover:text-primary">Tài khoản</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Địa chỉ</span>
+		</nav>
+
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+			<aside class="lg:col-span-1">
+				<?php get_template_part( 'template-parts/account/sidebar', null, array( 'active_tab' => 'addresses' ) ); ?>
+			</aside>
+
+			<div class="lg:col-span-3">
+				<div class="flex items-center justify-between mb-6">
+					<h1 class="text-xl font-semibold">Địa chỉ của tôi</h1>
+					<button type="button" id="wz-add-address-btn"
+					        class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+						+ Thêm địa chỉ
+					</button>
+				</div>
+
+				<div id="wz-address-message" class="hidden rounded-lg p-4 text-sm mb-4" role="alert" aria-live="polite"></div>
+
+				<?php if ( ! empty( $addresses ) ) : ?>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="wz-address-list">
+					<?php foreach ( $addresses as $addr ) : ?>
+					<div class="bg-white rounded-xl shadow-sm p-5 relative" data-address-id="<?php echo esc_attr( $addr['id'] ); ?>">
+						<?php if ( ! empty( $addr['is_default'] ) ) : ?>
+						<span class="absolute top-4 right-4 text-xs bg-primary text-white px-2 py-0.5 rounded-full">Mặc định</span>
+						<?php endif; ?>
+						<p class="font-semibold"><?php echo esc_html( $addr['name'] ); ?></p>
+						<p class="text-sm text-gray-600 mt-1"><?php echo esc_html( $addr['phone'] ); ?></p>
+						<p class="text-sm text-gray-600 mt-1"><?php echo esc_html( $addr['address'] ); ?></p>
+						<p class="text-sm text-gray-600"><?php echo esc_html( $addr['ward'] . ', ' . $addr['district'] . ', ' . $addr['province'] ); ?></p>
+						<div class="flex gap-3 mt-4 text-sm">
+							<button type="button" class="text-primary hover:underline wz-edit-address" data-id="<?php echo esc_attr( $addr['id'] ); ?>">Sửa</button>
+							<?php if ( empty( $addr['is_default'] ) ) : ?>
+							<button type="button" class="text-gray-500 hover:underline wz-set-default" data-id="<?php echo esc_attr( $addr['id'] ); ?>">Đặt mặc định</button>
+							<button type="button" class="text-red-500 hover:underline wz-delete-address" data-id="<?php echo esc_attr( $addr['id'] ); ?>">Xóa</button>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php endforeach; ?>
+				</div>
+				<?php else : ?>
+				<div class="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500">
+					<span class="material-icons text-5xl mb-3 block text-gray-300" aria-hidden="true">location_on</span>
+					<p class="font-medium">Bạn chưa có địa chỉ nào</p>
+					<p class="text-sm mt-1">Thêm địa chỉ để thanh toán nhanh hơn</p>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</main>
+
+<?php get_footer(); ?>

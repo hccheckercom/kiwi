@@ -367,6 +367,16 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
         from . import cache as cache_module
         cache_module.cache_violations_batch(files_to_cache, git_commit, patterns_version)
 
+    # Filter dismissed false positives
+    try:
+        from memory.db import is_dismissed
+        report.violations = [
+            v for v in report.violations
+            if not is_dismissed(v.lesson_id, v.file)
+        ]
+    except Exception:
+        pass
+
     return report
 
 

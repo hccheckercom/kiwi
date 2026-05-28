@@ -1,0 +1,102 @@
+<?php
+/**
+ * Template Name: Chính sách vận chuyển
+ */
+
+if ( ! function_exists( 'wezone_is_active' ) ) {
+	return;
+}
+?>
+
+<?php get_header(); ?>
+
+<main id="main" class="site-main">
+	<div class="container mx-auto px-4 py-8 max-w-3xl">
+
+		<nav class="breadcrumb mb-6 text-sm" aria-label="Breadcrumb">
+			<a href="<?php echo esc_url( home_url() ); ?>" class="text-gray-600 hover:text-primary">Trang chủ</a>
+			<span class="mx-2" aria-hidden="true">/</span>
+			<span class="text-gray-900">Chính sách vận chuyển</span>
+		</nav>
+
+		<article class="prose max-w-none">
+			<h1 class="text-3xl font-bold mb-2">Chính sách vận chuyển</h1>
+			<p class="text-sm text-gray-500 mb-8">Cập nhật lần cuối: <?php echo esc_html( date_i18n( 'd/m/Y' ) ); ?></p>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Phạm vi giao hàng</h2>
+				<p><?php echo esc_html( wz_config( 'name' ) ); ?> giao hàng toàn quốc 63 tỉnh thành, bao gồm:</p>
+				<ul class="list-disc pl-6 mt-2 space-y-1">
+					<li>Khu vực nội thành các thành phố lớn</li>
+					<li>Khu vực ngoại thành và vùng ven</li>
+					<li>Vùng sâu, vùng xa và hải đảo (thời gian giao hàng có thể kéo dài hơn)</li>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Thời gian giao hàng</h2>
+				<table class="w-full border-collapse text-sm">
+					<thead>
+						<tr class="bg-gray-50">
+							<th class="border border-gray-200 px-4 py-2 text-left">Khu vực</th>
+							<th class="border border-gray-200 px-4 py-2 text-left">Thời gian</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2">Nội thành (HN, HCM, ĐN)</td>
+							<td class="border border-gray-200 px-4 py-2">1 – 2 ngày làm việc</td>
+						</tr>
+						<tr class="bg-gray-50">
+							<td class="border border-gray-200 px-4 py-2">Ngoại thành & tỉnh thành khác</td>
+							<td class="border border-gray-200 px-4 py-2">3 – 5 ngày làm việc</td>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2">Vùng sâu, vùng xa, hải đảo</td>
+							<td class="border border-gray-200 px-4 py-2">5 – 7 ngày làm việc</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Phí vận chuyển</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<?php if ( function_exists( 'wz_config' ) && wz_config( 'shipping.free_ship_threshold' ) ) : ?>
+						<li><strong>Miễn phí vận chuyển</strong> cho đơn hàng từ <?php echo esc_html( wz_format_price( wz_config( 'shipping.free_ship_threshold' ) ) ); ?></li>
+					<?php endif; ?>
+					<?php if ( function_exists( 'wz_config' ) && wz_config( 'shipping.fees.default' ) ) : ?>
+						<li><strong>Phí vận chuyển tiêu chuẩn:</strong> <?php echo esc_html( wz_format_price( wz_config( 'shipping.fees.default' ) ) ); ?></li>
+					<?php endif; ?>
+					<?php if ( function_exists( 'wz_config' ) && wz_config( 'shipping.fees.express' ) ) : ?>
+						<li><strong>Phí vận chuyển nhanh (Express):</strong> <?php echo esc_html( wz_format_price( wz_config( 'shipping.fees.express' ) ) ); ?></li>
+					<?php endif; ?>
+				</ul>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Đối tác vận chuyển</h2>
+				<p>Chúng tôi hợp tác với các đơn vị vận chuyển uy tín: GHN, GHTK, Viettel Post để đảm bảo hàng hóa được giao đến tay bạn an toàn và đúng hẹn.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Theo dõi đơn hàng</h2>
+				<p>Sau khi đơn hàng được giao cho đơn vị vận chuyển, bạn sẽ nhận được thông báo qua email và SMS kèm mã vận đơn để theo dõi.</p>
+				<p class="mt-2">Bạn cũng có thể theo dõi đơn hàng tại <a href="<?php echo esc_url( home_url( '/tai-khoan/don-hang' ) ); ?>" class="text-primary hover:underline">trang quản lý đơn hàng</a>.</p>
+			</section>
+
+			<section class="mb-8">
+				<h2 class="text-xl font-semibold mb-4">Lưu ý khi nhận hàng</h2>
+				<ul class="list-disc pl-6 space-y-2">
+					<li>Kiểm tra kỹ hàng hóa trước khi ký nhận</li>
+					<li>Từ chối nhận nếu hàng bị hư hỏng, rách bao bì hoặc không đúng sản phẩm</li>
+					<li>Liên hệ ngay hotline <a href="tel:<?php echo esc_attr( wz_config( 'phone' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'phone' ) ); ?></a> nếu có vấn đề</li>
+					<li>Email hỗ trợ: <a href="mailto:<?php echo esc_attr( wz_config( 'email' ) ); ?>" class="text-primary hover:underline"><?php echo esc_html( wz_config( 'email' ) ); ?></a></li>
+				</ul>
+			</section>
+		</article>
+
+	</div>
+</main>
+
+<?php get_footer(); ?>
