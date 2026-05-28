@@ -6697,8 +6697,8 @@ var require_protocolCodeAction = __commonJS({
   "node_modules/vscode-languageclient/lib/common/protocolCodeAction.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var vscode13 = require("vscode");
-    var ProtocolCodeAction = class extends vscode13.CodeAction {
+    var vscode14 = require("vscode");
+    var ProtocolCodeAction = class extends vscode14.CodeAction {
       constructor(title, data) {
         super(title);
         this.data = data;
@@ -6714,7 +6714,7 @@ var require_protocolDiagnostic = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProtocolDiagnostic = exports2.DiagnosticCode = void 0;
-    var vscode13 = require("vscode");
+    var vscode14 = require("vscode");
     var Is = require_is();
     var DiagnosticCode;
     (function(DiagnosticCode2) {
@@ -6724,7 +6724,7 @@ var require_protocolDiagnostic = __commonJS({
       }
       DiagnosticCode2.is = is;
     })(DiagnosticCode || (exports2.DiagnosticCode = DiagnosticCode = {}));
-    var ProtocolDiagnostic = class extends vscode13.Diagnostic {
+    var ProtocolDiagnostic = class extends vscode14.Diagnostic {
       constructor(range, message, severity, data) {
         super(range, message, severity);
         this.data = data;
@@ -10845,7 +10845,7 @@ var require_notebook = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NotebookDocumentSyncFeature = void 0;
-    var vscode13 = require("vscode");
+    var vscode14 = require("vscode");
     var minimatch = require_minimatch();
     var proto = require_main3();
     var UUID = require_uuid();
@@ -10900,9 +10900,9 @@ var require_notebook = __commonJS({
         c2p2.asNotebookCell = asNotebookCell;
         function asNotebookCellKind(kind) {
           switch (kind) {
-            case vscode13.NotebookCellKind.Markup:
+            case vscode14.NotebookCellKind.Markup:
               return proto.NotebookCellKind.Markup;
-            case vscode13.NotebookCellKind.Code:
+            case vscode14.NotebookCellKind.Code:
               return proto.NotebookCellKind.Code;
           }
         }
@@ -11153,25 +11153,25 @@ var require_notebook = __commonJS({
         this.notebookDidOpen = /* @__PURE__ */ new Set();
         this.disposables = [];
         this.selector = client2.protocol2CodeConverter.asDocumentSelector($NotebookDocumentSyncOptions.asDocumentSelector(options));
-        vscode13.workspace.onDidOpenNotebookDocument((notebookDocument) => {
+        vscode14.workspace.onDidOpenNotebookDocument((notebookDocument) => {
           this.notebookDidOpen.add(notebookDocument.uri.toString());
           this.didOpen(notebookDocument);
         }, void 0, this.disposables);
-        for (const notebookDocument of vscode13.workspace.notebookDocuments) {
+        for (const notebookDocument of vscode14.workspace.notebookDocuments) {
           this.notebookDidOpen.add(notebookDocument.uri.toString());
           this.didOpen(notebookDocument);
         }
-        vscode13.workspace.onDidChangeNotebookDocument((event) => this.didChangeNotebookDocument(event), void 0, this.disposables);
+        vscode14.workspace.onDidChangeNotebookDocument((event) => this.didChangeNotebookDocument(event), void 0, this.disposables);
         if (this.options.save === true) {
-          vscode13.workspace.onDidSaveNotebookDocument((notebookDocument) => this.didSave(notebookDocument), void 0, this.disposables);
+          vscode14.workspace.onDidSaveNotebookDocument((notebookDocument) => this.didSave(notebookDocument), void 0, this.disposables);
         }
-        vscode13.workspace.onDidCloseNotebookDocument((notebookDocument) => {
+        vscode14.workspace.onDidCloseNotebookDocument((notebookDocument) => {
           this.didClose(notebookDocument);
           this.notebookDidOpen.delete(notebookDocument.uri.toString());
         }, void 0, this.disposables);
       }
       getState() {
-        for (const notebook of vscode13.workspace.notebookDocuments) {
+        for (const notebook of vscode14.workspace.notebookDocuments) {
           const matchingCells = this.getMatchingCells(notebook);
           if (matchingCells !== void 0) {
             return { kind: "document", id: "$internal", registrations: true, matches: true };
@@ -11183,10 +11183,10 @@ var require_notebook = __commonJS({
         return "notebook";
       }
       handles(textDocument) {
-        return vscode13.languages.match(this.selector, textDocument) > 0;
+        return vscode14.languages.match(this.selector, textDocument) > 0;
       }
       didOpenNotebookCellTextDocument(notebookDocument, cell) {
-        if (vscode13.languages.match(this.selector, cell.document) === 0) {
+        if (vscode14.languages.match(this.selector, cell.document) === 0) {
           return;
         }
         if (!this.notebookDidOpen.has(notebookDocument.uri.toString())) {
@@ -11217,7 +11217,7 @@ var require_notebook = __commonJS({
         }
       }
       didChangeNotebookCellTextDocument(notebookDocument, event) {
-        if (vscode13.languages.match(this.selector, event.document) === 0) {
+        if (vscode14.languages.match(this.selector, event.document) === 0) {
           return;
         }
         this.doSendChange({
@@ -11490,7 +11490,7 @@ var require_notebook = __commonJS({
         this.client = client2;
         this.registrations = /* @__PURE__ */ new Map();
         this.registrationType = proto.NotebookDocumentSyncRegistrationType.type;
-        vscode13.workspace.onDidOpenTextDocument((textDocument) => {
+        vscode14.workspace.onDidOpenTextDocument((textDocument) => {
           if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
             return;
           }
@@ -11504,7 +11504,7 @@ var require_notebook = __commonJS({
             }
           }
         });
-        vscode13.workspace.onDidChangeTextDocument((event) => {
+        vscode14.workspace.onDidChangeTextDocument((event) => {
           if (event.contentChanges.length === 0) {
             return;
           }
@@ -11522,7 +11522,7 @@ var require_notebook = __commonJS({
             }
           }
         });
-        vscode13.workspace.onDidCloseTextDocument((textDocument) => {
+        vscode14.workspace.onDidCloseTextDocument((textDocument) => {
           if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
             return;
           }
@@ -11587,7 +11587,7 @@ var require_notebook = __commonJS({
         if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
           return false;
         }
-        if (this.dedicatedChannel !== void 0 && vscode13.languages.match(this.dedicatedChannel, textDocument) > 0) {
+        if (this.dedicatedChannel !== void 0 && vscode14.languages.match(this.dedicatedChannel, textDocument) > 0) {
           return true;
         }
         for (const provider of this.registrations.values()) {
@@ -11607,7 +11607,7 @@ var require_notebook = __commonJS({
       }
       findNotebookDocumentAndCell(textDocument) {
         const uri = textDocument.uri.toString();
-        for (const notebookDocument of vscode13.workspace.notebookDocuments) {
+        for (const notebookDocument of vscode14.workspace.notebookDocuments) {
           for (const cell of notebookDocument.getCells()) {
             if (cell.document.uri.toString() === uri) {
               return [notebookDocument, cell];
@@ -14123,7 +14123,7 @@ var require_semanticTokens = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SemanticTokensFeature = void 0;
-    var vscode13 = require("vscode");
+    var vscode14 = require("vscode");
     var vscode_languageserver_protocol_1 = require_main3();
     var features_1 = require_features();
     var Is = require_is();
@@ -14201,7 +14201,7 @@ var require_semanticTokens = __commonJS({
         const selector = options.documentSelector;
         const fullProvider = Is.boolean(options.full) ? options.full : options.full !== void 0;
         const hasEditProvider = options.full !== void 0 && typeof options.full !== "boolean" && options.full.delta === true;
-        const eventEmitter = new vscode13.EventEmitter();
+        const eventEmitter = new vscode14.EventEmitter();
         const documentProvider = fullProvider ? {
           onDidChangeSemanticTokens: eventEmitter.event,
           provideDocumentSemanticTokens: (document, token) => {
@@ -14273,12 +14273,12 @@ var require_semanticTokens = __commonJS({
         const legend = client2.protocol2CodeConverter.asSemanticTokensLegend(options.legend);
         const documentSelector = client2.protocol2CodeConverter.asDocumentSelector(selector);
         if (documentProvider !== void 0) {
-          disposables.push(vscode13.languages.registerDocumentSemanticTokensProvider(documentSelector, documentProvider, legend));
+          disposables.push(vscode14.languages.registerDocumentSemanticTokensProvider(documentSelector, documentProvider, legend));
         }
         if (rangeProvider !== void 0) {
-          disposables.push(vscode13.languages.registerDocumentRangeSemanticTokensProvider(documentSelector, rangeProvider, legend));
+          disposables.push(vscode14.languages.registerDocumentRangeSemanticTokensProvider(documentSelector, rangeProvider, legend));
         }
-        return [new vscode13.Disposable(() => disposables.forEach((item) => item.dispose())), { range: rangeProvider, full: documentProvider, onDidChangeSemanticTokensEmitter: eventEmitter }];
+        return [new vscode14.Disposable(() => disposables.forEach((item) => item.dispose())), { range: rangeProvider, full: documentProvider, onDidChangeSemanticTokensEmitter: eventEmitter }];
       }
     };
     exports2.SemanticTokensFeature = SemanticTokensFeature;
@@ -17784,8 +17784,8 @@ var require_main4 = __commonJS({
         }
       }
       createMessageTransports(encoding) {
-        function getEnvironment(env, fork) {
-          if (!env && !fork) {
+        function getEnvironment(env2, fork) {
+          if (!env2 && !fork) {
             return void 0;
           }
           const result = /* @__PURE__ */ Object.create(null);
@@ -17794,8 +17794,8 @@ var require_main4 = __commonJS({
             result["ELECTRON_RUN_AS_NODE"] = "1";
             result["ELECTRON_NO_ASAR"] = "1";
           }
-          if (env) {
-            Object.keys(env).forEach((key) => result[key] = env[key]);
+          if (env2) {
+            Object.keys(env2).forEach((key) => result[key] = env2[key]);
           }
           return result;
         }
@@ -18151,7 +18151,7 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode12 = __toESM(require("vscode"));
+var vscode13 = __toESM(require("vscode"));
 
 // src/client.ts
 var vscode = __toESM(require("vscode"));
@@ -18316,7 +18316,7 @@ var KiwiStatusBar = class {
 };
 
 // src/commands/index.ts
-var vscode7 = __toESM(require("vscode"));
+var vscode8 = __toESM(require("vscode"));
 
 // src/commands/viewLesson.ts
 var vscode3 = __toESM(require("vscode"));
@@ -18516,54 +18516,301 @@ async function dismissViolation(client2, scope = "file") {
   }
 }
 
+// src/commands/editorGuide.ts
+var vscode7 = __toESM(require("vscode"));
+var GUIDES = {
+  neovim: {
+    name: "Neovim",
+    icon: "terminal",
+    config: `-- lua/lspconfig: add to your init.lua or lsp.lua
+local lspconfig = require('lspconfig')
+local configs = require('lspconfig.configs')
+
+if not configs.kiwi then
+  configs.kiwi = {
+    default_config = {
+      cmd = { 'python', '-m', 'lsp' },
+      cmd_cwd = vim.fn.expand('~/.claude/kiwi'),
+      filetypes = { 'php', 'javascript', 'typescript', 'css', 'html' },
+      root_dir = lspconfig.util.root_pattern('.git', 'composer.json', 'package.json'),
+      settings = {},
+      init_options = {
+        severity = 'ALL',
+        scanOnOpen = true,
+        scanOnSave = true,
+        platform = 'wp',
+      },
+    },
+  }
+end
+
+lspconfig.kiwi.setup({
+  on_attach = function(client, bufnr)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr })
+  end,
+})`,
+    steps: {
+      en: [
+        'Install nvim-lspconfig: `Plug "neovim/nvim-lspconfig"` or lazy.nvim equivalent',
+        "Copy the config above into your `init.lua` or `lua/lsp.lua`",
+        "Adjust `cmd_cwd` to point to your Kiwi installation path",
+        "Restart Neovim and open a PHP/JS/CSS file",
+        'Verify: `:LspInfo` should show "kiwi" as attached',
+        "Diagnostics appear inline, use `K` for hover, `<leader>ca` for code actions"
+      ],
+      vi: [
+        'C\xE0i nvim-lspconfig: `Plug "neovim/nvim-lspconfig"` ho\u1EB7c lazy.nvim t\u01B0\u01A1ng \u0111\u01B0\u01A1ng',
+        "Copy config tr\xEAn v\xE0o `init.lua` ho\u1EB7c `lua/lsp.lua`",
+        "S\u1EEDa `cmd_cwd` tr\u1ECF \u0111\u1EBFn th\u01B0 m\u1EE5c Kiwi c\u1EE7a b\u1EA1n",
+        "Restart Neovim v\xE0 m\u1EDF file PHP/JS/CSS",
+        'Ki\u1EC3m tra: `:LspInfo` ph\u1EA3i hi\u1EC7n "kiwi" \u0111\xE3 attached',
+        "Diagnostics hi\u1EC7n inline, d\xF9ng `K` \u0111\u1EC3 hover, `<leader>ca` cho code actions"
+      ]
+    }
+  },
+  jetbrains: {
+    name: "JetBrains (PhpStorm/WebStorm)",
+    icon: "code",
+    config: `// Settings \u2192 Languages & Frameworks \u2192 Language Servers
+// Add new server:
+{
+  "name": "Kiwi",
+  "command": "python -m lsp",
+  "workingDir": "C:\\\\Users\\\\<you>\\\\.claude\\\\kiwi",
+  "languages": ["PHP", "JavaScript", "TypeScript", "CSS", "HTML"],
+  "initializationOptions": {
+    "severity": "ALL",
+    "scanOnOpen": true,
+    "scanOnSave": true,
+    "platform": "wp"
+  }
+}`,
+    steps: {
+      en: [
+        "Open Settings \u2192 Languages & Frameworks \u2192 Language Servers (requires LSP plugin)",
+        'Click "+" to add a new language server',
+        'Name: "Kiwi", Command: `python -m lsp`',
+        "Set Working Directory to your Kiwi path (e.g. `~/.claude/kiwi`)",
+        "Add file type mappings: PHP, JavaScript, TypeScript, CSS, HTML",
+        "Apply and restart IDE \u2014 diagnostics will appear in editor"
+      ],
+      vi: [
+        "M\u1EDF Settings \u2192 Languages & Frameworks \u2192 Language Servers (c\u1EA7n c\xE0i LSP plugin)",
+        'Nh\u1EA5n "+" \u0111\u1EC3 th\xEAm language server m\u1EDBi',
+        'Name: "Kiwi", Command: `python -m lsp`',
+        "\u0110\u1EB7t Working Directory tr\u1ECF \u0111\u1EBFn th\u01B0 m\u1EE5c Kiwi (vd: `~/.claude/kiwi`)",
+        "Th\xEAm file type mappings: PHP, JavaScript, TypeScript, CSS, HTML",
+        "Apply v\xE0 restart IDE \u2014 diagnostics s\u1EBD hi\u1EC7n trong editor"
+      ]
+    }
+  },
+  cursor: {
+    name: "Cursor / Windsurf",
+    icon: "sparkle",
+    config: `// These editors are VS Code-compatible.
+// Install the .vsix directly:
+//   1. Download kiwi-lsp-0.1.0.vsix
+//   2. Extensions panel \u2192 "..." menu \u2192 "Install from VSIX..."
+//   3. Select the .vsix file
+//
+// Or via command line:
+cursor --install-extension kiwi-lsp-0.1.0.vsix
+windsurf --install-extension kiwi-lsp-0.1.0.vsix`,
+    steps: {
+      en: [
+        "Download `kiwi-lsp-0.1.0.vsix` from the release",
+        'Open Extensions panel \u2192 click "..." \u2192 "Install from VSIX..."',
+        "Select the downloaded .vsix file",
+        "Reload the editor \u2014 Kiwi activates automatically on PHP/JS/CSS files",
+        "All features work identically to VS Code (diagnostics, hover, quick fix)"
+      ],
+      vi: [
+        "T\u1EA3i `kiwi-lsp-0.1.0.vsix` t\u1EEB release",
+        'M\u1EDF Extensions panel \u2192 nh\u1EA5n "..." \u2192 "Install from VSIX..."',
+        "Ch\u1ECDn file .vsix \u0111\xE3 t\u1EA3i",
+        "Reload editor \u2014 Kiwi t\u1EF1 k\xEDch ho\u1EA1t khi m\u1EDF file PHP/JS/CSS",
+        "M\u1ECDi t\xEDnh n\u0103ng ho\u1EA1t \u0111\u1ED9ng gi\u1ED1ng VS Code (diagnostics, hover, quick fix)"
+      ]
+    }
+  },
+  sublime: {
+    name: "Sublime Text",
+    icon: "file-text",
+    config: `// Install "LSP" package via Package Control first.
+// Then create: Preferences \u2192 Package Settings \u2192 LSP \u2192 Settings
+{
+  "clients": {
+    "kiwi": {
+      "enabled": true,
+      "command": ["python", "-m", "lsp"],
+      "working_dir": "C:\\\\Users\\\\<you>\\\\.claude\\\\kiwi",
+      "selector": "source.php | source.js | source.ts | source.css | text.html",
+      "initializationOptions": {
+        "severity": "ALL",
+        "scanOnOpen": true,
+        "scanOnSave": true,
+        "platform": "wp"
+      }
+    }
+  }
+}`,
+    steps: {
+      en: [
+        'Install "LSP" package via Package Control (Ctrl+Shift+P \u2192 Install Package \u2192 LSP)',
+        "Open: Preferences \u2192 Package Settings \u2192 LSP \u2192 Settings",
+        'Add the Kiwi client config (see above) to the "clients" object',
+        "Adjust `working_dir` to your Kiwi installation path",
+        "Save and reopen a PHP/JS/CSS file",
+        "Diagnostics appear as inline phantoms, hover for details, Ctrl+. for code actions"
+      ],
+      vi: [
+        'C\xE0i package "LSP" qua Package Control (Ctrl+Shift+P \u2192 Install Package \u2192 LSP)',
+        "M\u1EDF: Preferences \u2192 Package Settings \u2192 LSP \u2192 Settings",
+        'Th\xEAm config Kiwi (xem tr\xEAn) v\xE0o object "clients"',
+        "S\u1EEDa `working_dir` tr\u1ECF \u0111\u1EBFn th\u01B0 m\u1EE5c Kiwi c\u1EE7a b\u1EA1n",
+        "L\u01B0u v\xE0 m\u1EDF l\u1EA1i file PHP/JS/CSS",
+        "Diagnostics hi\u1EC7n inline, hover \u0111\u1EC3 xem chi ti\u1EBFt, Ctrl+. cho code actions"
+      ]
+    }
+  }
+};
+var guidePanel;
+function showEditorGuide(editor) {
+  const lang = getLanguage();
+  if (!editor) {
+    const items = Object.entries(GUIDES).map(([key, g]) => ({
+      label: `$(${g.icon}) ${g.name}`,
+      description: key,
+      key
+    }));
+    vscode7.window.showQuickPick(items, {
+      placeHolder: lang === "vi" ? "Ch\u1ECDn editor \u0111\u1EC3 xem h\u01B0\u1EDBng d\u1EABn setup" : "Select editor for setup guide"
+    }).then((selected) => {
+      if (selected)
+        showEditorGuide(selected.key);
+    });
+    return;
+  }
+  const guide = GUIDES[editor];
+  if (!guide)
+    return;
+  if (guidePanel) {
+    guidePanel.reveal();
+  } else {
+    guidePanel = vscode7.window.createWebviewPanel(
+      "kiwiEditorGuide",
+      `Kiwi: ${guide.name} Setup`,
+      vscode7.ViewColumn.One,
+      { enableScripts: false }
+    );
+    guidePanel.onDidDispose(() => {
+      guidePanel = void 0;
+    });
+  }
+  guidePanel.title = `Kiwi: ${guide.name} Setup`;
+  guidePanel.webview.html = buildGuideHtml(guide, lang);
+}
+function getLanguage() {
+  const vscodeLang = vscode7.env.language;
+  return vscodeLang.startsWith("vi") ? "vi" : "en";
+}
+function escapeHtml2(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function buildGuideHtml(guide, lang) {
+  const title = lang === "vi" ? `H\u01B0\u1EDBng d\u1EABn c\xE0i \u0111\u1EB7t Kiwi cho ${guide.name}` : `Kiwi Setup Guide for ${guide.name}`;
+  const stepsTitle = lang === "vi" ? "C\xE1c b\u01B0\u1EDBc" : "Steps";
+  const configTitle = lang === "vi" ? "C\u1EA5u h\xECnh" : "Configuration";
+  const requireTitle = lang === "vi" ? "Y\xEAu c\u1EA7u" : "Requirements";
+  const requireText = lang === "vi" ? "Python 3.9+ v\u1EDBi <code>pygls</code> v\xE0 <code>lsprotocol</code> \u0111\xE3 c\xE0i" : "Python 3.9+ with <code>pygls</code> and <code>lsprotocol</code> installed";
+  const steps = guide.steps[lang];
+  const stepsHtml = steps.map((s, i) => `<li>${formatStep(s)}</li>`).join("\n");
+  return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: var(--vscode-font-family); padding: 20px; color: var(--vscode-foreground); background: var(--vscode-editor-background); max-width: 800px; }
+        h1 { font-size: 1.4em; margin-bottom: 4px; }
+        h2 { font-size: 1.1em; margin-top: 20px; color: var(--vscode-textLink-foreground); }
+        pre { background: var(--vscode-textCodeBlock-background); padding: 14px; border-radius: 6px; overflow-x: auto; font-size: 0.88em; line-height: 1.5; }
+        code { background: var(--vscode-textCodeBlock-background); padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+        ol { padding-left: 20px; line-height: 1.8; }
+        li { margin-bottom: 6px; }
+        .badge { display: inline-block; background: var(--vscode-badge-background); color: var(--vscode-badge-foreground); padding: 2px 8px; border-radius: 10px; font-size: 0.8em; margin-left: 8px; }
+        .req { background: var(--vscode-editorWidget-background); border: 1px solid var(--vscode-editorWidget-border); border-radius: 6px; padding: 12px; margin: 12px 0; }
+    </style>
+</head>
+<body>
+    <h1>${escapeHtml2(title)} <span class="badge">LSP stdio</span></h1>
+
+    <div class="req">
+        <strong>${requireTitle}:</strong> ${requireText}
+    </div>
+
+    <h2>${configTitle}</h2>
+    <pre>${escapeHtml2(guide.config)}</pre>
+
+    <h2>${stepsTitle}</h2>
+    <ol>${stepsHtml}</ol>
+</body>
+</html>`;
+}
+function formatStep(step) {
+  return step.replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+
 // src/commands/index.ts
 function registerCommands(context, client2, violationsTree, dashboard) {
   const lc = client2.getClient();
   if (lc)
     setLspClient(lc);
   context.subscriptions.push(
-    vscode7.commands.registerCommand("kiwi.restart", async () => {
+    vscode8.commands.registerCommand("kiwi.restart", async () => {
       await client2.restart();
       setLspClient(client2.getClient());
     }),
-    vscode7.commands.registerCommand("kiwi.scanProject", () => scanProject(client2)),
-    vscode7.commands.registerCommand("kiwi.viewLesson", (lessonId) => viewLesson(lessonId)),
-    vscode7.commands.registerCommand("kiwi.dismissFile", () => dismissViolation(client2, "file")),
-    vscode7.commands.registerCommand("kiwi.dismissProject", () => dismissViolation(client2, "project")),
-    vscode7.commands.registerCommand("kiwi.refreshViolations", () => violationsTree.refresh()),
-    vscode7.commands.registerCommand("kiwi.openDashboard", () => dashboard.openDashboard()),
-    vscode7.commands.registerCommand("kiwi.scanUncommitted", () => scanUncommitted(client2))
+    vscode8.commands.registerCommand("kiwi.scanProject", () => scanProject(client2)),
+    vscode8.commands.registerCommand("kiwi.viewLesson", (lessonId) => viewLesson(lessonId)),
+    vscode8.commands.registerCommand("kiwi.dismissFile", () => dismissViolation(client2, "file")),
+    vscode8.commands.registerCommand("kiwi.dismissProject", () => dismissViolation(client2, "project")),
+    vscode8.commands.registerCommand("kiwi.refreshViolations", () => violationsTree.refresh()),
+    vscode8.commands.registerCommand("kiwi.openDashboard", () => dashboard.openDashboard()),
+    vscode8.commands.registerCommand("kiwi.scanUncommitted", () => scanUncommitted(client2)),
+    vscode8.commands.registerCommand("kiwi.editorGuide", (editor) => showEditorGuide(editor))
   );
 }
 
 // src/providers/fileDecorations.ts
-var vscode8 = __toESM(require("vscode"));
+var vscode9 = __toESM(require("vscode"));
 var FileDecorationProvider = class {
-  _onDidChangeFileDecorations = new vscode8.EventEmitter();
+  _onDidChangeFileDecorations = new vscode9.EventEmitter();
   onDidChangeFileDecorations = this._onDidChangeFileDecorations.event;
   disposables = [];
   registration;
   constructor() {
-    this.registration = vscode8.window.registerFileDecorationProvider(this);
+    this.registration = vscode9.window.registerFileDecorationProvider(this);
     this.disposables.push(
       this.registration,
-      vscode8.languages.onDidChangeDiagnostics((e) => {
+      vscode9.languages.onDidChangeDiagnostics((e) => {
         this._onDidChangeFileDecorations.fire(e.uris);
       })
     );
   }
   provideFileDecoration(uri) {
-    const diagnostics = vscode8.languages.getDiagnostics(uri);
+    const diagnostics = vscode9.languages.getDiagnostics(uri);
     const kiwiDiags = diagnostics.filter((d) => d.source === "kiwi");
     if (kiwiDiags.length === 0)
       return void 0;
-    const hasCritical = kiwiDiags.some((d) => d.severity === vscode8.DiagnosticSeverity.Error);
-    const hasHigh = kiwiDiags.some((d) => d.severity === vscode8.DiagnosticSeverity.Warning);
+    const hasCritical = kiwiDiags.some((d) => d.severity === vscode9.DiagnosticSeverity.Error);
+    const hasHigh = kiwiDiags.some((d) => d.severity === vscode9.DiagnosticSeverity.Warning);
     if (hasCritical) {
       return {
         badge: `${kiwiDiags.length}`,
         tooltip: `Kiwi: ${kiwiDiags.length} violation(s) \u2014 CRITICAL`,
-        color: new vscode8.ThemeColor("errorForeground"),
+        color: new vscode9.ThemeColor("errorForeground"),
         propagate: true
       };
     }
@@ -18571,7 +18818,7 @@ var FileDecorationProvider = class {
       return {
         badge: `${kiwiDiags.length}`,
         tooltip: `Kiwi: ${kiwiDiags.length} violation(s)`,
-        color: new vscode8.ThemeColor("editorWarning.foreground"),
+        color: new vscode9.ThemeColor("editorWarning.foreground"),
         propagate: false
       };
     }
@@ -18588,41 +18835,41 @@ var FileDecorationProvider = class {
 };
 
 // src/providers/gutterDecorations.ts
-var vscode9 = __toESM(require("vscode"));
-var criticalDecoration = vscode9.window.createTextEditorDecorationType({
+var vscode10 = __toESM(require("vscode"));
+var criticalDecoration = vscode10.window.createTextEditorDecorationType({
   gutterIconPath: void 0,
   gutterIconSize: "contain",
-  overviewRulerColor: new vscode9.ThemeColor("editorError.foreground"),
-  overviewRulerLane: vscode9.OverviewRulerLane.Left,
+  overviewRulerColor: new vscode10.ThemeColor("editorError.foreground"),
+  overviewRulerLane: vscode10.OverviewRulerLane.Left,
   before: {
     contentText: "",
-    color: new vscode9.ThemeColor("editorError.foreground"),
+    color: new vscode10.ThemeColor("editorError.foreground"),
     margin: "0 4px 0 0"
   },
-  backgroundColor: new vscode9.ThemeColor("diffEditor.removedTextBackground"),
+  backgroundColor: new vscode10.ThemeColor("diffEditor.removedTextBackground"),
   isWholeLine: true
 });
-var highDecoration = vscode9.window.createTextEditorDecorationType({
-  overviewRulerColor: new vscode9.ThemeColor("editorWarning.foreground"),
-  overviewRulerLane: vscode9.OverviewRulerLane.Left,
-  backgroundColor: new vscode9.ThemeColor("diffEditor.removedTextBackground"),
+var highDecoration = vscode10.window.createTextEditorDecorationType({
+  overviewRulerColor: new vscode10.ThemeColor("editorWarning.foreground"),
+  overviewRulerLane: vscode10.OverviewRulerLane.Left,
+  backgroundColor: new vscode10.ThemeColor("diffEditor.removedTextBackground"),
   isWholeLine: true,
   opacity: "0.6"
 });
-var suggestDecoration = vscode9.window.createTextEditorDecorationType({
-  overviewRulerColor: new vscode9.ThemeColor("editorInfo.foreground"),
-  overviewRulerLane: vscode9.OverviewRulerLane.Left
+var suggestDecoration = vscode10.window.createTextEditorDecorationType({
+  overviewRulerColor: new vscode10.ThemeColor("editorInfo.foreground"),
+  overviewRulerLane: vscode10.OverviewRulerLane.Left
 });
 var GutterDecorationProvider = class {
   disposables = [];
   constructor() {
     this.disposables.push(
-      vscode9.window.onDidChangeActiveTextEditor((editor) => {
+      vscode10.window.onDidChangeActiveTextEditor((editor) => {
         if (editor)
           this.updateDecorations(editor);
       }),
-      vscode9.languages.onDidChangeDiagnostics((e) => {
-        const editor = vscode9.window.activeTextEditor;
+      vscode10.languages.onDidChangeDiagnostics((e) => {
+        const editor = vscode10.window.activeTextEditor;
         if (!editor)
           return;
         const affected = e.uris.some((uri) => uri.toString() === editor.document.uri.toString());
@@ -18630,12 +18877,12 @@ var GutterDecorationProvider = class {
           this.updateDecorations(editor);
       })
     );
-    if (vscode9.window.activeTextEditor) {
-      this.updateDecorations(vscode9.window.activeTextEditor);
+    if (vscode10.window.activeTextEditor) {
+      this.updateDecorations(vscode10.window.activeTextEditor);
     }
   }
   updateDecorations(editor) {
-    const diagnostics = vscode9.languages.getDiagnostics(editor.document.uri);
+    const diagnostics = vscode10.languages.getDiagnostics(editor.document.uri);
     const kiwiDiags = diagnostics.filter((d) => d.source === "kiwi");
     const critical = [];
     const high = [];
@@ -18643,11 +18890,11 @@ var GutterDecorationProvider = class {
     for (const diag of kiwiDiags) {
       const option = {
         range: diag.range,
-        hoverMessage: new vscode9.MarkdownString(diag.message)
+        hoverMessage: new vscode10.MarkdownString(diag.message)
       };
-      if (diag.severity === vscode9.DiagnosticSeverity.Error) {
+      if (diag.severity === vscode10.DiagnosticSeverity.Error) {
         critical.push(option);
-      } else if (diag.severity === vscode9.DiagnosticSeverity.Warning) {
+      } else if (diag.severity === vscode10.DiagnosticSeverity.Warning) {
         high.push(option);
       } else {
         suggest.push(option);
@@ -18666,32 +18913,32 @@ var GutterDecorationProvider = class {
 };
 
 // src/providers/violationsTree.ts
-var vscode10 = __toESM(require("vscode"));
+var vscode11 = __toESM(require("vscode"));
 var ViolationsTreeProvider = class {
-  _onDidChangeTreeData = new vscode10.EventEmitter();
+  _onDidChangeTreeData = new vscode11.EventEmitter();
   onDidChangeTreeData = this._onDidChangeTreeData.event;
   disposables = [];
   constructor() {
     this.disposables.push(
-      vscode10.languages.onDidChangeDiagnostics(() => this._onDidChangeTreeData.fire(void 0))
+      vscode11.languages.onDidChangeDiagnostics(() => this._onDidChangeTreeData.fire(void 0))
     );
   }
   refresh() {
     this._onDidChangeTreeData.fire(void 0);
   }
   getTreeItem(element) {
-    const item = new vscode10.TreeItem(element.label);
+    const item = new vscode11.TreeItem(element.label);
     if (element.type === "severity") {
-      item.collapsibleState = vscode10.TreeItemCollapsibleState.Expanded;
+      item.collapsibleState = vscode11.TreeItemCollapsibleState.Expanded;
       item.description = `${element.count}`;
-      item.iconPath = element.severity === "CRITICAL" ? new vscode10.ThemeIcon("error", new vscode10.ThemeColor("errorForeground")) : element.severity === "HIGH" ? new vscode10.ThemeIcon("warning", new vscode10.ThemeColor("editorWarning.foreground")) : new vscode10.ThemeIcon("info", new vscode10.ThemeColor("editorInfo.foreground"));
+      item.iconPath = element.severity === "CRITICAL" ? new vscode11.ThemeIcon("error", new vscode11.ThemeColor("errorForeground")) : element.severity === "HIGH" ? new vscode11.ThemeIcon("warning", new vscode11.ThemeColor("editorWarning.foreground")) : new vscode11.ThemeIcon("info", new vscode11.ThemeColor("editorInfo.foreground"));
     } else if (element.type === "file") {
-      item.collapsibleState = vscode10.TreeItemCollapsibleState.Collapsed;
+      item.collapsibleState = vscode11.TreeItemCollapsibleState.Collapsed;
       item.resourceUri = element.uri;
       item.description = `${element.count}`;
-      item.iconPath = vscode10.ThemeIcon.File;
+      item.iconPath = vscode11.ThemeIcon.File;
     } else if (element.type === "violation") {
-      item.collapsibleState = vscode10.TreeItemCollapsibleState.None;
+      item.collapsibleState = vscode11.TreeItemCollapsibleState.None;
       item.description = element.lessonId;
       item.tooltip = element.label;
       if (element.uri && element.range) {
@@ -18711,7 +18958,7 @@ var ViolationsTreeProvider = class {
     return element.children || [];
   }
   getRootItems() {
-    const allDiags = vscode10.languages.getDiagnostics();
+    const allDiags = vscode11.languages.getDiagnostics();
     const bySeverity = {
       CRITICAL: /* @__PURE__ */ new Map(),
       HIGH: /* @__PURE__ */ new Map(),
@@ -18721,7 +18968,7 @@ var ViolationsTreeProvider = class {
       for (const diag of diags) {
         if (diag.source !== "kiwi")
           continue;
-        const severity = diag.severity === vscode10.DiagnosticSeverity.Error ? "CRITICAL" : diag.severity === vscode10.DiagnosticSeverity.Warning ? "HIGH" : "SUGGEST";
+        const severity = diag.severity === vscode11.DiagnosticSeverity.Error ? "CRITICAL" : diag.severity === vscode11.DiagnosticSeverity.Warning ? "HIGH" : "SUGGEST";
         const filePath = uri.fsPath;
         const fileName = filePath.split(/[/\\]/).pop() || filePath;
         if (!bySeverity[severity].has(filePath)) {
@@ -18770,7 +19017,7 @@ var ViolationsTreeProvider = class {
 };
 
 // src/providers/dashboard.ts
-var vscode11 = __toESM(require("vscode"));
+var vscode12 = __toESM(require("vscode"));
 var dashboardPanel;
 var SAVINGS_PER_SEVERITY = {
   CRITICAL: 4,
@@ -18789,10 +19036,10 @@ var DashboardProvider = class {
     if (dashboardPanel) {
       dashboardPanel.reveal();
     } else {
-      dashboardPanel = vscode11.window.createWebviewPanel(
+      dashboardPanel = vscode12.window.createWebviewPanel(
         "kiwiDashboard",
         "Kiwi Dashboard",
-        vscode11.ViewColumn.One,
+        vscode12.ViewColumn.One,
         { enableScripts: true }
       );
       dashboardPanel.onDidDispose(() => {
@@ -18972,14 +19219,14 @@ var DashboardProvider = class {
 var client;
 var statusBar;
 async function activate(context) {
-  const outputChannel = vscode12.window.createOutputChannel("Kiwi LSP");
+  const outputChannel = vscode13.window.createOutputChannel("Kiwi LSP");
   statusBar = new KiwiStatusBar();
   client = new KiwiClient(context, outputChannel, statusBar);
   const fileDecorations = new FileDecorationProvider();
   const gutterDecorations = new GutterDecorationProvider();
   const violationsTree = new ViolationsTreeProvider();
   const dashboard = new DashboardProvider(context, () => client.getClient());
-  vscode12.window.createTreeView("kiwiViolations", {
+  vscode13.window.createTreeView("kiwiViolations", {
     treeDataProvider: violationsTree,
     showCollapseAll: true
   });

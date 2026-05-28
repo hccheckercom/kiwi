@@ -1,226 +1,231 @@
-{
-  "version": 2,
-  "next_id": 728,
-  "next_fea_id": 31,
-  "last_updated": "2026-05-27",
-  "projects": {
-    "wezone": "D:\\projects\\wezone",
-    "wezone-plugins": "D:\\projects\\wezone\\wezone-plugins",
-    "webstore-vn": "D:\\projects\\wezone\\webstore-vn"
-  },
-  "platforms": {
-    "wp": [
-      "ads-compliance",
-      "css-tokens",
-      "db-schema",
-      "edge-cases",
-      "feature-suggest",
-      "file-structure",
-      "js-contract",
-      "performance",
-      "php-security",
-      "placeholder",
-      "wezone-api",
-      "layout-consistency",
-      "responsive",
-      "dark-mode",
-      "accessibility",
-      "component-pattern"
-    ],
-    "nextjs": [
-      "ads-compliance",
-      "ai-safety",
-      "concurrency",
-      "feature-suggest",
-      "nextjs-react",
-      "supabase",
-      "layout-consistency",
-      "responsive",
-      "dark-mode",
-      "accessibility",
-      "component-pattern"
-    ],
-    "python": [
-      "python",
-      "python-windows",
-      "fastapi",
-      "error-handling",
-      "resource-management",
-      "security",
-      "concurrency",
-      "code-quality",
-      "websocket"
-    ]
-  },
-  "categories": {
-    "css-tokens": {
-      "count": 31,
-      "desc": "Hardcode colors, mobile-first, tokens, a11y, viewport zoom, animation, position variants, dark mode hardcoded #fff/#000"
-    },
-    "feature-suggest": {
-      "count": 37,
-      "desc": "Feature suggestions: dark mode, a11y, performance, SEO, typography, edge cases, voucher UI, onboarding, conversion recovery, upsell/cross-sell"
-    },
-    "file-structure": {
-      "count": 21,
-      "desc": "BOM, Template:, missing files, SEO, JSON-LD GMC, nginx routing, Tailwind pipeline, stale CSS bundle"
-    },
-    "js-contract": {
-      "count": 12,
-      "desc": "innerHTML XSS, wzTheme, IIFE, handlers, wishlist, admin SPA stale data, optimistic lock, error handling"
-    },
-    "performance": {
-      "count": 53,
-      "desc": "N+1, autoload, lazy loading, batch queries, CLS, bundle size, caching, dynamic imports, fetchpriority, @import chain, conditional JS, img width/height, font-display, hero LCP, admin export streaming, atomic counter, batch DELETE, export LIMIT, cache versioning, deploy race condition, cache stampede, transient full table scan, cart N+1 reads, cart REPLACE race, coupon double query, redis maxmemory OOM, wp_cache_flush nuclear, wp_cache_set no TTL, order transition race condition, order status+history no transaction, order cache stale after transition, repository full-scan detection, webhook static cache invalidation, webhook retry exponential backoff, webhook timeout configuration, bulk insert wz_bulk_insert temp table swap, seed import bulk insert, cache invalidation specific keys, external font request login page, CSS tokens rebuilt every request, price filter N+1 tier query, get_post_meta N+1 in loop, get_page_by_path in loop, wp_schedule_single_event race, transient without invalidation hook"
-    },
-    "php-security": {
-      "count": 104,
-      "desc": "nonce, sanitize, escape, auth, REST permissions, SQL injection, CSRF, admin bulk transaction, stored XSS, file upload MIME, LIKE injection, capability RBAC, notification rate limit, session fixation, re-auth sudo, dashboard data leak, REST password validation, user existence guard, nonce refresh, PII email masking, public endpoint rate limit, cart shipping rate bypass, cart max size DoS, session stale cached_key, order history note stored XSS, coupon user_id bypass, coupon TOCTOU null, cart qty negative, notice type XSS, webhook SSRF, webhook empty secret, webhook JSON encode, webhook table prefix injection, webhook HMAC timing, static method capability checks, option name injection, public method nonce protection, constructor path traversal, public destructive methods, hook callback nonce exemption, file copy MIME validation, cron callback capability checks, state-modify no transaction, enum type validation, PII logging mask, public endpoint rate limit abuse, SQL column interpolation allowlist, SQL table prefix interpolation, REST date validation fallback, admin GET nonce verification, IPN amount validation, guest checkout session fixation"
-    },
-    "placeholder": {
-      "count": 1,
-      "desc": "Clone placeholders not replaced"
-    },
-    "wezone-api": {
-      "count": 97,
-      "desc": "wz_ prefix, hooks, adapter layer, Router, get_template_part args, banner plugin, admin order state machine, price validation, audit trail, coupon uniqueness, flash sale time, CSV import validation, REST action hooks, wezone_ meta prefix, adapter duplicate code, interface contracts, AdapterManager completeness, updatePrice sale_price, require_once, i18n, analytics aggregator guards, banner cache, reorder batch, array length validation, foreign key validation, hex color validation, cart resolvePrice zero, cart merge stock, cart stale prices, completePayment unchecked update, count/list filter mismatch, inconsistent timestamp functions, coupon engine inconsistent DI, singleton not resettable, repository cache invalidation, repository sanitization, repository JSON field handling, webhook DB update error handling, config array hardcoded colors, API public permission auth endpoint, DI container bypass, cron schedule option type validation"
-    },
-    "nextjs-react": {
-      "count": 36,
-      "desc": "Next.js 16 App Router, React hooks, auth patterns, AI cost control, Zustand, error boundaries, cache invalidation, server actions"
-    },
-    "supabase": {
-      "count": 26,
-      "desc": "RLS, schema cache, multi-tenant isolation, payment webhooks, CORS, VNPay, migrations, pagination"
-    },
-    "concurrency": {
-      "count": 13,
-      "desc": "Race conditions, idempotency, atomic operations, optimistic locking, cron safety, realtime cleanup, webhook duplicate enqueue, transient counter increment race, payment IPN duplicate"
-    },
-    "ads-compliance": {
-      "count": 27,
-      "desc": "Google Ads + Meta Ads policy compliance: misleading claims, pricing, privacy, tracking, business identity, mobile UX, Core Web Vitals, engagement bait, analytics events, cookie consent, GDPR/CCPA"
-    },
-    "ai-safety": {
-      "count": 7,
-      "desc": "Prompt injection, cost control, timeout, fallback, output validation, PII protection, content moderation"
-    },
-    "edge-cases": {
-      "count": 17,
-      "desc": "Empty states, content overflow, number abbreviation, image fallbacks, grid overflow, defensive CSS, error states, dimensions loose coercion, time-based features timezone handling, undefined constants guard, wpdb get_results null guard, $GLOBALS as runtime flag"
-    },
-    "db-schema": {
-      "count": 13,
-      "desc": "Database schema design: missing UNIQUE constraints, junction table PK, FK indexes, composite indexes, webhook secret defaults, email UNIQUE constraint, missing indexes on query columns, race condition atomic increment, delete+insert transaction, TOCTOU SELECT then INSERT/UPDATE"
-    },
-    "php-db": {
-      "count": 8,
-      "desc": ""
-    },
-    "php-performance": {
-      "count": 5,
-      "desc": ""
-    },
-    "php-i18n": {
-      "count": 3,
-      "desc": ""
-    },
-    "loyalty": {
-      "count": 4,
-      "desc": ""
-    },
-    "php-architecture": {
-      "count": 4,
-      "desc": ""
-    },
-    "security": {
-      "count": 75,
-      "desc": ""
-    },
-    "resource-management": {
-      "count": 1,
-      "desc": ""
-    },
-    "error-handling": {
-      "count": 1,
-      "desc": ""
-    },
-    "react": {
-      "count": 5,
-      "desc": ""
-    },
-    "fastapi": {
-      "count": 54,
-      "desc": "Dependency injection, request validation, response models, CORS, background tasks, HTTPException, auth dependencies, blocking I/O, database cleanup, rate limiting, input validation, WebSocket cleanup, request ID tracing, pagination, file uploads, streaming responses, middleware, lifespan events, testing, OpenAPI customization, security headers, compression, caching, monitoring, health checks, graceful shutdown"
-    },
-    "d3": {
-      "count": 1,
-      "desc": ""
-    },
-    "websocket": {
-      "count": 2,
-      "desc": ""
-    },
-    "python": {
-      "count": 53,
-      "desc": "Type hints, exceptions, async/await, context managers, mutable defaults, string concat, is vs ==, dict.get(), len() checks, pathlib, staticmethod, print vs logging, hardcoded credentials, SQL injection, global mutation, HTTP timeouts, enums, list comprehensions, f-strings, dataclasses, generators, decorators, metaclasses, descriptors, slots, weakref, abc, typing protocols, contextlib, functools, itertools, collections, heapq, bisect, array, struct, pickle, json, csv, xml, html, urllib, socket, threading, multiprocessing, subprocess, signal, os, sys, argparse, configparser, logging config"
-    },
-    "python-windows": {
-      "count": 2,
-      "desc": ""
-    },
-    "portability": {
-      "count": 22,
-      "desc": ""
-    },
-    "reliability": {
-      "count": 17,
-      "desc": ""
-    },
-    "code-quality": {
-      "count": 6,
-      "desc": ""
-    },
-    "layout-consistency": {
-      "count": 7,
-      "desc": "Container width, spacing, fullwidth consistency"
-    },
-    "responsive": {
-      "count": 14,
-      "desc": "Breakpoint coverage, mobile-first rules, overflow prevention"
-    },
-    "dark-mode": {
-      "count": 9,
-      "desc": "Dark mode class coverage, contrast, text/bg pairing"
-    },
-    "accessibility": {
-      "count": 13,
-      "desc": "ARIA, focus, contrast, labels, keyboard support"
-    },
-    "component-pattern": {
-      "count": 10,
-      "desc": "Loading/error/empty states, button consistency"
-    }
-  },
-  "tags": [
-    "theme",
-    "plugin",
-    "webstore",
-    "both"
-  ],
-  "features": {
-    "pattern_refinement": true,
-    "deduplication": true,
-    "semantic_embeddings": true,
-    "ml_training": true,
-    "js_ast_parsing": true,
-    "cfg_analysis": false,
-    "self_healing": false
-  },
-  "stats": {
-    "total": 121,
-    "critical": 50,
-    "high": 47,
-    "suggest": 24
-  }
+﻿{
+    "version":  2,
+    "next_id":  741,
+    "next_fea_id":  31,
+    "last_updated":  "2026-05-28",
+    "projects":  {
+                     "wezone":  "D:\\projects\\wezone",
+                     "wezone-plugins":  "D:\\projects\\wezone\\wezone-plugins",
+                     "webstore-vn":  "D:\\projects\\wezone\\webstore-vn"
+                 },
+    "platforms":  {
+                      "wp":  [
+                                 "ads-compliance",
+                                 "css-tokens",
+                                 "db-schema",
+                                 "edge-cases",
+                                 "feature-suggest",
+                                 "file-structure",
+                                 "js-contract",
+                                 "performance",
+                                 "php-security",
+                                 "placeholder",
+                                 "wezone-api",
+                                 "layout-consistency",
+                                 "responsive",
+                                 "dark-mode",
+                                 "accessibility",
+                                 "component-pattern",
+                                 "woocommerce-migration"
+                             ],
+                      "nextjs":  [
+                                     "ads-compliance",
+                                     "ai-safety",
+                                     "concurrency",
+                                     "feature-suggest",
+                                     "nextjs-react",
+                                     "supabase",
+                                     "layout-consistency",
+                                     "responsive",
+                                     "dark-mode",
+                                     "accessibility",
+                                     "component-pattern"
+                                 ],
+                      "python":  [
+                                     "python",
+                                     "python-windows",
+                                     "fastapi",
+                                     "error-handling",
+                                     "resource-management",
+                                     "security",
+                                     "concurrency",
+                                     "code-quality",
+                                     "websocket"
+                                 ]
+                  },
+    "categories":  {
+                       "css-tokens":  {
+                                          "count":  31,
+                                          "desc":  "Hardcode colors, mobile-first, tokens, a11y, viewport zoom, animation, position variants, dark mode hardcoded #fff/#000"
+                                      },
+                       "feature-suggest":  {
+                                               "count":  37,
+                                               "desc":  "Feature suggestions: dark mode, a11y, performance, SEO, typography, edge cases, voucher UI, onboarding, conversion recovery, upsell/cross-sell"
+                                           },
+                       "file-structure":  {
+                                              "count":  21,
+                                              "desc":  "BOM, Template:, missing files, SEO, JSON-LD GMC, nginx routing, Tailwind pipeline, stale CSS bundle"
+                                          },
+                       "js-contract":  {
+                                           "count":  12,
+                                           "desc":  "innerHTML XSS, wzTheme, IIFE, handlers, wishlist, admin SPA stale data, optimistic lock, error handling"
+                                       },
+                       "performance":  {
+                                           "count":  53,
+                                           "desc":  "N+1, autoload, lazy loading, batch queries, CLS, bundle size, caching, dynamic imports, fetchpriority, @import chain, conditional JS, img width/height, font-display, hero LCP, admin export streaming, atomic counter, batch DELETE, export LIMIT, cache versioning, deploy race condition, cache stampede, transient full table scan, cart N+1 reads, cart REPLACE race, coupon double query, redis maxmemory OOM, wp_cache_flush nuclear, wp_cache_set no TTL, order transition race condition, order status+history no transaction, order cache stale after transition, repository full-scan detection, webhook static cache invalidation, webhook retry exponential backoff, webhook timeout configuration, bulk insert wz_bulk_insert temp table swap, seed import bulk insert, cache invalidation specific keys, external font request login page, CSS tokens rebuilt every request, price filter N+1 tier query, get_post_meta N+1 in loop, get_page_by_path in loop, wp_schedule_single_event race, transient without invalidation hook"
+                                       },
+                       "php-security":  {
+                                            "count":  104,
+                                            "desc":  "nonce, sanitize, escape, auth, REST permissions, SQL injection, CSRF, admin bulk transaction, stored XSS, file upload MIME, LIKE injection, capability RBAC, notification rate limit, session fixation, re-auth sudo, dashboard data leak, REST password validation, user existence guard, nonce refresh, PII email masking, public endpoint rate limit, cart shipping rate bypass, cart max size DoS, session stale cached_key, order history note stored XSS, coupon user_id bypass, coupon TOCTOU null, cart qty negative, notice type XSS, webhook SSRF, webhook empty secret, webhook JSON encode, webhook table prefix injection, webhook HMAC timing, static method capability checks, option name injection, public method nonce protection, constructor path traversal, public destructive methods, hook callback nonce exemption, file copy MIME validation, cron callback capability checks, state-modify no transaction, enum type validation, PII logging mask, public endpoint rate limit abuse, SQL column interpolation allowlist, SQL table prefix interpolation, REST date validation fallback, admin GET nonce verification, IPN amount validation, guest checkout session fixation"
+                                        },
+                       "placeholder":  {
+                                           "count":  1,
+                                           "desc":  "Clone placeholders not replaced"
+                                       },
+                       "wezone-api":  {
+                                          "count":  97,
+                                          "desc":  "wz_ prefix, hooks, adapter layer, Router, get_template_part args, banner plugin, admin order state machine, price validation, audit trail, coupon uniqueness, flash sale time, CSV import validation, REST action hooks, wezone_ meta prefix, adapter duplicate code, interface contracts, AdapterManager completeness, updatePrice sale_price, require_once, i18n, analytics aggregator guards, banner cache, reorder batch, array length validation, foreign key validation, hex color validation, cart resolvePrice zero, cart merge stock, cart stale prices, completePayment unchecked update, count/list filter mismatch, inconsistent timestamp functions, coupon engine inconsistent DI, singleton not resettable, repository cache invalidation, repository sanitization, repository JSON field handling, webhook DB update error handling, config array hardcoded colors, API public permission auth endpoint, DI container bypass, cron schedule option type validation"
+                                      },
+                       "nextjs-react":  {
+                                            "count":  36,
+                                            "desc":  "Next.js 16 App Router, React hooks, auth patterns, AI cost control, Zustand, error boundaries, cache invalidation, server actions"
+                                        },
+                       "supabase":  {
+                                        "count":  26,
+                                        "desc":  "RLS, schema cache, multi-tenant isolation, payment webhooks, CORS, VNPay, migrations, pagination"
+                                    },
+                       "concurrency":  {
+                                           "count":  13,
+                                           "desc":  "Race conditions, idempotency, atomic operations, optimistic locking, cron safety, realtime cleanup, webhook duplicate enqueue, transient counter increment race, payment IPN duplicate"
+                                       },
+                       "ads-compliance":  {
+                                              "count":  27,
+                                              "desc":  "Google Ads + Meta Ads policy compliance: misleading claims, pricing, privacy, tracking, business identity, mobile UX, Core Web Vitals, engagement bait, analytics events, cookie consent, GDPR/CCPA"
+                                          },
+                       "ai-safety":  {
+                                         "count":  7,
+                                         "desc":  "Prompt injection, cost control, timeout, fallback, output validation, PII protection, content moderation"
+                                     },
+                       "edge-cases":  {
+                                          "count":  17,
+                                          "desc":  "Empty states, content overflow, number abbreviation, image fallbacks, grid overflow, defensive CSS, error states, dimensions loose coercion, time-based features timezone handling, undefined constants guard, wpdb get_results null guard, $GLOBALS as runtime flag"
+                                      },
+                       "db-schema":  {
+                                         "count":  13,
+                                         "desc":  "Database schema design: missing UNIQUE constraints, junction table PK, FK indexes, composite indexes, webhook secret defaults, email UNIQUE constraint, missing indexes on query columns, race condition atomic increment, delete+insert transaction, TOCTOU SELECT then INSERT/UPDATE"
+                                     },
+                       "php-db":  {
+                                      "count":  8,
+                                      "desc":  ""
+                                  },
+                       "php-performance":  {
+                                               "count":  5,
+                                               "desc":  ""
+                                           },
+                       "php-i18n":  {
+                                        "count":  3,
+                                        "desc":  ""
+                                    },
+                       "loyalty":  {
+                                       "count":  4,
+                                       "desc":  ""
+                                   },
+                       "php-architecture":  {
+                                                "count":  4,
+                                                "desc":  ""
+                                            },
+                       "security":  {
+                                        "count":  75,
+                                        "desc":  ""
+                                    },
+                       "resource-management":  {
+                                                   "count":  1,
+                                                   "desc":  ""
+                                               },
+                       "error-handling":  {
+                                              "count":  1,
+                                              "desc":  ""
+                                          },
+                       "react":  {
+                                     "count":  5,
+                                     "desc":  ""
+                                 },
+                       "fastapi":  {
+                                       "count":  54,
+                                       "desc":  "Dependency injection, request validation, response models, CORS, background tasks, HTTPException, auth dependencies, blocking I/O, database cleanup, rate limiting, input validation, WebSocket cleanup, request ID tracing, pagination, file uploads, streaming responses, middleware, lifespan events, testing, OpenAPI customization, security headers, compression, caching, monitoring, health checks, graceful shutdown"
+                                   },
+                       "d3":  {
+                                  "count":  1,
+                                  "desc":  ""
+                              },
+                       "websocket":  {
+                                         "count":  2,
+                                         "desc":  ""
+                                     },
+                       "python":  {
+                                      "count":  53,
+                                      "desc":  "Type hints, exceptions, async/await, context managers, mutable defaults, string concat, is vs ==, dict.get(), len() checks, pathlib, staticmethod, print vs logging, hardcoded credentials, SQL injection, global mutation, HTTP timeouts, enums, list comprehensions, f-strings, dataclasses, generators, decorators, metaclasses, descriptors, slots, weakref, abc, typing protocols, contextlib, functools, itertools, collections, heapq, bisect, array, struct, pickle, json, csv, xml, html, urllib, socket, threading, multiprocessing, subprocess, signal, os, sys, argparse, configparser, logging config"
+                                  },
+                       "python-windows":  {
+                                              "count":  2,
+                                              "desc":  ""
+                                          },
+                       "portability":  {
+                                           "count":  22,
+                                           "desc":  ""
+                                       },
+                       "reliability":  {
+                                           "count":  17,
+                                           "desc":  ""
+                                       },
+                       "code-quality":  {
+                                            "count":  6,
+                                            "desc":  ""
+                                        },
+                       "layout-consistency":  {
+                                                  "count":  7,
+                                                  "desc":  "Container width, spacing, fullwidth consistency"
+                                              },
+                       "responsive":  {
+                                          "count":  14,
+                                          "desc":  "Breakpoint coverage, mobile-first rules, overflow prevention"
+                                      },
+                       "dark-mode":  {
+                                         "count":  9,
+                                         "desc":  "Dark mode class coverage, contrast, text/bg pairing"
+                                     },
+                       "accessibility":  {
+                                             "count":  13,
+                                             "desc":  "ARIA, focus, contrast, labels, keyboard support"
+                                         },
+                       "component-pattern":  {
+                                                 "count":  10,
+                                                 "desc":  "Loading/error/empty states, button consistency"
+                                             },
+                       "woocommerce-migration":  {
+                                                     "count":  13,
+                                                     "desc":  "WooCommerce to Wezone Commer migration: WC() singleton, wc_* functions, WC_* classes, woocommerce_* hooks, REST API, DB tables, conditionals, templates, shortcodes, JS events, class_exists checks"
+                                                 }
+                   },
+    "tags":  [
+                 "theme",
+                 "plugin",
+                 "webstore",
+                 "both"
+             ],
+    "features":  {
+                     "pattern_refinement":  true,
+                     "deduplication":  true,
+                     "semantic_embeddings":  true,
+                     "ml_training":  true,
+                     "js_ast_parsing":  true,
+                     "cfg_analysis":  false,
+                     "self_healing":  false
+                 },
+    "stats":  {
+                  "total":  121,
+                  "critical":  50,
+                  "high":  47,
+                  "suggest":  24
+              }
 }

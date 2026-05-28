@@ -2,7 +2,7 @@
 
 > Auto-generated. Do NOT edit manually. Run `python tools/rebuild_index.py`.
 
-**Total: 598** | CRITICAL: 146 | HIGH: 356 | INFO: 18 | MEDIUM: 3 | SUGGEST: 75
+**Total: 611** | CRITICAL: 153 | HIGH: 362 | INFO: 18 | MEDIUM: 3 | SUGGEST: 75
 
 ## accessibility
 
@@ -786,3 +786,21 @@
 | LES-343 | SUGG | `^require\s+__DIR__\s*\.\s*'/functions/` | Adapter functions.php uses require instead of require_once f |
 | LES-344 | SUGG | `sprintf\s*\(\s*'Thanh toan` | WZ_Gateway hardcoded Vietnamese string without __() i18n |
 | LES-406 | SUGG | `static\s+\$[a-z_]+\s*=\s*null` | Helper singleton functions not resettable — breaks unit test |
+
+## woocommerce-migration
+
+| ID | Sev | Pattern | Summary |
+|----|-----|---------|---------|
+| LES-728 | CRIT | `WC\(\)\s*->` | WC() singleton usage — dùng wz_ helper functions thay thế |
+| LES-729 | CRIT | `wc_get_(product|order|products|orders)\s...` | wc_get_product/wc_get_order — dùng wz_get_product/wz_get_ord |
+| LES-730 | CRIT | `\bnew\s+WC_|instanceof\s+WC_|extends\s+W...` | WC_Product/WC_Order classes — Wezone dùng array, không dùng  |
+| LES-731 | CRIT | `(add_action|do_action|remove_action)\s*\...` | woocommerce_* action hooks — dùng wezone_* hooks thay thế |
+| LES-732 | CRIT | `(add_filter|apply_filters|remove_filter)...` | woocommerce_* filter hooks — dùng wezone_* filters thay thế |
+| LES-733 | CRIT | `wc_(price|clean|sanitize|mail|enqueue_js...` | wc_price/wc_get_template — utility functions phổ biến nhất |
+| LES-734 | CRIT | `\b(is_shop|is_product|is_product_categor...` | is_shop/is_product/is_cart — conditional functions WooCommer |
+| LES-735 | HIGH | `(wp-json|rest_url).*wc/v[0-9]|WC_REST_|w...` | WooCommerce REST API endpoints — dùng Wezone REST API |
+| LES-736 | HIGH | `woocommerce/|wc-template|woocommerce_con...` | WooCommerce template override pattern — dùng wezone-template |
+| LES-737 | HIGH | `wp_wc_|wp_woocommerce_|_wc_|wc_order|woo...` | WooCommerce database tables/meta keys — dùng wz_* tables |
+| LES-738 | HIGH | `\[(products|product_page|product_categor...` | WooCommerce shortcodes — [products], [cart], [checkout] khôn |
+| LES-739 | HIGH | `class_exists\s*\(\s*['"]WooCommerce['"]|...` | class_exists('WooCommerce') check — dùng wezone_is_active()  |
+| LES-740 | HIGH | `wc_add_to_cart_params|wc_cart_fragments_...` | WooCommerce JavaScript events/objects — dùng Wezone JS API |
