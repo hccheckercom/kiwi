@@ -22,6 +22,37 @@ PATTERN_TYPE_TO_SEVERITY = {
 }
 
 
+def _log_err(stage: str, exc: BaseException) -> None:
+    try:
+        conn = _get_conn()
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS learning_health ("
+            "stage TEXT PRIMARY KEY, fail_count INTEGER DEFAULT 0, "
+            "last_failure_at REAL, last_error TEXT)"
+        )
+        conn.execute(
+            "INSERT INTO learning_health (stage, fail_count, last_failure_at, last_error) "
+            "VALUES (?, 1, ?, ?) ON CONFLICT(stage) DO UPDATE SET "
+            "fail_count = fail_count + 1, last_failure_at = excluded.last_failure_at, "
+            "last_error = excluded.last_error",
+            (f"auto_promoter.{stage}", time.time(), f"{type(exc).__name__}: {exc}"[:500]),
+        )
+        conn.commit()
+    except Exception:
+        pass
+
+
+def _ensure_promotion_unique_index(conn):
+    """Promote SELECT-then-INSERT to atomic UPSERT by adding a unique index."""
+    try:
+        conn.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_ps_pattern_type "
+            "ON promotion_suggestions(pattern, pattern_type)"
+        )
+    except Exception as e:
+        _log_err("ensure_unique_index", e)
+
+
 def auto_promote_check() -> list[dict]:
     """Check for promotable patterns and create lesson suggestions. Max 2 per call."""
     promotable = get_promotable_patterns(min_occurrences=3)
@@ -30,7 +61,6 @@ def auto_promote_check() -> list[dict]:
 
     created = []
     for pattern in promotable[:MAX_PROMOTIONS_PER_SESSION]:
-        # R8: validate novel pattern before promoting
         try:
             from .thinker import think
             ctx = {
@@ -43,8 +73,8 @@ def auto_promote_check() -> list[dict]:
             result = think('novel_validation', ctx)
             if result and result.confidence >= 0.7 and result.decision == 'skip':
                 continue
-        except Exception:
-            pass
+        except Exception as e:
+            _log_err("think_validation", e)
 
         suggestion = _create_suggestion(pattern)
         if suggestion:
@@ -55,10 +85,12 @@ def auto_promote_check() -> list[dict]:
 
 
 def _create_suggestion(pattern: dict) -> dict | None:
-    """Create a pending lesson suggestion from a novel pattern."""
+    """Create a pending lesson suggestion. Atomic UPSERT — race-safe."""
     conn = _get_conn()
     if not conn:
         return None
+
+    _ensure_promotion_unique_index(conn)
 
     category = PATTERN_TYPE_TO_CATEGORY.get(pattern["type"], "api-usage")
     severity = PATTERN_TYPE_TO_SEVERITY.get(pattern["type"], "SUGGEST")
@@ -75,18 +107,12 @@ def _create_suggestion(pattern: dict) -> dict | None:
     }
 
     try:
-        existing = conn.execute(
-            "SELECT id FROM promotion_suggestions WHERE pattern = ? AND pattern_type = ?",
-            (suggestion["pattern"], suggestion["pattern_type"]),
-        ).fetchone()
-        if existing:
-            return None
-
-        conn.execute(
+        cursor = conn.execute(
             "INSERT INTO promotion_suggestions "
             "(pattern, pattern_type, category, severity, theme, task_type, "
             "times_seen, status, created_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)",
+            "VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?) "
+            "ON CONFLICT(pattern, pattern_type) DO NOTHING",
             (
                 suggestion["pattern"],
                 suggestion["pattern_type"],
@@ -99,8 +125,11 @@ def _create_suggestion(pattern: dict) -> dict | None:
             ),
         )
         conn.commit()
+        if cursor.rowcount == 0:
+            return None
         return suggestion
-    except Exception:
+    except Exception as e:
+        _log_err("create_suggestion", e)
         return None
 
 
@@ -124,7 +153,8 @@ def get_pending_suggestions(limit: int = 10) -> list[dict]:
             "severity": r[4], "theme": r[5], "task_type": r[6],
             "times_seen": r[7], "created_at": r[8],
         } for r in rows]
-    except Exception:
+    except Exception as e:
+        _log_err("get_pending_suggestions", e)
         return []
 
 
@@ -139,7 +169,8 @@ def approve_suggestion(suggestion_id: int) -> bool:
         )
         conn.commit()
         return True
-    except Exception:
+    except Exception as e:
+        _log_err("approve_suggestion", e)
         return False
 
 
@@ -154,5 +185,6 @@ def reject_suggestion(suggestion_id: int) -> bool:
         )
         conn.commit()
         return True
-    except Exception:
+    except Exception as e:
+        _log_err("reject_suggestion", e)
         return False

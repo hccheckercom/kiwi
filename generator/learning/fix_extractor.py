@@ -3,6 +3,7 @@
 import re
 import difflib
 import sqlite3
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
@@ -10,23 +11,88 @@ from typing import Optional
 from memory.db import get_connection, get_suggested_lessons
 
 
-def _get_existing_patterns() -> list[str]:
-    """Load all existing Kiwi lesson patterns for conflict check."""
+_PATTERNS_CACHE = {"compiled": None, "loaded_at": 0.0, "mtime": 0.0}
+_PATTERNS_TTL = 300  # 5 minutes — lessons rarely change mid-session
+_REGEX_TIMEOUT_BYTES = 200 * 1024  # cap input size before regex search
+
+
+def _log_err(stage: str, exc: BaseException) -> None:
+    """Record fix_extractor failures so silent breakage is visible."""
+    try:
+        kiwi_dir = Path(__file__).parent.parent.parent
+        db_path = kiwi_dir / "memory" / "reasoning.db"
+        if not db_path.exists():
+            return
+        conn = sqlite3.connect(str(db_path), timeout=5)
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS learning_health ("
+            "stage TEXT PRIMARY KEY, fail_count INTEGER DEFAULT 0, "
+            "last_failure_at REAL, last_error TEXT)"
+        )
+        conn.execute(
+            "INSERT INTO learning_health (stage, fail_count, last_failure_at, last_error) "
+            "VALUES (?, 1, ?, ?) ON CONFLICT(stage) DO UPDATE SET "
+            "fail_count = fail_count + 1, last_failure_at = excluded.last_failure_at, "
+            "last_error = excluded.last_error",
+            (f"fix_extractor.{stage}", time.time(), f"{type(exc).__name__}: {exc}"[:500]),
+        )
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
+
+
+def _get_existing_patterns() -> list:
+    """Load all existing Kiwi lesson patterns (compiled, cached, validated).
+
+    Returns list of (raw_pattern, compiled_re_or_None). Bad regex are stored
+    with compiled=None so _has_conflict can skip them without re-compiling.
+    """
     lessons_dir = Path(__file__).parent.parent.parent / "lessons"
-    patterns = []
+    if not lessons_dir.exists():
+        return []
+
+    try:
+        dir_mtime = max(
+            (f.stat().st_mtime for f in lessons_dir.rglob("*.md")),
+            default=0.0,
+        )
+    except OSError:
+        dir_mtime = 0.0
+
+    now = time.time()
+    cached = _PATTERNS_CACHE["compiled"]
+    if (
+        cached is not None
+        and (now - _PATTERNS_CACHE["loaded_at"]) < _PATTERNS_TTL
+        and abs(dir_mtime - _PATTERNS_CACHE["mtime"]) < 1e-6
+    ):
+        return cached
+
+    out = []
     for f in lessons_dir.rglob("*.md"):
-        text = f.read_text(encoding="utf-8", errors="ignore")
+        try:
+            text = f.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
         m = re.search(r"^pattern:\s*(.+)$", text, re.MULTILINE)
-        if m:
-            patterns.append(m.group(1).strip())
-    return patterns
+        if not m:
+            continue
+        raw = m.group(1).strip()
+        try:
+            compiled = re.compile(raw)
+        except re.error:
+            compiled = None
+        out.append((raw, compiled))
+
+    _PATTERNS_CACHE.update({"compiled": out, "loaded_at": now, "mtime": dir_mtime})
+    return out
 
 
 def _is_regex_able(code: str) -> bool:
     """Check if the bad code snippet can be expressed as a regex pattern."""
     if not code.strip():
         return False
-    # Heuristic: contains a recognizable PHP/JS/CSS token that can be matched
     indicators = [
         r"\$_GET", r"\$_POST", r"\$_REQUEST", r"\$_COOKIE",
         r"echo\s+\$", r"mysql_", r"eval\s*\(", r"base64_decode",
@@ -36,19 +102,43 @@ def _is_regex_able(code: str) -> bool:
     return any(re.search(p, code, re.IGNORECASE) for p in indicators)
 
 
-def _has_conflict(bad_lines: list[str], existing_patterns: list[str]) -> bool:
-    """Return True if bad code already matches an existing lesson pattern."""
+def _has_conflict(bad_lines: list, existing_patterns: list) -> bool:
+    """Return True if bad code already matches an existing lesson pattern.
+
+    Uses pre-compiled patterns; truncates input to bound regex work
+    (defense against ReDoS via untrusted lesson patterns).
+    """
     bad_text = "\n".join(bad_lines)
-    for pat in existing_patterns:
+    if len(bad_text) > _REGEX_TIMEOUT_BYTES:
+        bad_text = bad_text[:_REGEX_TIMEOUT_BYTES]
+    for raw, compiled in existing_patterns:
+        if compiled is None:
+            continue
         try:
-            if re.search(pat, bad_text):
+            if compiled.search(bad_text):
                 return True
         except re.error:
-            pass
+            continue
     return False
 
 
-def _infer_category(bad_lines: list[str], file_path: str) -> str:
+def _safe_truncate_then_escape(raw: str, max_raw: int = 60) -> str:
+    """Truncate raw string FIRST, then re.escape — never split a backslash sequence.
+
+    BUG #20: ``re.escape(s)[:120]`` may slice between ``\`` and the next char,
+    producing a dangling backslash that re.compile rejects. Truncating before
+    escaping avoids that entirely.
+    """
+    truncated = raw[:max_raw]
+    pattern = re.escape(truncated)
+    try:
+        re.compile(pattern)
+    except re.error:
+        pattern = re.escape(truncated.rstrip("\\"))
+    return pattern
+
+
+def _infer_category(bad_lines: list, file_path: str) -> str:
     bad_text = "\n".join(bad_lines).lower()
     if any(k in bad_text for k in ["$_get", "$_post", "$_request", "eval(", "base64_decode"]):
         return "security"
@@ -63,6 +153,17 @@ def _infer_category(bad_lines: list[str], file_path: str) -> str:
     if file_path.endswith(".js") or file_path.endswith(".ts"):
         return "javascript"
     return "general"
+
+
+def _ensure_suggested_unique_index(conn) -> None:
+    """Create unique index so upsert is atomic across concurrent hooks (BUG #18)."""
+    try:
+        conn.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_sl_pattern_status "
+            "ON suggested_lessons(pattern, status)"
+        )
+    except Exception as e:
+        _log_err("ensure_unique_index", e)
 
 
 def extract_lesson_candidate(
@@ -93,26 +194,26 @@ def extract_lesson_candidate(
     if len(bad_code) < 5 or len(good_code) < 5:
         return None
 
-    # Build confidence score from 4 signals
     confidence = 0.0
 
     regex_able = _is_regex_able(bad_code)
     if regex_able:
         confidence += 0.3
 
-    # frequency signal: will be tracked via DB upsert (frequency column)
-    # check existing DB count as a proxy before first insert
     pattern_fragment = bad_code[:50]
-    conn = get_connection()
-    existing_freq = conn.execute(
-        "SELECT frequency FROM suggested_lessons WHERE pattern LIKE ? AND status = 'pending' LIMIT 1",
-        (f"{pattern_fragment[:30]}%",),
-    ).fetchone()
-    conn.close()
+    try:
+        conn = get_connection()
+        existing_freq = conn.execute(
+            "SELECT frequency FROM suggested_lessons WHERE pattern LIKE ? AND status = 'pending' LIMIT 1",
+            (f"{pattern_fragment[:30]}%",),
+        ).fetchone()
+        conn.close()
+    except Exception as e:
+        _log_err("read_existing_freq", e)
+        existing_freq = None
     if existing_freq and (existing_freq[0] or 0) >= 3:
         confidence += 0.2
 
-    # consistent: good_lines are non-trivial (not just whitespace changes)
     meaningful_good = [l for l in good_lines if l.strip()]
     consistent = len(meaningful_good) > 0 and len(good_lines) <= len(bad_lines) * 3
     if consistent:
@@ -126,15 +227,12 @@ def extract_lesson_candidate(
     if confidence < 0.5:
         return None
 
-    # Build a simple regex pattern from the first bad line
     first_bad = bad_lines[0].strip()
-    # Escape for regex but keep common wildcards readable
-    pattern = re.escape(first_bad)[:120]
+    pattern = _safe_truncate_then_escape(first_bad, max_raw=60)
 
     category = _infer_category(bad_lines, file_path)
     severity = "HIGH" if category == "security" else "SUGGEST"
 
-    # Find approximate line number of first bad line in before_content
     example_line = 1
     for i, line in enumerate(before_content.splitlines(), 1):
         if line.strip() == bad_lines[0].strip():
@@ -154,27 +252,19 @@ def extract_lesson_candidate(
         "theme_slug": theme_slug,
     }
 
-    # Insert into suggested_lessons (upsert: increment frequency if same pattern exists)
-    conn = get_connection()
-    existing = conn.execute(
-        "SELECT id, frequency FROM suggested_lessons WHERE pattern = ? AND status = 'pending'",
-        (candidate["pattern"],),
-    ).fetchone()
-
-    if existing:
-        conn.execute(
-            "UPDATE suggested_lessons SET frequency = frequency + 1, confidence_score = ?, good_code = ? WHERE id = ?",
-            (round(confidence, 2), good_code[:500], existing["id"]),
-        )
-        conn.commit()
-        candidate["id"] = existing["id"]
-    else:
-        conn.execute(
+    try:
+        conn = get_connection()
+        _ensure_suggested_unique_index(conn)
+        cursor = conn.execute(
             """
             INSERT INTO suggested_lessons
                 (pattern, scope, category, severity, example_file, example_line,
                  example_code, good_code, suggested_at, status, confidence_score, frequency)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, 1)
+            ON CONFLICT(pattern, status) DO UPDATE SET
+                frequency = frequency + 1,
+                confidence_score = excluded.confidence_score,
+                good_code = excluded.good_code
             """,
             (
                 candidate["pattern"],
@@ -190,8 +280,15 @@ def extract_lesson_candidate(
             ),
         )
         conn.commit()
-        candidate["id"] = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
-    conn.close()
+        row = conn.execute(
+            "SELECT id FROM suggested_lessons WHERE pattern = ? AND status = 'pending'",
+            (candidate["pattern"],),
+        ).fetchone()
+        candidate["id"] = row[0] if row else None
+        conn.close()
+    except Exception as e:
+        _log_err("upsert_suggestion", e)
+        return None
 
     return candidate
 
@@ -219,9 +316,12 @@ def _create_lesson_file(candidate: dict) -> Optional[str]:
     """
     Call kiwi_add to create a real lesson file from a candidate.
     Returns the new lesson_id on success, None on failure.
+
+    SAFETY: This function spawns a subprocess (timeout 10s). DO NOT call from
+    PostToolUse hooks — only from batch contexts like auto_promote_candidates().
     """
     try:
-        import subprocess, sys, json
+        import subprocess, sys
         kiwi_dir = Path(__file__).parent.parent.parent
         result = subprocess.run(
             [sys.executable, "-m", "tools.add",
@@ -237,14 +337,18 @@ def _create_lesson_file(candidate: dict) -> Optional[str]:
             cwd=str(kiwi_dir),
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=10,
         )
         if result.returncode == 0:
             m = re.search(r"\b(LES|FEA|SEC)-\d+\b", result.stdout)
             if m:
                 return m.group(0)
-    except Exception:
-        pass
+        else:
+            _log_err("create_lesson_file_rc", RuntimeError(f"rc={result.returncode} stderr={result.stderr[:200]}"))
+    except subprocess.TimeoutExpired as e:
+        _log_err("create_lesson_file_timeout", e)
+    except Exception as e:
+        _log_err("create_lesson_file", e)
     return None
 
 

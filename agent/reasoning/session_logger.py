@@ -12,6 +12,8 @@ SCHEMA_PATH = Path(__file__).parent / "schema.sql"
 SESSION_FILE = Path(__file__).parent.parent.parent / "memory" / ".current_session_id"
 
 _session_id = None
+_session_id_set_at = 0.0
+_SESSION_ID_TTL = 14400  # 4 hours — match file-based TTL on disk
 _conn = None
 
 
@@ -159,15 +161,24 @@ def _table_exists(conn, table: str) -> bool:
 
 
 def get_session_id() -> str:
-    """Get or create session ID. Persists via file so all hook subprocesses share it."""
-    global _session_id
-    if _session_id is not None:
+    """Get or create session ID. Persists via file so all hook subprocesses share it.
+
+    Cached `_session_id` expires after `_SESSION_ID_TTL` seconds (4h) so a long-lived
+    Python process (e.g. MCP server) does not keep using a stale id from an old session.
+    """
+    global _session_id, _session_id_set_at
+    now = time.time()
+    if _session_id is not None and (now - _session_id_set_at) < _SESSION_ID_TTL:
         return _session_id
+    if _session_id is not None:
+        # cache expired — drop it so we re-resolve from env/file/new
+        _session_id = None
 
     # Priority 1: env var from Claude Code
     conv_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "") or os.environ.get("CLAUDE_CONVERSATION_ID", "")
     if conv_id:
         _session_id = conv_id[:12]
+        _session_id_set_at = now
         _ensure_session_file(_session_id)
         _init_session()
         return _session_id
@@ -179,10 +190,11 @@ def get_session_id() -> str:
             file_sid = data.get("session_id", "")
             created_at = data.get("created_at", 0)
             # Session expires after 4 hours of inactivity
-            if file_sid and (time.time() - created_at) < 14400:
+            if file_sid and (now - created_at) < _SESSION_ID_TTL:
                 _session_id = file_sid
+                _session_id_set_at = now
                 # Update last_active
-                data["last_active"] = time.time()
+                data["last_active"] = now
                 SESSION_FILE.write_text(json.dumps(data), encoding="utf-8")
                 _init_session()
                 return _session_id
@@ -191,6 +203,7 @@ def get_session_id() -> str:
 
     # Priority 3: create new session
     _session_id = uuid.uuid4().hex[:8]
+    _session_id_set_at = now
     _ensure_session_file(_session_id)
     _init_session()
     return _session_id

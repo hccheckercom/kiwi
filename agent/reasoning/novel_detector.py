@@ -7,6 +7,27 @@ from .session_logger import _get_conn
 MAX_NOVEL_PATTERNS = 200
 
 
+def _log_err(stage: str, exc: BaseException) -> None:
+    """Record failure in learning_health so silent breakage is visible."""
+    try:
+        conn = _get_conn()
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS learning_health ("
+            "stage TEXT PRIMARY KEY, fail_count INTEGER DEFAULT 0, "
+            "last_failure_at REAL, last_error TEXT)"
+        )
+        conn.execute(
+            "INSERT INTO learning_health (stage, fail_count, last_failure_at, last_error) "
+            "VALUES (?, 1, ?, ?) ON CONFLICT(stage) DO UPDATE SET "
+            "fail_count = fail_count + 1, last_failure_at = excluded.last_failure_at, "
+            "last_error = excluded.last_error",
+            (f"novel_detector.{stage}", time.time(), f"{type(exc).__name__}: {exc}"[:500]),
+        )
+        conn.commit()
+    except Exception:
+        pass
+
+
 def detect_novel_bindings(session_bindings: list, task_type: str, theme: str) -> list:
     """Compare session bindings against known binding_knowledge. Return novel ones."""
     conn = _get_conn()
@@ -20,40 +41,34 @@ def detect_novel_bindings(session_bindings: list, task_type: str, theme: str) ->
         ).fetchall()
         known = {r[0] for r in known_rows}
         return [b for b in session_bindings if b not in known]
-    except Exception:
+    except Exception as e:
+        _log_err("detect_novel_bindings", e)
         return []
 
 
 def record_novel_pattern(pattern: str, pattern_type: str, theme: str,
                          task_type: str, source_file: str = ""):
-    """Record a novel pattern. Increments times_seen if already recorded."""
+    """Record a novel pattern. Atomic UPSERT — race-safe across hook subprocesses.
+
+    Schema has UNIQUE(pattern, pattern_type, theme) so ON CONFLICT is well-defined.
+    """
     conn = _get_conn()
     if not conn:
         return
 
     now = time.time()
     try:
-        existing = conn.execute(
-            "SELECT id FROM novel_patterns "
-            "WHERE pattern = ? AND pattern_type = ? AND theme = ?",
-            (pattern, pattern_type, theme),
-        ).fetchone()
+        conn.execute(
+            "INSERT INTO novel_patterns "
+            "(pattern, pattern_type, source_file, theme, task_type, "
+            " times_seen, first_seen, last_seen) "
+            "VALUES (?, ?, ?, ?, ?, 1, ?, ?) "
+            "ON CONFLICT(pattern, pattern_type, theme) DO UPDATE SET "
+            "times_seen = times_seen + 1, last_seen = excluded.last_seen, "
+            "task_type = excluded.task_type",
+            (pattern, pattern_type, source_file, theme, task_type, now, now),
+        )
 
-        if existing:
-            conn.execute(
-                "UPDATE novel_patterns SET times_seen = times_seen + 1, "
-                "last_seen = ?, task_type = ? WHERE id = ?",
-                (now, task_type, existing[0]),
-            )
-        else:
-            conn.execute(
-                "INSERT INTO novel_patterns "
-                "(pattern, pattern_type, source_file, theme, task_type, times_seen, first_seen, last_seen) "
-                "VALUES (?, ?, ?, ?, ?, 1, ?, ?)",
-                (pattern, pattern_type, source_file, theme, task_type, now, now),
-            )
-
-        # FIFO eviction
         count = conn.execute(
             "SELECT COUNT(*) FROM novel_patterns WHERE promoted = 0"
         ).fetchone()[0]
@@ -66,8 +81,8 @@ def record_novel_pattern(pattern: str, pattern_type: str, theme: str,
                 (count - MAX_NOVEL_PATTERNS,),
             )
         conn.commit()
-    except Exception:
-        pass
+    except Exception as e:
+        _log_err("record_novel_pattern", e)
 
 
 def get_promotable_patterns(min_occurrences: int = 3) -> list[dict]:
@@ -89,7 +104,8 @@ def get_promotable_patterns(min_occurrences: int = 3) -> list[dict]:
             "id": r[0], "pattern": r[1], "type": r[2], "theme": r[3],
             "task_type": r[4], "times_seen": r[5], "first_seen": r[6],
         } for r in rows]
-    except Exception:
+    except Exception as e:
+        _log_err("get_promotable_patterns", e)
         return []
 
 
@@ -97,5 +113,8 @@ def promote_pattern(pattern_id: int):
     """Mark pattern as promoted (lesson suggestion created)."""
     conn = _get_conn()
     if conn:
-        conn.execute("UPDATE novel_patterns SET promoted = 1 WHERE id = ?", (pattern_id,))
-        conn.commit()
+        try:
+            conn.execute("UPDATE novel_patterns SET promoted = 1 WHERE id = ?", (pattern_id,))
+            conn.commit()
+        except Exception as e:
+            _log_err("promote_pattern", e)

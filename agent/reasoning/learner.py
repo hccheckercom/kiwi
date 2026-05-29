@@ -16,7 +16,12 @@ from .session_logger import (
 
 
 def learn_from_session(session_id: str) -> dict:
-    """Parse session log -> extract patterns -> update memory. 0 token."""
+    """Parse session log -> extract patterns -> update memory. 0 token.
+
+    Incremental: only re-process files that have changed (mtime) since the
+    last learn pass for this session. Earlier passes already extracted from
+    older versions; re-extracting them every 5 writes is O(N²) wasted work.
+    """
     reads = get_session_reads(session_id)
     writes = get_session_writes(session_id)
 
@@ -31,9 +36,17 @@ def learn_from_session(session_id: str) -> dict:
     task_type = _infer_task_type([w["file"] for w in theme_writes])
     theme = _detect_theme([w["file"] for w in theme_writes])
 
-    learned = {"status": "learned", "context_patterns": 0, "style_updates": 0, "bindings": 0}
+    learned = {
+        "status": "learned",
+        "context_patterns": 0,
+        "style_updates": 0,
+        "bindings": 0,
+        "novel_patterns": 0,
+        "files_processed": 0,
+        "files_skipped": 0,
+    }
 
-    # 1. Save context pattern
+    # 1. Save context pattern (always — captures full session shape)
     _save_context_pattern(
         task_type=task_type,
         files_read=[r["file"] for r in reads if r["file"]],
@@ -44,51 +57,114 @@ def learn_from_session(session_id: str) -> dict:
     )
     learned["context_patterns"] = 1
 
-    # 2. Extract style + bindings from written files
+    # Determine which files have changed since last learn pass
+    last_seen = _get_last_learned_files(session_id)
+    pending_files = []
     for w in theme_writes:
         fp = w["file"]
-        if not fp or not Path(fp).exists():
+        if not fp:
             continue
         try:
-            content = Path(fp).read_text(encoding="utf-8", errors="ignore")
+            path_obj = Path(fp)
+            if not path_obj.exists():
+                continue
+            mtime = path_obj.stat().st_mtime
         except OSError:
             continue
+        if last_seen.get(fp) == mtime:
+            learned["files_skipped"] += 1
+            continue
+        pending_files.append((fp, path_obj, mtime))
+
+    # 2. Extract style + bindings + novel detection in single pass per file
+    try:
+        from .novel_detector import detect_novel_bindings, record_novel_pattern
+        novel_enabled = True
+    except Exception:
+        novel_enabled = False
+
+    new_seen = dict(last_seen)
+    for fp, path_obj, mtime in pending_files:
+        try:
+            content = path_obj.read_text(encoding="utf-8", errors="ignore")
+        except (OSError, ValueError):
+            continue
+
+        learned["files_processed"] += 1
 
         styles = _extract_styles(content)
         if styles:
             _merge_styles(theme, styles)
             learned["style_updates"] += len(styles)
 
-        bindings = _extract_bindings(content)
+        bindings = _extract_bindings(content, theme)
         if bindings:
             _save_bindings(task_type, bindings, theme)
             learned["bindings"] += len(bindings)
+
+            if novel_enabled:
+                try:
+                    novel = detect_novel_bindings(bindings, task_type, theme)
+                    for pattern in novel:
+                        record_novel_pattern(pattern, "binding", theme, task_type, fp)
+                    learned["novel_patterns"] += len(novel)
+                except Exception:
+                    pass
+
+        new_seen[fp] = mtime
+
+    if new_seen != last_seen:
+        _set_last_learned_files(session_id, new_seen)
 
     # 3. Compute session quality signals → populate output_quality
     try:
         quality = _compute_session_quality(session_id, task_type)
         learned["quality"] = quality
-    except Exception:
+    except Exception as e:
         learned["quality"] = {"error": "output_quality table may be missing"}
+        try:
+            from hooks.post_edit import _log_learning_error
+            _log_learning_error("compute_quality", e)
+        except Exception:
+            pass
 
-    # 4. R4: Detect novel patterns (reuse bindings already extracted in step 2)
+    return learned
+
+
+def _get_last_learned_files(session_id: str) -> dict:
+    """Return {file_path: mtime} processed in earlier learn passes."""
+    conn = _get_conn()
     try:
-        from .novel_detector import detect_novel_bindings, record_novel_pattern
-        for w in theme_writes:
-            fp = w["file"]
-            if not fp or not Path(fp).exists():
-                continue
-            content = Path(fp).read_text(encoding="utf-8", errors="ignore")
-            file_bindings = _extract_bindings(content)
-            novel = detect_novel_bindings(file_bindings, task_type, theme)
-            for pattern in novel:
-                record_novel_pattern(pattern, "binding", theme, task_type, fp)
-            learned["novel_patterns"] = learned.get("novel_patterns", 0) + len(novel)
+        row = conn.execute(
+            "SELECT last_learned_files FROM session_learn_state WHERE session_id = ?",
+            (session_id,),
+        ).fetchone()
+        if row and row[0]:
+            return json.loads(row[0])
     except Exception:
         pass
+    return {}
 
-    mark_session_processed(session_id)
-    return learned
+
+def _set_last_learned_files(session_id: str, files: dict) -> None:
+    conn = _get_conn()
+    try:
+        # Cap stored map to avoid bloat on huge sessions
+        if len(files) > 500:
+            sorted_items = sorted(files.items(), key=lambda kv: kv[1], reverse=True)[:500]
+            files = dict(sorted_items)
+        payload = json.dumps(files, ensure_ascii=False)
+        conn.execute(
+            "INSERT INTO session_learn_state (session_id, last_learned_writes, last_learned_at, last_learned_files) "
+            "VALUES (?, COALESCE((SELECT last_learned_writes FROM session_learn_state WHERE session_id = ?), 0), "
+            "strftime('%s', 'now'), ?) "
+            "ON CONFLICT(session_id) DO UPDATE SET last_learned_files = excluded.last_learned_files, "
+            "last_learned_at = excluded.last_learned_at",
+            (session_id, session_id, payload),
+        )
+        conn.commit()
+    except Exception:
+        pass
 
 
 def learn_all_unprocessed() -> list:
@@ -136,22 +212,102 @@ def _extract_styles(content: str) -> dict:
     return styles
 
 
-def _extract_bindings(content: str) -> list:
+def _extract_bindings(content: str, theme: str = "") -> list:
+    if not content:
+        return []
+    if len(content) > _EXTRACT_MAX_BYTES:
+        content = content[:_EXTRACT_MAX_BYTES]
+    content = _strip_php_comments(content)
+
     bindings = set()
 
-    wz_calls = re.findall(r"(wz_\w+)\s*\(", content)
-    bindings.update(wz_calls)
+    bindings.update(_RE_WZ_CALL.findall(content))
+    bindings.update(f"$product['{k}']" for k in _RE_PRODUCT_KEY.findall(content))
+    bindings.update(_RE_WEZONE_HOOK.findall(content))
+    bindings.update(f"wz_component('{c}')" for c in _RE_WZ_COMPONENT.findall(content))
 
-    product_keys = re.findall(r"\$product\['(\w+)'\]", content)
-    bindings.update(f"$product['{k}']" for k in product_keys)
+    bindings.update(f"wp:{f}" for f in _RE_WP_FUNC_CURATED.findall(content))
+    bindings.update(
+        f"wp:{f}" for f in _RE_WP_FUNC_PREFIX.findall(content)
+        if f not in _WP_FUNC_BLACKLIST
+    )
+    bindings.update(f"wp:{f}" for f in _RE_WP_CHECK.findall(content))
 
-    hooks = re.findall(r"(?:do_action|apply_filters)\s*\(\s*'(wezone_\w+)'", content)
-    bindings.update(hooks)
+    for h in _RE_HOOK_NAME.findall(content):
+        if not h.startswith("wezone_"):
+            bindings.add(f"hook:{h}")
 
-    components = re.findall(r"wz_component\s*\(\s*'([^']+)'", content)
-    bindings.update(f"wz_component('{c}')" for c in components)
+    if theme and theme not in ("unknown", ""):
+        prefix = theme.replace("-", "_").lower()
+        prefix_funcs = re.findall(rf"\b({re.escape(prefix)}_\w+)\s*\(", content)
+        bindings.update(f"theme:{f}" for f in prefix_funcs)
+
+        prefix_const_re = re.compile(rf"\b({re.escape(prefix.upper())}_[A-Z][A-Z0-9_]*)\b")
+        for c in set(prefix_const_re.findall(content)):
+            if c in _WP_CONST_BLACKLIST:
+                continue
+            bindings.add(f"const:{c}")
 
     return list(bindings)
+
+
+_EXTRACT_MAX_BYTES = 200 * 1024  # cap regex work on huge files (~200KB)
+
+_RE_PHP_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
+_RE_PHP_LINE_COMMENT = re.compile(r"(?<!:)//[^\n]*|^\s*#[^\n]*", re.MULTILINE)
+
+
+def _strip_php_comments(content: str) -> str:
+    """Remove PHP/JS comments before regex extraction so commented-out code
+    (e.g. ``// example: wp_nav_menu()``) does not produce false positives."""
+    content = _RE_PHP_BLOCK_COMMENT.sub("", content)
+    content = _RE_PHP_LINE_COMMENT.sub("", content)
+    return content
+
+
+_RE_WZ_CALL = re.compile(r"(wz_\w+)\s*\(")
+_RE_PRODUCT_KEY = re.compile(r"\$product\['(\w+)'\]")
+_RE_WEZONE_HOOK = re.compile(r"(?:do_action|apply_filters)\s*\(\s*'(wezone_\w+)'")
+_RE_WZ_COMPONENT = re.compile(r"wz_component\s*\(\s*'([^']+)'")
+
+_RE_WP_FUNC_CURATED = re.compile(
+    r"\b(get_theme_mod|get_template_part|wp_nav_menu|wp_head|wp_footer|"
+    r"wp_enqueue_script|wp_enqueue_style|bloginfo|language_attributes|"
+    r"add_theme_support|register_nav_menus|add_action|add_filter|"
+    r"esc_html|esc_url|esc_attr|esc_html_e|esc_attr_e|wp_register_script|"
+    r"wp_localize_script|wp_create_nonce|check_ajax_referer|wp_send_json|"
+    r"register_post_type|register_taxonomy|wp_insert_post|update_post_meta|"
+    r"get_post_meta|wp_get_nav_menu_object|home_url|admin_url|site_url|"
+    r"wp_kses|wp_kses_post|wp_safe_redirect|sanitize_text_field|"
+    r"sanitize_email|sanitize_key|sanitize_title|wp_verify_nonce|"
+    r"wp_die|current_user_can|is_admin|is_user_logged_in|get_current_user_id|"
+    r"get_post|get_posts|wp_query|wp_reset_postdata|have_posts|the_post|"
+    r"the_content|the_title|the_permalink|get_the_ID|get_permalink|"
+    r"get_option|update_option|delete_option|wp_get_attachment_image|"
+    r"wp_get_attachment_url|get_the_post_thumbnail|has_post_thumbnail)\s*\("
+)
+
+_RE_WP_FUNC_PREFIX = re.compile(r"\b(wp_[a-z][a-z0-9_]*)\s*\(")
+
+_WP_FUNC_BLACKLIST = frozenset({
+    "wp_die",
+    "wp_send_json",
+    "wp_safe_redirect",
+})
+
+_RE_WP_CHECK = re.compile(r"\b(is_[a-z][a-z0-9_]*|has_[a-z][a-z0-9_]*)\s*\(")
+
+_RE_HOOK_NAME = re.compile(
+    r"(?:add_action|add_filter|do_action|apply_filters)\s*\(\s*'([a-z_][a-z0-9_]*)'"
+)
+
+_WP_CONST_BLACKLIST = frozenset({
+    "WP_DEBUG", "WP_DEBUG_LOG", "WP_DEBUG_DISPLAY", "WP_HOME", "WP_SITEURL",
+    "WP_CONTENT_DIR", "WP_CONTENT_URL", "WP_PLUGIN_DIR", "WP_PLUGIN_URL",
+    "WPINC", "ABSPATH", "WP_LANG_DIR", "WP_TEMP_DIR",
+    "WP_MEMORY_LIMIT", "WP_MAX_MEMORY_LIMIT", "WP_AUTO_UPDATE_CORE",
+    "WP_DEFAULT_THEME", "WP_USE_THEMES", "WP_CACHE",
+})
 
 
 # --- Task type inference ---
@@ -243,7 +399,19 @@ def _save_context_pattern(task_type, files_read, files_written, read_order, them
             ")",
             (task_type, count - 1000),
         )
+    # Global cap (BUG #12): hard ceiling across all task_types to bound DB size
+    total = conn.execute("SELECT COUNT(*) FROM context_patterns").fetchone()[0]
+    if total > _CONTEXT_PATTERNS_GLOBAL_CAP:
+        conn.execute(
+            "DELETE FROM context_patterns WHERE id IN ("
+            "  SELECT id FROM context_patterns ORDER BY created_at ASC LIMIT ?"
+            ")",
+            (total - _CONTEXT_PATTERNS_GLOBAL_CAP,),
+        )
     conn.commit()
+
+
+_CONTEXT_PATTERNS_GLOBAL_CAP = 5000
 
 
 def _merge_styles(theme: str, styles: dict):
@@ -280,9 +448,14 @@ def _merge_styles(theme: str, styles: dict):
 
 
 def _save_bindings(task_type: str, bindings: list, theme: str):
+    if not bindings:
+        return
+    valid = _sanitize_bindings(bindings)
+    if not valid:
+        return
     conn = _get_conn()
     now = time.time()
-    for binding in bindings:
+    for binding in valid:
         conn.execute(
             "INSERT INTO binding_knowledge (task_type, binding, theme, times_seen, last_seen) "
             "VALUES (?, ?, ?, 1, ?) "
@@ -291,6 +464,33 @@ def _save_bindings(task_type: str, bindings: list, theme: str):
             (task_type, binding, theme, now, now),
         )
     conn.commit()
+
+
+_BINDING_MAX_LEN = 200
+_BINDING_VALID_RE = re.compile(r"^[A-Za-z0-9_:$\[\]'\"\-./()]+$")
+
+
+def _sanitize_bindings(bindings: list) -> list:
+    """Drop bindings that are empty, too long, contain control chars, or
+    fail a printable-ASCII whitelist. Prevents DB bloat and dirty data
+    when a regex match accidentally captures junk."""
+    out = []
+    seen = set()
+    for b in bindings:
+        if not isinstance(b, str):
+            continue
+        s = b.strip()
+        if not s or len(s) > _BINDING_MAX_LEN:
+            continue
+        if "\x00" in s or any(ord(c) < 32 for c in s):
+            continue
+        if not _BINDING_VALID_RE.match(s):
+            continue
+        if s in seen:
+            continue
+        seen.add(s)
+        out.append(s)
+    return out
 
 
 # --- Accuracy detector (R2 closed loop) ---

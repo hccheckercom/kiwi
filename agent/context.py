@@ -367,15 +367,6 @@ def _get_pending_anomalies(project_path: str) -> list:
     except Exception as e:
         print(f"[kiwi] _get_pending_anomalies error: {e}", file=sys.stderr)
         return []
-    """Infer project root from target_file path."""
-    if not target_file:
-        return ""
-    p = Path(target_file)
-    markers = {".git", "composer.json", "package.json", "wp-config.php"}
-    for parent in p.parents:
-        if any((parent / m).exists() for m in markers):
-            return str(parent)
-    return str(p.parent)
 
 
 def _infer_project_path(target_file: str) -> str:
@@ -388,6 +379,47 @@ def _infer_project_path(target_file: str) -> str:
         if any((parent / m).exists() for m in markers):
             return str(parent)
     return str(p.parent)
+
+
+def _infer_theme_slug(target_file: str, project_path: str) -> str:
+    """Extract theme slug from path like '.../themes/{slug}/...'."""
+    path = target_file or project_path or ""
+    if not path:
+        return ""
+    parts = Path(path).parts
+    for i, p in enumerate(parts):
+        if p == "themes" and i + 1 < len(parts):
+            return parts[i + 1]
+    return ""
+
+
+def _get_learned_conventions(theme_slug: str, max_styles: int = 8, max_bindings: int = 10) -> dict:
+    """Read style/binding patterns from reasoning.db for given theme."""
+    result = {"styles": [], "bindings": []}
+    if not theme_slug:
+        return result
+    try:
+        from agent.reasoning.session_logger import _get_conn
+        conn = _get_conn()
+        styles = conn.execute(
+            "SELECT pattern_key, value, times_seen FROM style_knowledge "
+            "WHERE theme = ? ORDER BY times_seen DESC LIMIT ?",
+            (theme_slug, max_styles)
+        ).fetchall()
+        result["styles"] = [
+            {"key": r[0], "value": r[1], "count": r[2]} for r in styles
+        ]
+        bindings = conn.execute(
+            "SELECT task_type, binding, times_seen FROM binding_knowledge "
+            "WHERE theme = ? ORDER BY times_seen DESC LIMIT ?",
+            (theme_slug, max_bindings)
+        ).fetchall()
+        result["bindings"] = [
+            {"task_type": r[0], "binding": r[1], "count": r[2]} for r in bindings
+        ]
+    except Exception as e:
+        print(f"[kiwi] _get_learned_conventions error: {e}", file=sys.stderr)
+    return result
 
 
 def _get_project_profile(project_path: str) -> dict:
@@ -475,6 +507,10 @@ def build_context(
     # Pending anomaly alerts
     anomalies = _get_pending_anomalies(effective_project)
 
+    # Learned theme conventions (style/binding from reasoning.db)
+    theme_slug = _infer_theme_slug(target_file, effective_project)
+    learned_conventions = _get_learned_conventions(theme_slug) if theme_slug else {"styles": [], "bindings": []}
+
     pre_max = min(max_rules, 8) if compact is True else max_rules
     rules = _get_rules(
         scope_type, platform, files, pre_max,
@@ -516,6 +552,8 @@ def build_context(
         "contextual_rules": contextual_rules,
         "anomalies": anomalies,
         "semantic_matches": len(semantic_scores) if semantic_scores else 0,
+        "theme_slug": theme_slug,
+        "learned_conventions": learned_conventions,
     }
 
 
@@ -547,6 +585,11 @@ def _format_compact(ctx: dict) -> str:
 
     if ctx.get("anomalies"):
         lines.append(f"Anomalies: {len(ctx['anomalies'])} pending patterns detected")
+
+    lc = ctx.get("learned_conventions") or {}
+    if lc.get("styles") or lc.get("bindings"):
+        slug = ctx.get("theme_slug", "")
+        lines.append(f"Learned conventions ({slug}): {len(lc.get('styles', []))} styles, {len(lc.get('bindings', []))} bindings")
 
     return "\n".join(lines)
 
@@ -601,6 +644,20 @@ def _format_full(ctx: dict) -> str:
         lines.append("## Pending Anomaly Alerts")
         for a in ctx["anomalies"]:
             lines.append(f"- [{a['severity']}] {a['category']}: `{a['pattern'][:60]}`")
+        lines.append("")
+
+    lc = ctx.get("learned_conventions") or {}
+    if lc.get("styles") or lc.get("bindings"):
+        slug = ctx.get("theme_slug", "")
+        lines.append(f"## Theme conventions Kiwi đã học ({slug})")
+        if lc.get("styles"):
+            lines.append("**Style preferences:**")
+            for s in lc["styles"]:
+                lines.append(f"- `{s['key']}` = `{s['value']}` (seen {s['count']}x)")
+        if lc.get("bindings"):
+            lines.append("**Common bindings:**")
+            for b in lc["bindings"]:
+                lines.append(f"- `{b['binding']}` ({b['task_type']}, seen {b['count']}x)")
         lines.append("")
 
     return "\n".join(lines)
