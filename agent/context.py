@@ -8,6 +8,29 @@ from pathlib import Path
 
 KIWI_DIR = Path(__file__).parent.parent
 
+
+class _Health:
+    """Track subsystem status so degradation is visible, not silent."""
+
+    def __init__(self):
+        self.subsystems = {}
+
+    def ok(self, name):
+        self.subsystems[name] = {"status": "ok"}
+
+    def degraded(self, name, why):
+        self.subsystems[name] = {"status": "degraded", "reason": why}
+
+    def unavailable(self, name, why):
+        self.subsystems[name] = {"status": "unavailable", "reason": why}
+
+    def report(self):
+        return [
+            {"name": k, **v}
+            for k, v in self.subsystems.items()
+            if v["status"] != "ok"
+        ]
+
 # --- F1: Task-to-Category Mapping ---
 _TASK_CATEGORY_MAP = {
     # E-commerce / checkout
@@ -138,13 +161,54 @@ def _tokenize_task(task: str) -> set:
     return keywords
 
 
-def _map_task_to_categories(task: str) -> set:
-    """Map task description to relevant lesson categories."""
+_dynamic_category_map_cache = None
+_dynamic_category_map_time = 0
+_DYN_MAP_TTL = 300
+
+
+def _build_dynamic_category_map(patterns: list) -> dict:
+    """Build keyword→categories map from lesson tags.
+
+    Auto-extends static _TASK_CATEGORY_MAP coverage as new lessons are added.
+    Cached for 5 min.
+    """
+    global _dynamic_category_map_cache, _dynamic_category_map_time
+
+    if _dynamic_category_map_cache is not None and \
+            (time.time() - _dynamic_category_map_time) < _DYN_MAP_TTL:
+        return _dynamic_category_map_cache
+
+    m = {}
+    for p in patterns:
+        cat = p.get("category")
+        if not cat:
+            continue
+        for tag in (p.get("tags") or []):
+            tag_lower = str(tag).lower().strip()
+            if not tag_lower or len(tag_lower) < 3:
+                continue
+            m.setdefault(tag_lower, set()).add(cat)
+
+    _dynamic_category_map_cache = m
+    _dynamic_category_map_time = time.time()
+    return m
+
+
+def _map_task_to_categories(task: str, patterns: list = None) -> set:
+    """Map task description to relevant lesson categories.
+
+    Combines static _TASK_CATEGORY_MAP + dynamic map from lesson tags.
+    """
     keywords = _tokenize_task(task)
     categories = set()
     for kw in keywords:
         if kw in _TASK_CATEGORY_MAP:
             categories.update(_TASK_CATEGORY_MAP[kw])
+    if patterns:
+        dyn = _build_dynamic_category_map(patterns)
+        for kw in keywords:
+            if kw in dyn:
+                categories.update(dyn[kw])
     return categories
 
 
@@ -168,13 +232,13 @@ def _build_signal_index(patterns: list) -> list:
         if p.get("type") in ("absence", "cross-check", "cross_check", "bom-check"):
             continue
         pattern_str = p.get("pattern")
-        if not pattern_str:
+        if not pattern_str or not isinstance(pattern_str, str):
             continue
         try:
             compiled = re.compile(pattern_str, re.MULTILINE)
             pre_check = p.get("pre_check")
             index.append((compiled, pre_check, p["id"]))
-        except re.error:
+        except (re.error, TypeError):
             continue
 
     _signal_index = index
@@ -214,7 +278,7 @@ def _detect_signals_deep(target_file: str, patterns: list) -> dict:
     return matched
 
 
-def _get_db_scores(project_path: str = "") -> dict:
+def _get_db_scores(project_path: str = "", health=None) -> dict:
     """Query violations history and confidence scores from SQLite.
 
     Returns {lesson_id: {"history": int, "confidence": float}}
@@ -231,7 +295,21 @@ def _get_db_scores(project_path: str = "") -> dict:
         confidence = get_all_confidence_scores()
         for lid, conf in confidence.items():
             result.setdefault(lid, {})["confidence"] = conf
+
+        if health:
+            if not result:
+                health.degraded("db_scores",
+                    "chưa có lịch sử vi phạm / confidence — cold-start, "
+                    "scan vài vòng để tích luỹ")
+            else:
+                health.ok("db_scores")
+    except ImportError as e:
+        if health:
+            health.unavailable("db_scores", f"thiếu module memory.db: {e}")
+        print(f"[kiwi] _get_db_scores ImportError: {e}", file=sys.stderr)
     except Exception as e:
+        if health:
+            health.degraded("db_scores", str(e))
         print(f"[kiwi] _get_db_scores error: {e}", file=sys.stderr)
 
     return result
@@ -242,7 +320,7 @@ _embeddings_loaded = False
 _lesson_embeddings = {}  # {lesson_id: np.ndarray}
 
 
-def _get_semantic_scores(task: str, patterns: list) -> dict:
+def _get_semantic_scores(task: str, patterns: list, health=None) -> dict:
     """Compute semantic similarity between task and lesson descriptions.
 
     Uses batch encoding for speed. First call embeds all lessons (~5s with batch),
@@ -252,6 +330,8 @@ def _get_semantic_scores(task: str, patterns: list) -> dict:
     global _embeddings_loaded, _lesson_embeddings
 
     if not task or len(task) < 5:
+        if health:
+            health.degraded("semantic", "task quá ngắn (<5 ký tự)")
         return {}
 
     try:
@@ -301,18 +381,35 @@ def _get_semantic_scores(task: str, patterns: list) -> dict:
             if sim > 0.4:
                 scores[lid] = sim
 
+        if health:
+            if not _lesson_embeddings:
+                health.degraded("semantic", "không có lesson nào được embed")
+            elif not scores:
+                health.degraded("semantic",
+                    "task không match lesson nào (similarity <= 0.4)")
+            else:
+                health.ok("semantic")
         return scores
+    except ImportError as e:
+        if health:
+            health.unavailable("semantic", f"thiếu dependency embedding: {e}")
+        print(f"[kiwi] _get_semantic_scores ImportError: {e}", file=sys.stderr)
+        return {}
     except Exception as e:
+        if health:
+            health.degraded("semantic", str(e))
         print(f"[kiwi] _get_semantic_scores error: {e}", file=sys.stderr)
         return {}
 
 
-def _get_contextual_rules(target_file: str) -> list:
+def _get_contextual_rules(target_file: str, health=None) -> list:
     """Get AST-learned contextual rules matching the target file.
 
     Returns list of {context, violation, fix, confidence} dicts.
     """
     if not target_file:
+        if health:
+            health.degraded("contextual_rules", "không có target_file — bỏ qua AST rules")
         return []
 
     try:
@@ -320,6 +417,9 @@ def _get_contextual_rules(target_file: str) -> list:
         lessons = get_contextual_lessons(min_confidence=0.7)
 
         if not lessons:
+            if health:
+                health.degraded("contextual_rules",
+                    "chưa có AST-learned rules — chạy learning vài vòng để tích luỹ")
             return []
 
         content = Path(target_file).read_text(encoding="utf-8")
@@ -333,13 +433,22 @@ def _get_contextual_rules(target_file: str) -> list:
                     "fix": cl.fix_pattern if hasattr(cl, 'fix_pattern') else cl.get("fix_pattern", ""),
                     "confidence": cl.confidence if hasattr(cl, 'confidence') else cl.get("confidence", 0.5),
                 })
+        if health:
+            health.ok("contextual_rules")
         return matched[:3]
+    except ImportError as e:
+        if health:
+            health.unavailable("contextual_rules", f"thiếu module learning.context_learner: {e}")
+        print(f"[kiwi] _get_contextual_rules ImportError: {e}", file=sys.stderr)
+        return []
     except Exception as e:
+        if health:
+            health.degraded("contextual_rules", str(e))
         print(f"[kiwi] _get_contextual_rules error: {e}", file=sys.stderr)
         return []
 
 
-def _get_pending_anomalies(project_path: str) -> list:
+def _get_pending_anomalies(project_path: str, health=None) -> list:
     """Get pending anomaly suggestions relevant to this project.
 
     Returns list of {pattern, category, severity} dicts.
@@ -361,10 +470,19 @@ def _get_pending_anomalies(project_path: str) -> list:
         finally:
             conn.close()
 
+        if health:
+            health.ok("anomalies")
         return [{"pattern": r["pattern"], "category": r["category"],
                  "severity": r["severity"], "example": r["example_file"]}
                 for r in rows]
+    except ImportError as e:
+        if health:
+            health.unavailable("anomalies", f"thiếu module memory.db: {e}")
+        print(f"[kiwi] _get_pending_anomalies ImportError: {e}", file=sys.stderr)
+        return []
     except Exception as e:
+        if health:
+            health.degraded("anomalies", str(e))
         print(f"[kiwi] _get_pending_anomalies error: {e}", file=sys.stderr)
         return []
 
@@ -393,7 +511,7 @@ def _infer_theme_slug(target_file: str, project_path: str) -> str:
     return ""
 
 
-def _get_learned_conventions(theme_slug: str, max_styles: int = 8, max_bindings: int = 10) -> dict:
+def _get_learned_conventions(theme_slug: str, max_styles: int = 8, max_bindings: int = 10, health=None) -> dict:
     """Read style/binding patterns from reasoning.db for given theme."""
     result = {"styles": [], "bindings": []}
     if not theme_slug:
@@ -417,7 +535,21 @@ def _get_learned_conventions(theme_slug: str, max_styles: int = 8, max_bindings:
         result["bindings"] = [
             {"task_type": r[0], "binding": r[1], "count": r[2]} for r in bindings
         ]
+        if health:
+            if not result["styles"] and not result["bindings"]:
+                health.degraded("learned_conventions",
+                    f"chưa học được style/binding cho theme '{theme_slug}' — "
+                    "chạy kiwi_learn_session vài lần")
+            else:
+                health.ok("learned_conventions")
+    except ImportError as e:
+        if health:
+            health.unavailable("learned_conventions",
+                f"thiếu module agent.reasoning.session_logger: {e}")
+        print(f"[kiwi] _get_learned_conventions ImportError: {e}", file=sys.stderr)
     except Exception as e:
+        if health:
+            health.degraded("learned_conventions", str(e))
         print(f"[kiwi] _get_learned_conventions error: {e}", file=sys.stderr)
     return result
 
@@ -485,31 +617,75 @@ def build_context(
     sys.path.insert(0, str(KIWI_DIR))
     from scanner.loader import load_patterns
 
+    health = _Health()
+
     patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type)
 
-    task_categories = _map_task_to_categories(task) if task else set()
+    task_categories = _map_task_to_categories(task, patterns) if task else set()
     task_keywords = _tokenize_task(task) if task else set()
 
-    if target_file:
-        relevant_ids = _detect_signals_deep(target_file, patterns)
+    signal_files = []
+    if target_file and os.path.exists(target_file):
+        signal_files.append(target_file)
+    if files:
+        for f in files:
+            if not f or not isinstance(f, str):
+                continue
+            if os.path.sep in f or "/" in f or os.path.exists(f):
+                if os.path.exists(f) and f not in signal_files:
+                    signal_files.append(f)
+
+    if signal_files:
+        relevant_ids = {}
+        for sf in signal_files:
+            relevant_ids.update(_detect_signals_deep(sf, patterns))
+        if not relevant_ids:
+            relevant_ids = None
+            health.degraded("deep_signal",
+                f"đọc {len(signal_files)} file nhưng không match lesson nào — "
+                "lesson có thể không cover stack hiện tại")
+        else:
+            health.ok("deep_signal")
     else:
         relevant_ids = None
+        if task:
+            health.degraded("deep_signal",
+                "không có file thật — mất +30 boost khớp nội dung; "
+                "truyền target_file= khi sửa code có sẵn")
 
     effective_project = project_path or _infer_project_path(target_file)
-    db_scores = _get_db_scores(effective_project)
+    db_scores = _get_db_scores(effective_project, health=health)
 
-    # Semantic scores (lazy — first call loads model ~2s, then cached)
-    semantic_scores = _get_semantic_scores(task, patterns)
+    semantic_scores = _get_semantic_scores(task, patterns, health=health)
 
-    # Contextual AST-learned rules
-    contextual_rules = _get_contextual_rules(target_file)
+    if task and not task_categories and semantic_scores:
+        sem_cats = {}
+        pattern_by_id = {p["id"]: p for p in patterns}
+        for lid, score in semantic_scores.items():
+            p = pattern_by_id.get(lid)
+            if not p:
+                continue
+            cat = p.get("category")
+            if cat:
+                sem_cats[cat] = sem_cats.get(cat, 0) + score
+        task_categories = {
+            c for c, _ in sorted(sem_cats.items(), key=lambda x: -x[1])[:3]
+        }
+        if task_categories:
+            health.degraded("task_mapping",
+                "không khớp keyword — category suy từ semantic similarity")
 
-    # Pending anomaly alerts
-    anomalies = _get_pending_anomalies(effective_project)
+    if task and not task_categories:
+        health.degraded("task_mapping",
+            "task khớp 0 category & 0 semantic — chỉ xếp theo severity; "
+            "nên mô tả rõ hơn hoặc truyền files=/target_file=")
 
-    # Learned theme conventions (style/binding from reasoning.db)
+    contextual_rules = _get_contextual_rules(target_file, health=health)
+
+    anomalies = _get_pending_anomalies(effective_project, health=health)
+
     theme_slug = _infer_theme_slug(target_file, effective_project)
-    learned_conventions = _get_learned_conventions(theme_slug) if theme_slug else {"styles": [], "bindings": []}
+    learned_conventions = _get_learned_conventions(theme_slug, health=health) if theme_slug else {"styles": [], "bindings": []}
 
     pre_max = min(max_rules, 8) if compact is True else max_rules
     rules = _get_rules(
@@ -554,6 +730,7 @@ def build_context(
         "semantic_matches": len(semantic_scores) if semantic_scores else 0,
         "theme_slug": theme_slug,
         "learned_conventions": learned_conventions,
+        "degraded": health.report(),
     }
 
 
@@ -567,6 +744,12 @@ def format_context(ctx: dict) -> str:
 def _format_compact(ctx: dict) -> str:
     """One-line-per-severity format. ~200 tokens vs ~2000."""
     lines = [f"# Kiwi ({ctx['rules_count']} rules)"]
+
+    if ctx.get("degraded"):
+        lines.append("⚠️ **Kiwi chạy chế độ giảm** — một số tín hiệu không khả dụng:")
+        for d in ctx["degraded"]:
+            lines.append(f"  - {d['name']}: {d['status']} ({d.get('reason','')})")
+        lines.append("")
 
     if ctx.get("task_categories"):
         lines.append(f"Focus: {', '.join(ctx['task_categories'])}")
@@ -600,6 +783,12 @@ def _format_full(ctx: dict) -> str:
 
     lines.append(f"# Kiwi Pre-Code Context ({ctx['rules_count']} rules, {ctx['anti_patterns_count']} anti-patterns)")
     lines.append("")
+
+    if ctx.get("degraded"):
+        lines.append("⚠️ **Kiwi chạy chế độ giảm** — một số tín hiệu không khả dụng:")
+        for d in ctx["degraded"]:
+            lines.append(f"- **{d['name']}**: {d['status']} ({d.get('reason','')})")
+        lines.append("")
 
     if ctx.get("task_categories"):
         lines.append(f"**Focus categories:** {', '.join(ctx['task_categories'])}")
