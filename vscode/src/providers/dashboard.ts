@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import * as cp from 'child_process';
+import * as path from 'path';
 import { LanguageClient } from 'vscode-languageclient/node';
 
 let dashboardPanel: vscode.WebviewPanel | undefined;
@@ -9,6 +11,30 @@ interface StatsResponse {
     by_severity: { CRITICAL: number; HIGH: number; SUGGEST: number };
     top_lessons: Array<{ id: string; count: number }>;
     total_patterns: number;
+}
+
+interface LearningHealth {
+    status: 'healthy' | 'degraded' | 'stalled' | 'disabled' | 'error';
+    stats?: {
+        total_sessions: number;
+        total_writes_logged: number;
+        total_bindings_learned: number;
+        total_styles_learned: number;
+        total_context_patterns: number;
+        total_suggestions_pending: number;
+        total_suggestions_promoted: number;
+        last_session_at: string | null;
+        last_promotion_at: string | null;
+    };
+    health_signals?: {
+        learning_disabled: boolean;
+        fail_counts: Record<string, number>;
+        stale_sessions: number;
+        recent_sessions_7d: number;
+        db_size_mb: number;
+    };
+    themes_learned?: string[];
+    top_bindings?: Array<{ binding: string; times_seen: number }>;
 }
 
 interface ProgressData {
@@ -56,10 +82,11 @@ export class DashboardProvider implements vscode.Disposable {
         if (!dashboardPanel) return;
 
         const stats = await this.fetchStats();
+        const learning = await this.fetchLearningHealth();
         const savings = this.calculateSavings(stats);
         const progress = this.progress;
 
-        dashboardPanel.webview.html = this.buildHtml(stats, savings, progress);
+        dashboardPanel.webview.html = this.buildHtml(stats, savings, progress, learning);
     }
 
     recordScan(): void {
@@ -111,6 +138,37 @@ export class DashboardProvider implements vscode.Disposable {
         return { hours: Math.round(hours * 10) / 10, bugs: stats.total_violations };
     }
 
+    private async fetchLearningHealth(): Promise<LearningHealth | null> {
+        return await new Promise<LearningHealth | null>((resolve) => {
+            try {
+                const folders = vscode.workspace.workspaceFolders;
+                if (!folders || folders.length === 0) {
+                    resolve(null);
+                    return;
+                }
+                const root = folders[0].uri.fsPath;
+                const script = path.join(root, '.claude', 'kiwi', 'tools', 'learning_health.py');
+                const proc = cp.spawn('python', [script], {
+                    cwd: path.join(root, '.claude', 'kiwi'),
+                    env: { ...process.env, PYTHONUTF8: '1' },
+                });
+                let stdout = '';
+                proc.stdout.on('data', (d) => { stdout += d.toString(); });
+                proc.on('close', () => {
+                    try {
+                        resolve(JSON.parse(stdout) as LearningHealth);
+                    } catch {
+                        resolve(null);
+                    }
+                });
+                proc.on('error', () => resolve(null));
+                setTimeout(() => { try { proc.kill(); } catch {} resolve(null); }, 5000);
+            } catch {
+                resolve(null);
+            }
+        });
+    }
+
     private loadProgress(): ProgressData {
         const stored = this.context.workspaceState.get<ProgressData>(this.storageKey);
         if (stored) return stored;
@@ -127,7 +185,7 @@ export class DashboardProvider implements vscode.Disposable {
         this.context.workspaceState.update(this.storageKey, this.progress);
     }
 
-    private buildHtml(stats: StatsResponse | null, savings: { hours: number; bugs: number }, progress: ProgressData): string {
+    private buildHtml(stats: StatsResponse | null, savings: { hours: number; bugs: number }, progress: ProgressData, learning: LearningHealth | null): string {
         const totalPatterns = stats?.total_patterns || 726;
         const encountered = progress.lessonsEncountered.length;
         const fixed = progress.lessonsFixed.length;
@@ -138,6 +196,57 @@ export class DashboardProvider implements vscode.Disposable {
         const topLessonsHtml = (stats?.top_lessons || [])
             .map(l => `<tr><td>${l.id}</td><td>${l.count}</td></tr>`)
             .join('');
+
+        const learningStatusColor: Record<string, string> = {
+            healthy: 'var(--vscode-testing-iconPassed, #4ec9b0)',
+            degraded: 'var(--vscode-editorWarning-foreground, #d7ba7d)',
+            stalled: 'var(--vscode-disabledForeground, #888)',
+            disabled: 'var(--vscode-disabledForeground, #888)',
+            error: 'var(--vscode-errorForeground, #f48771)',
+        };
+        const learningStatus = learning?.status || 'error';
+        const learningHtml = learning && learning.stats ? `
+    <h2>Active Learning</h2>
+    <p>
+        Status: <strong style="color: ${learningStatusColor[learningStatus] || ''}">● ${learningStatus.toUpperCase()}</strong>
+        &nbsp;|&nbsp; DB: ${learning.health_signals?.db_size_mb ?? 0} MB
+        &nbsp;|&nbsp; Last session: ${learning.stats.last_session_at ? new Date(learning.stats.last_session_at).toLocaleString() : 'never'}
+    </p>
+    <div class="grid">
+        <div class="card">
+            <h3>Sessions</h3>
+            <div class="value">${learning.stats.total_sessions}</div>
+            <div class="sub">${learning.health_signals?.recent_sessions_7d ?? 0} in last 7d</div>
+        </div>
+        <div class="card">
+            <h3>Writes Captured</h3>
+            <div class="value">${learning.stats.total_writes_logged}</div>
+            <div class="sub">Write/Edit calls logged</div>
+        </div>
+        <div class="card">
+            <h3>Bindings Learned</h3>
+            <div class="value">${learning.stats.total_bindings_learned}</div>
+            <div class="sub">${learning.themes_learned?.length || 0} themes</div>
+        </div>
+        <div class="card">
+            <h3>Suggestions</h3>
+            <div class="value">${learning.stats.total_suggestions_pending}</div>
+            <div class="sub">${learning.stats.total_suggestions_promoted} promoted</div>
+        </div>
+    </div>
+    ${learning.top_bindings && learning.top_bindings.length > 0 ? `
+    <h2>Top Bindings Learned</h2>
+    <table>
+        <tr><th>Binding</th><th>Times Seen</th></tr>
+        ${learning.top_bindings.slice(0, 5).map(b => `<tr><td>${b.binding}</td><td>${b.times_seen}</td></tr>`).join('')}
+    </table>` : ''}
+    ${learning.health_signals && Object.keys(learning.health_signals.fail_counts).length > 0 ? `
+    <h2>Fail Counters</h2>
+    <table>
+        <tr><th>Stage</th><th>Failures</th></tr>
+        ${Object.entries(learning.health_signals.fail_counts).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+    </table>` : ''}
+` : `<h2>Active Learning</h2><p class="empty">No learning data yet — code with Kiwi to start building patterns.</p>`;
 
         return `<!DOCTYPE html>
 <html>
@@ -225,6 +334,8 @@ export class DashboardProvider implements vscode.Disposable {
         <tr><th>Lesson</th><th>Count</th></tr>
         ${topLessonsHtml}
     </table>` : ''}
+
+    ${learningHtml}
 </body>
 </html>`;
     }

@@ -3104,7 +3104,7 @@ var require_main = __commonJS({
     exports2.createMessageConnection = exports2.createServerSocketTransport = exports2.createClientSocketTransport = exports2.createServerPipeTransport = exports2.createClientPipeTransport = exports2.generateRandomPipeName = exports2.StreamMessageWriter = exports2.StreamMessageReader = exports2.SocketMessageWriter = exports2.SocketMessageReader = exports2.PortMessageWriter = exports2.PortMessageReader = exports2.IPCMessageWriter = exports2.IPCMessageReader = void 0;
     var ril_1 = require_ril();
     ril_1.default.install();
-    var path2 = require("path");
+    var path3 = require("path");
     var os = require("os");
     var crypto_1 = require("crypto");
     var net_1 = require("net");
@@ -3240,9 +3240,9 @@ var require_main = __commonJS({
       }
       let result;
       if (XDG_RUNTIME_DIR) {
-        result = path2.join(XDG_RUNTIME_DIR, `vscode-ipc-${randomSuffix}.sock`);
+        result = path3.join(XDG_RUNTIME_DIR, `vscode-ipc-${randomSuffix}.sock`);
       } else {
-        result = path2.join(os.tmpdir(), `vscode-${randomSuffix}.sock`);
+        result = path3.join(os.tmpdir(), `vscode-${randomSuffix}.sock`);
       }
       const limit = safeIpcPathLengths.get(process.platform);
       if (limit !== void 0 && result.length > limit) {
@@ -8433,11 +8433,11 @@ ${JSON.stringify(change, void 0, 4)}`);
         }
         return async.map(colorInformation, asColorInformation, token);
       }
-      function asColorPresentation(cp) {
-        let presentation = new code.ColorPresentation(cp.label);
-        presentation.additionalTextEdits = asTextEditsSync(cp.additionalTextEdits);
-        if (cp.textEdit) {
-          presentation.textEdit = asTextEdit(cp.textEdit);
+      function asColorPresentation(cp2) {
+        let presentation = new code.ColorPresentation(cp2.label);
+        presentation.additionalTextEdits = asTextEditsSync(cp2.additionalTextEdits);
+        if (cp2.textEdit) {
+          presentation.textEdit = asTextEdit(cp2.textEdit);
         }
         return presentation;
       }
@@ -9437,8 +9437,8 @@ var require_minimatch = __commonJS({
       return new Minimatch(pattern, options).match(p);
     };
     module2.exports = minimatch;
-    var path2 = require_path();
-    minimatch.sep = path2.sep;
+    var path3 = require_path();
+    minimatch.sep = path3.sep;
     var GLOBSTAR = Symbol("globstar **");
     minimatch.GLOBSTAR = GLOBSTAR;
     var expand = require_brace_expansion();
@@ -10056,8 +10056,8 @@ var require_minimatch = __commonJS({
         if (f === "/" && partial)
           return true;
         const options = this.options;
-        if (path2.sep !== "/") {
-          f = f.split(path2.sep).join("/");
+        if (path3.sep !== "/") {
+          f = f.split(path3.sep).join("/");
         }
         f = f.split(slashSplit);
         this.debug(this.pattern, "split", f);
@@ -11785,13 +11785,13 @@ var require_configuration = __commonJS({
         });
       }
       extractSettingsInformation(keys) {
-        function ensurePath(config, path2) {
+        function ensurePath(config, path3) {
           let current = config;
-          for (let i = 0; i < path2.length - 1; i++) {
-            let obj = current[path2[i]];
+          for (let i = 0; i < path3.length - 1; i++) {
+            let obj = current[path3[i]];
             if (!obj) {
               obj = /* @__PURE__ */ Object.create(null);
-              current[path2[i]] = obj;
+              current[path3[i]] = obj;
             }
             current = obj;
           }
@@ -11809,8 +11809,8 @@ var require_configuration = __commonJS({
             config = vscode_1.workspace.getConfiguration(void 0, resource).get(key);
           }
           if (config) {
-            let path2 = keys[i].split(".");
-            ensurePath(result, path2)[path2[path2.length - 1]] = toJSONObject(config);
+            let path3 = keys[i].split(".");
+            ensurePath(result, path3)[path3[path3.length - 1]] = toJSONObject(config);
           }
         }
         return result;
@@ -14377,13 +14377,13 @@ var require_fileOperations = __commonJS({
       async filter(event, prop) {
         const fileMatches = await Promise.all(event.files.map(async (item) => {
           const uri = prop(item);
-          const path2 = uri.fsPath.replace(/\\/g, "/");
+          const path3 = uri.fsPath.replace(/\\/g, "/");
           for (const filters of this._filters.values()) {
             for (const filter of filters) {
               if (filter.scheme !== void 0 && filter.scheme !== uri.scheme) {
                 continue;
               }
-              if (filter.matcher.match(path2)) {
+              if (filter.matcher.match(path3)) {
                 if (filter.kind === void 0) {
                   return true;
                 }
@@ -14397,7 +14397,7 @@ var require_fileOperations = __commonJS({
                 }
               } else if (filter.kind === proto.FileOperationPatternKind.folder) {
                 const fileType = await _FileOperationFeature.getFileType(uri);
-                if (fileType === code.FileType.Directory && filter.matcher.match(`${path2}/`)) {
+                if (fileType === code.FileType.Directory && filter.matcher.match(`${path3}/`)) {
                   return true;
                 }
               }
@@ -16381,7 +16381,7 @@ var require_processes = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.terminate = void 0;
-    var cp = require("child_process");
+    var cp2 = require("child_process");
     var path_1 = require("path");
     var isWindows = process.platform === "win32";
     var isMacintosh = process.platform === "darwin";
@@ -16395,7 +16395,7 @@ var require_processes = __commonJS({
           if (cwd) {
             options.cwd = cwd;
           }
-          cp.execFileSync("taskkill", ["/T", "/F", "/PID", process2.pid.toString()], options);
+          cp2.execFileSync("taskkill", ["/T", "/F", "/PID", process2.pid.toString()], options);
           return true;
         } catch (err) {
           return false;
@@ -16403,7 +16403,7 @@ var require_processes = __commonJS({
       } else if (isLinux || isMacintosh) {
         try {
           var cmd = (0, path_1.join)(__dirname, "terminateProcess.sh");
-          var result = cp.spawnSync(cmd, [process2.pid.toString()]);
+          var result = cp2.spawnSync(cmd, [process2.pid.toString()]);
           return result.error ? false : true;
         } catch (err) {
           return false;
@@ -17629,9 +17629,9 @@ var require_main4 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SettingMonitor = exports2.LanguageClient = exports2.TransportKind = void 0;
-    var cp = require("child_process");
+    var cp2 = require("child_process");
     var fs = require("fs");
-    var path2 = require("path");
+    var path3 = require("path");
     var vscode_1 = require("vscode");
     var Is = require_is();
     var client_1 = require_client();
@@ -17825,16 +17825,16 @@ var require_main4 = __commonJS({
               this._isDetached = !!result.detached;
               return { reader: new node_1.StreamMessageReader(result.reader), writer: new node_1.StreamMessageWriter(result.writer) };
             } else {
-              let cp2;
+              let cp3;
               if (ChildProcessInfo.is(result)) {
-                cp2 = result.process;
+                cp3 = result.process;
                 this._isDetached = result.detached;
               } else {
-                cp2 = result;
+                cp3 = result;
                 this._isDetached = false;
               }
-              cp2.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
-              return { reader: new node_1.StreamMessageReader(cp2.stdout), writer: new node_1.StreamMessageWriter(cp2.stdin) };
+              cp3.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
+              return { reader: new node_1.StreamMessageReader(cp3.stdout), writer: new node_1.StreamMessageWriter(cp3.stdin) };
             }
           });
         }
@@ -17883,7 +17883,7 @@ var require_main4 = __commonJS({
               }
               args.push(`--clientProcessId=${process.pid.toString()}`);
               if (transport === TransportKind2.ipc || transport === TransportKind2.stdio) {
-                const serverProcess = cp.spawn(runtime, args, execOptions);
+                const serverProcess = cp2.spawn(runtime, args, execOptions);
                 if (!serverProcess || !serverProcess.pid) {
                   return handleChildProcessStartError(serverProcess, `Launching server using runtime ${runtime} failed.`);
                 }
@@ -17897,7 +17897,7 @@ var require_main4 = __commonJS({
                 }
               } else if (transport === TransportKind2.pipe) {
                 return (0, node_1.createClientPipeTransport)(pipeName).then((transport2) => {
-                  const process2 = cp.spawn(runtime, args, execOptions);
+                  const process2 = cp2.spawn(runtime, args, execOptions);
                   if (!process2 || !process2.pid) {
                     return handleChildProcessStartError(process2, `Launching server using runtime ${runtime} failed.`);
                   }
@@ -17910,7 +17910,7 @@ var require_main4 = __commonJS({
                 });
               } else if (Transport.isSocket(transport)) {
                 return (0, node_1.createClientSocketTransport)(transport.port).then((transport2) => {
-                  const process2 = cp.spawn(runtime, args, execOptions);
+                  const process2 = cp2.spawn(runtime, args, execOptions);
                   if (!process2 || !process2.pid) {
                     return handleChildProcessStartError(process2, `Launching server using runtime ${runtime} failed.`);
                   }
@@ -17943,7 +17943,7 @@ var require_main4 = __commonJS({
                 options.cwd = serverWorkingDir;
                 options.silent = true;
                 if (transport === TransportKind2.ipc || transport === TransportKind2.stdio) {
-                  const sp = cp.fork(node.module, args || [], options);
+                  const sp = cp2.fork(node.module, args || [], options);
                   assertStdio(sp);
                   this._serverProcess = sp;
                   sp.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
@@ -17955,7 +17955,7 @@ var require_main4 = __commonJS({
                   }
                 } else if (transport === TransportKind2.pipe) {
                   (0, node_1.createClientPipeTransport)(pipeName).then((transport2) => {
-                    const sp = cp.fork(node.module, args || [], options);
+                    const sp = cp2.fork(node.module, args || [], options);
                     assertStdio(sp);
                     this._serverProcess = sp;
                     sp.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
@@ -17966,7 +17966,7 @@ var require_main4 = __commonJS({
                   }, reject);
                 } else if (Transport.isSocket(transport)) {
                   (0, node_1.createClientSocketTransport)(transport.port).then((transport2) => {
-                    const sp = cp.fork(node.module, args || [], options);
+                    const sp = cp2.fork(node.module, args || [], options);
                     assertStdio(sp);
                     this._serverProcess = sp;
                     sp.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
@@ -17996,7 +17996,7 @@ var require_main4 = __commonJS({
             const options = Object.assign({}, command.options);
             options.cwd = options.cwd || serverWorkingDir;
             if (transport === void 0 || transport === TransportKind2.stdio) {
-              const serverProcess = cp.spawn(command.command, args, options);
+              const serverProcess = cp2.spawn(command.command, args, options);
               if (!serverProcess || !serverProcess.pid) {
                 return handleChildProcessStartError(serverProcess, `Launching server using command ${command.command} failed.`);
               }
@@ -18006,7 +18006,7 @@ var require_main4 = __commonJS({
               return Promise.resolve({ reader: new node_1.StreamMessageReader(serverProcess.stdout), writer: new node_1.StreamMessageWriter(serverProcess.stdin) });
             } else if (transport === TransportKind2.pipe) {
               return (0, node_1.createClientPipeTransport)(pipeName).then((transport2) => {
-                const serverProcess = cp.spawn(command.command, args, options);
+                const serverProcess = cp2.spawn(command.command, args, options);
                 if (!serverProcess || !serverProcess.pid) {
                   return handleChildProcessStartError(serverProcess, `Launching server using command ${command.command} failed.`);
                 }
@@ -18020,7 +18020,7 @@ var require_main4 = __commonJS({
               });
             } else if (Transport.isSocket(transport)) {
               return (0, node_1.createClientSocketTransport)(transport.port).then((transport2) => {
-                const serverProcess = cp.spawn(command.command, args, options);
+                const serverProcess = cp2.spawn(command.command, args, options);
                 if (!serverProcess || !serverProcess.pid) {
                   return handleChildProcessStartError(serverProcess, `Launching server using command ${command.command} failed.`);
                 }
@@ -18049,18 +18049,18 @@ var require_main4 = __commonJS({
         });
       }
       _getRuntimePath(runtime, serverWorkingDirectory) {
-        if (path2.isAbsolute(runtime)) {
+        if (path3.isAbsolute(runtime)) {
           return runtime;
         }
         const mainRootPath = this._mainGetRootPath();
         if (mainRootPath !== void 0) {
-          const result = path2.join(mainRootPath, runtime);
+          const result = path3.join(mainRootPath, runtime);
           if (fs.existsSync(result)) {
             return result;
           }
         }
         if (serverWorkingDirectory !== void 0) {
-          const result = path2.join(serverWorkingDirectory, runtime);
+          const result = path3.join(serverWorkingDirectory, runtime);
           if (fs.existsSync(result)) {
             return result;
           }
@@ -19018,6 +19018,8 @@ var ViolationsTreeProvider = class {
 
 // src/providers/dashboard.ts
 var vscode12 = __toESM(require("vscode"));
+var cp = __toESM(require("child_process"));
+var path2 = __toESM(require("path"));
 var dashboardPanel;
 var SAVINGS_PER_SEVERITY = {
   CRITICAL: 4,
@@ -19052,9 +19054,10 @@ var DashboardProvider = class {
     if (!dashboardPanel)
       return;
     const stats = await this.fetchStats();
+    const learning = await this.fetchLearningHealth();
     const savings = this.calculateSavings(stats);
     const progress = this.progress;
-    dashboardPanel.webview.html = this.buildHtml(stats, savings, progress);
+    dashboardPanel.webview.html = this.buildHtml(stats, savings, progress, learning);
   }
   recordScan() {
     this.progress.scansToday++;
@@ -19095,6 +19098,44 @@ var DashboardProvider = class {
     const hours = stats.by_severity.CRITICAL * SAVINGS_PER_SEVERITY.CRITICAL + stats.by_severity.HIGH * SAVINGS_PER_SEVERITY.HIGH + stats.by_severity.SUGGEST * SAVINGS_PER_SEVERITY.SUGGEST;
     return { hours: Math.round(hours * 10) / 10, bugs: stats.total_violations };
   }
+  async fetchLearningHealth() {
+    return await new Promise((resolve) => {
+      try {
+        const folders = vscode12.workspace.workspaceFolders;
+        if (!folders || folders.length === 0) {
+          resolve(null);
+          return;
+        }
+        const root = folders[0].uri.fsPath;
+        const script = path2.join(root, ".claude", "kiwi", "tools", "learning_health.py");
+        const proc = cp.spawn("python", [script], {
+          cwd: path2.join(root, ".claude", "kiwi"),
+          env: { ...process.env, PYTHONUTF8: "1" }
+        });
+        let stdout = "";
+        proc.stdout.on("data", (d) => {
+          stdout += d.toString();
+        });
+        proc.on("close", () => {
+          try {
+            resolve(JSON.parse(stdout));
+          } catch {
+            resolve(null);
+          }
+        });
+        proc.on("error", () => resolve(null));
+        setTimeout(() => {
+          try {
+            proc.kill();
+          } catch {
+          }
+          resolve(null);
+        }, 5e3);
+      } catch {
+        resolve(null);
+      }
+    });
+  }
   loadProgress() {
     const stored = this.context.workspaceState.get(this.storageKey);
     if (stored)
@@ -19110,7 +19151,7 @@ var DashboardProvider = class {
   saveProgress() {
     this.context.workspaceState.update(this.storageKey, this.progress);
   }
-  buildHtml(stats, savings, progress) {
+  buildHtml(stats, savings, progress, learning) {
     const totalPatterns = stats?.total_patterns || 726;
     const encountered = progress.lessonsEncountered.length;
     const fixed = progress.lessonsFixed.length;
@@ -19118,6 +19159,56 @@ var DashboardProvider = class {
     const addressed = fixed + dismissed;
     const progressPct = encountered > 0 ? Math.round(addressed / encountered * 100) : 0;
     const topLessonsHtml = (stats?.top_lessons || []).map((l) => `<tr><td>${l.id}</td><td>${l.count}</td></tr>`).join("");
+    const learningStatusColor = {
+      healthy: "var(--vscode-testing-iconPassed, #4ec9b0)",
+      degraded: "var(--vscode-editorWarning-foreground, #d7ba7d)",
+      stalled: "var(--vscode-disabledForeground, #888)",
+      disabled: "var(--vscode-disabledForeground, #888)",
+      error: "var(--vscode-errorForeground, #f48771)"
+    };
+    const learningStatus = learning?.status || "error";
+    const learningHtml = learning && learning.stats ? `
+    <h2>Active Learning</h2>
+    <p>
+        Status: <strong style="color: ${learningStatusColor[learningStatus] || ""}">\u25CF ${learningStatus.toUpperCase()}</strong>
+        &nbsp;|&nbsp; DB: ${learning.health_signals?.db_size_mb ?? 0} MB
+        &nbsp;|&nbsp; Last session: ${learning.stats.last_session_at ? new Date(learning.stats.last_session_at).toLocaleString() : "never"}
+    </p>
+    <div class="grid">
+        <div class="card">
+            <h3>Sessions</h3>
+            <div class="value">${learning.stats.total_sessions}</div>
+            <div class="sub">${learning.health_signals?.recent_sessions_7d ?? 0} in last 7d</div>
+        </div>
+        <div class="card">
+            <h3>Writes Captured</h3>
+            <div class="value">${learning.stats.total_writes_logged}</div>
+            <div class="sub">Write/Edit calls logged</div>
+        </div>
+        <div class="card">
+            <h3>Bindings Learned</h3>
+            <div class="value">${learning.stats.total_bindings_learned}</div>
+            <div class="sub">${learning.themes_learned?.length || 0} themes</div>
+        </div>
+        <div class="card">
+            <h3>Suggestions</h3>
+            <div class="value">${learning.stats.total_suggestions_pending}</div>
+            <div class="sub">${learning.stats.total_suggestions_promoted} promoted</div>
+        </div>
+    </div>
+    ${learning.top_bindings && learning.top_bindings.length > 0 ? `
+    <h2>Top Bindings Learned</h2>
+    <table>
+        <tr><th>Binding</th><th>Times Seen</th></tr>
+        ${learning.top_bindings.slice(0, 5).map((b) => `<tr><td>${b.binding}</td><td>${b.times_seen}</td></tr>`).join("")}
+    </table>` : ""}
+    ${learning.health_signals && Object.keys(learning.health_signals.fail_counts).length > 0 ? `
+    <h2>Fail Counters</h2>
+    <table>
+        <tr><th>Stage</th><th>Failures</th></tr>
+        ${Object.entries(learning.health_signals.fail_counts).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
+    </table>` : ""}
+` : `<h2>Active Learning</h2><p class="empty">No learning data yet \u2014 code with Kiwi to start building patterns.</p>`;
     return `<!DOCTYPE html>
 <html>
 <head>
@@ -19204,6 +19295,8 @@ var DashboardProvider = class {
         <tr><th>Lesson</th><th>Count</th></tr>
         ${topLessonsHtml}
     </table>` : ""}
+
+    ${learningHtml}
 </body>
 </html>`;
   }

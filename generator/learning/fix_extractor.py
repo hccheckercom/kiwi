@@ -1,5 +1,6 @@
 """Extract lesson candidates from before/after diffs."""
 
+import os
 import re
 import difflib
 import sqlite3
@@ -295,11 +296,11 @@ def extract_lesson_candidate(
 
 # ── Phase 4: Auto-promote ────────────────────────────────────────────────────
 
-_MIN_APPROVED_LESSONS = 50
-_MIN_CONFIDENCE = 0.8
-_MIN_FREQUENCY = 3
-_QUARANTINE_DAYS = 7
-_QUARANTINE_SCANS = 5  # clean scans required before lesson is active in generation
+_MIN_APPROVED_LESSONS = int(os.environ.get("KIWI_MIN_APPROVED_LESSONS", 50))
+_MIN_CONFIDENCE = float(os.environ.get("KIWI_MIN_CONFIDENCE", 0.8))
+_MIN_FREQUENCY = int(os.environ.get("KIWI_MIN_FREQUENCY", 3))
+_QUARANTINE_DAYS = int(os.environ.get("KIWI_QUARANTINE_DAYS", 7))
+_QUARANTINE_SCANS = int(os.environ.get("KIWI_QUARANTINE_SCANS", 5))
 
 
 def _count_approved_lessons() -> int:
@@ -401,8 +402,34 @@ def auto_promote_candidates() -> dict:
             result["skipped_frequency"] += 1
             continue
 
+        # Claim row atomically to prevent concurrent double-promotion.
+        claim_conn = get_connection()
+        try:
+            cursor = claim_conn.execute(
+                "UPDATE suggested_lessons SET status = 'promoting' "
+                "WHERE id = ? AND status = 'pending'",
+                (row["id"],),
+            )
+            claim_conn.commit()
+            claimed = cursor.rowcount > 0
+        finally:
+            claim_conn.close()
+        if not claimed:
+            continue
+
         lesson_id = _create_lesson_file(row)
         if not lesson_id:
+            # Release claim so another run can retry.
+            release_conn = get_connection()
+            try:
+                release_conn.execute(
+                    "UPDATE suggested_lessons SET status = 'pending' "
+                    "WHERE id = ? AND status = 'promoting'",
+                    (row["id"],),
+                )
+                release_conn.commit()
+            finally:
+                release_conn.close()
             continue
 
         quarantine_until = (

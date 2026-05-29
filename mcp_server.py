@@ -263,6 +263,29 @@ def _handle_stats(args: dict) -> str:
     return "\n".join(lines)
 
 
+def _handle_learning_health(args: dict) -> str:
+    """Health snapshot of Kiwi active-learning system.
+
+    Returns sessions logged, bindings/styles/patterns learned, suggestions pending,
+    fail counters, themes touched, top bindings — read-only.
+
+    Status values:
+      healthy   — sessions logged in last 7d, fail_counts low
+      degraded  — fail_counts > 50 (something keeps breaking)
+      stalled   — no sessions in last 7d (or DB empty)
+      disabled  — KIWI_LEARNING_DISABLED=1 or .learning_disabled flag file present
+
+    Example:
+        kiwi_learning_health()
+    """
+    try:
+        sys.path.insert(0, str(KIWI_DIR))
+        from tools.learning_health import get_health
+        return json.dumps(get_health(), indent=2, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({"status": "error", "error": f"{type(e).__name__}: {e}"})
+
+
 def _handle_fix(args: dict) -> str:
     """
     Fix suggestion or auto-fix violation.
@@ -2047,6 +2070,11 @@ TOOL_DEFS = [
         "inputSchema": {"type": "object", "properties": {}},
     },
     {
+        "name": "kiwi_learning_health",
+        "description": "Health snapshot of Kiwi active-learning system. Returns sessions, bindings, styles, suggestions, fail counters, themes learned, top bindings. Read-only — safe to call any time. Status: healthy | degraded | stalled | disabled.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
         "name": "kiwi_fix",
         "description": "Fix suggestion hoặc auto-fix violation. Không có file → trả Good example. Có file → preview diff. Có file+apply=true → apply fix.",
         "inputSchema": {
@@ -3486,6 +3514,7 @@ HANDLERS = {
     "kiwi_lesson": _handle_lesson,
     "kiwi_add": _handle_add,
     "kiwi_stats": _handle_stats,
+    "kiwi_learning_health": _handle_learning_health,
     "kiwi_fix": _handle_fix,
     "kiwi_template": _handle_template,
     "kiwi_agent": _handle_agent,

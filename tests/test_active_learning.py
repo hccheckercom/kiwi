@@ -260,5 +260,70 @@ def test_bug24_session_id_cache_ttl(isolated_kiwi, monkeypatch):
     assert sid2 != sid1, f"expired cache should re-issue: sid1={sid1} sid2={sid2}"
 
 
+def test_auto_promote_atomic_claim_no_double_promote(isolated_kiwi, monkeypatch, tmp_path):
+    """Concurrent auto_promote_candidates() must not double-promote one candidate.
+
+    Each row is claimed via UPDATE ... WHERE status='pending' before subprocess
+    spawn, so only one runner promotes a given suggestion even with N workers.
+    """
+    db_path = tmp_path / "memory" / "kiwi.db"
+    db_path.parent.mkdir(exist_ok=True)
+
+    sys.modules.pop("memory.db", None)
+    sys.modules.pop("memory.coordination", None)
+    import memory.db as mdb
+    import memory.coordination as mc
+    monkeypatch.setattr(mdb, "DB_PATH", db_path)
+    monkeypatch.setattr(mc, "init_coordination_db", lambda: None)
+    mdb.init_db()
+
+    sys.modules.pop("generator.learning.fix_extractor", None)
+    import generator.learning.fix_extractor as fx
+
+    monkeypatch.setattr(fx, "_count_approved_lessons", lambda: fx._MIN_APPROVED_LESSONS)
+    monkeypatch.setattr(fx, "_MIN_FREQUENCY", 1)
+
+    create_calls = []
+    create_lock = threading.Lock()
+
+    def fake_create(candidate):
+        with create_lock:
+            create_calls.append(candidate["id"])
+        time.sleep(0.05)
+        return f"LES-FAKE-{candidate['id']}"
+
+    monkeypatch.setattr(fx, "_create_lesson_file", fake_create)
+
+    conn = mdb.get_connection()
+    conn.execute(
+        """INSERT INTO suggested_lessons
+           (pattern, scope, category, severity, example_file, example_line,
+            example_code, good_code, suggested_at, status, confidence_score, frequency)
+           VALUES (?, '**/*.php', 'security', 'HIGH', 'x.php', 1,
+                   'bad', 'good', '2026-05-29', 'pending', 0.9, 5)""",
+        ("race-pattern-1",),
+    )
+    conn.commit()
+    conn.close()
+
+    summaries = []
+    sum_lock = threading.Lock()
+
+    def runner():
+        out = fx.auto_promote_candidates()
+        with sum_lock:
+            summaries.append(out)
+
+    threads = [threading.Thread(target=runner, name=f"p{i}") for i in range(5)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    promoted_total = sum(len(s["promoted"]) for s in summaries)
+    assert promoted_total == 1, f"expected exactly 1 promotion, got {promoted_total} across {summaries}"
+    assert len(create_calls) == 1, f"expected 1 _create_lesson_file call, got {len(create_calls)}"
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))
