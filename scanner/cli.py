@@ -210,7 +210,7 @@ def scan_theme(theme_path: str, severity_filter: str = "ALL",
     report = Report(theme_path=theme_path)
     theme_path = os.path.abspath(theme_path)
 
-    patterns = load_patterns(lessons_dir, platform=platform, scope_type=scope_type)
+    patterns = load_patterns(lessons_dir, platform=platform, scope_type=scope_type, project_path=theme_path)
     changed_files = get_changed_files(theme_path) if diff_only else None
 
     # Initialize cache if enabled

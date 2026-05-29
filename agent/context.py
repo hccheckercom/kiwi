@@ -619,7 +619,20 @@ def build_context(
 
     health = _Health()
 
-    patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type)
+    # Stack filtering is EXPLICIT-ONLY: only the project_path the caller passes
+    # triggers requires:/conflicts: filtering. An inferred path (from target_file)
+    # is used for history/conventions but NOT for filtering — keeps behaviour
+    # identical for every existing caller that omits project_path.
+    filter_path = project_path or None
+    patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type, project_path=filter_path)
+    if filter_path:
+        try:
+            from scanner.project_profile import detect_stack
+            caps = detect_stack(filter_path)
+            health.ok("project_filter") if caps else health.degraded(
+                "project_filter", "không nhận diện được stack — không lọc lesson")
+        except Exception:
+            pass
 
     task_categories = _map_task_to_categories(task, patterns) if task else set()
     task_keywords = _tokenize_task(task) if task else set()
@@ -695,6 +708,7 @@ def build_context(
         task_keywords=task_keywords,
         db_scores=db_scores,
         semantic_scores=semantic_scores,
+        project_path=filter_path,
     )
 
     if compact is None:
@@ -708,7 +722,7 @@ def build_context(
         snippets = []
     else:
         relevant_set = set(relevant_ids.keys()) if relevant_ids else None
-        anti_patterns = _get_anti_patterns(scope_type, platform, max_rules, relevant_set)
+        anti_patterns = _get_anti_patterns(scope_type, platform, max_rules, relevant_set, project_path=filter_path)
         templates = _get_templates(task, max_templates)
         snippets = _get_snippets(scope_type, platform, rules)
 
@@ -862,11 +876,12 @@ def _get_rules(
     task_keywords: set = None,
     db_scores: dict = None,
     semantic_scores: dict = None,
+    project_path: str = None,
 ) -> list:
     """Get must-follow rules ranked by composite relevance score."""
     from scanner.loader import load_patterns
 
-    patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type)
+    patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type, project_path=project_path)
 
     file_extensions = set()
     if files:
@@ -932,11 +947,11 @@ def _get_rules(
     return candidates[:max_rules]
 
 
-def _get_anti_patterns(scope_type: str, platform: str, max_count: int, relevant_ids: set = None) -> list:
+def _get_anti_patterns(scope_type: str, platform: str, max_count: int, relevant_ids: set = None, project_path: str = None) -> list:
     """Get anti-patterns with bad code examples from CRITICAL lessons."""
     from scanner.loader import load_patterns, get_lesson_frontmatter
 
-    patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type)
+    patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type, project_path=project_path)
     critical = [p for p in patterns if p["severity"] == "CRITICAL"]
 
     if relevant_ids:

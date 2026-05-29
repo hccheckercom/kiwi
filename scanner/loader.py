@@ -91,6 +91,34 @@ def _matches_platform(fm: dict, category: str, platform: str) -> bool:
     return False
 
 
+def _matches_stack(fm: dict, caps: set) -> bool:
+    """Check if a lesson is applicable given the project's capabilities.
+
+    `requires:` — load only if the project HAS that capability.
+    `conflicts:` — skip if the project HAS that capability.
+    Both accept a string or a list. Lessons without either field are universal
+    and always load (preserves pre-filter behaviour).
+    """
+    def _as_set(val):
+        if not val:
+            return set()
+        if isinstance(val, str):
+            return {val}
+        if isinstance(val, (list, tuple, set)):
+            return {str(v) for v in val}
+        return set()
+
+    requires = _as_set(fm.get("requires"))
+    if requires and not (requires & caps):
+        return False  # needs a capability the project does not have
+
+    conflicts = _as_set(fm.get("conflicts"))
+    if conflicts and (conflicts & caps):
+        return False  # conflicts with a capability the project has
+
+    return True
+
+
 def _matches_scope_type(fm: dict, scope_type: str) -> bool:
     """Check if lesson matches scope_type filter (theme/plugin)."""
     tags = fm.get("tags", [])
@@ -156,19 +184,21 @@ def get_lesson_body(lesson_id: str) -> str:
     return body or ""
 
 
-def get_lesson_frontmatter(lesson_id: str) -> dict:
-    """Get lesson frontmatter as dict.
+def get_lesson_frontmatter(lesson_id: str, lessons_dir: str = None) -> tuple:
+    """Get lesson frontmatter + body.
 
-    Returns empty dict if lesson not found.
+    Returns (frontmatter_dict, body_str). Both default to empty if lesson not found.
+    Accepts optional lessons_dir for callers that load from a custom path; the
+    underlying get_lesson_content already resolves the default lessons dir.
     """
-    fm, _ = get_lesson_content(lesson_id)
-    return fm or {}
+    fm, body = get_lesson_content(lesson_id)
+    return (fm or {}, body or "")
 
 
-def load_patterns(lessons_dir: str = None, platform: str = None, scope_type: str = None, include_disabled: bool = False) -> list:
+def load_patterns(lessons_dir: str = None, platform: str = None, scope_type: str = None, include_disabled: bool = False, project_path: str = None) -> list:
     """Load all patterns from lessons/**/*.md frontmatter scan: blocks.
 
-    Results are cached per (lessons_dir, platform, scope_type) combination.
+    Results are cached per (lessons_dir, platform, scope_type, caps) combination.
     Call invalidate_cache() to force reload.
 
     Args:
@@ -176,13 +206,28 @@ def load_patterns(lessons_dir: str = None, platform: str = None, scope_type: str
         platform: Filter by platform (wp, nextjs, both)
         scope_type: Filter by scope (theme, plugin, both)
         include_disabled: If False, filter out disabled lessons (default: False)
+        project_path: Project root. When set, lessons are filtered by their
+            `requires:`/`conflicts:` frontmatter against the project's detected
+            stack (e.g. a WooCommerce project drops Wezone-only lessons). When
+            None (default), no stack filtering — preserves legacy behaviour.
     """
     global _cache_mtime
 
     if lessons_dir is None:
         lessons_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "lessons")
 
-    key = (lessons_dir, platform or "", scope_type or "", include_disabled)
+    # Resolve project capabilities once (None = filtering disabled)
+    caps = None
+    if project_path:
+        try:
+            from .project_profile import detect_stack
+            caps = detect_stack(project_path)
+        except Exception as e:
+            print(f"[kiwi] stack detection error: {e}", file=sys.stderr)
+            caps = None
+
+    caps_key = "all" if caps is None else ",".join(sorted(caps)) or "none"
+    key = (lessons_dir, platform or "", scope_type or "", include_disabled, caps_key)
     if key in _patterns_cache and _cache_mtime and (time.time() - _cache_mtime) < _CACHE_TTL:
         return _patterns_cache[key]
 
@@ -232,6 +277,9 @@ def load_patterns(lessons_dir: str = None, platform: str = None, scope_type: str
             continue
 
         if scope_type and not _matches_scope_type(fm, scope_type):
+            continue
+
+        if caps is not None and not _matches_stack(fm, caps):
             continue
 
         pattern_def = {
