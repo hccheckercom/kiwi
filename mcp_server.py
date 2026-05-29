@@ -1999,9 +1999,42 @@ def _handle_scan_learn(args: dict) -> str:
     return "\n".join(lines)
 
 
+def _handle_init(args: dict) -> str:
+    """Onboard a project: stack detect → mine → review → seed scan → learn → anchor + hook."""
+    _ensure_scanner()
+    from agent.init_pipeline import run_init, format_init_report
+
+    path = _resolve_path(args["path"])
+    if not os.path.isdir(path):
+        return f"ERROR: Directory not found: {path}"
+
+    report = run_init(
+        project_path=path,
+        write_anchor=args.get("write_anchor", True),
+        write_cursor=args.get("write_cursor", False),
+        write_windsurf=args.get("write_windsurf", False),
+        assume_yes=True,
+    )
+    return format_init_report(report)
+
+
 # --- MCP Protocol ---
 
 TOOL_DEFS = [
+    {
+        "name": "kiwi_init",
+        "description": "Onboard a project: detect stack → mine lessons → review → seed scan → learn session → write Kiwi gate anchor + register PreToolUse hook. Idempotent. Run once per new project to warm db_scores/conventions so kiwi_context ranks by project signal, not bare severity.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description": "Project path hoặc name"},
+                "write_anchor": {"type": "boolean", "default": True, "description": "Write Kiwi gate block into CLAUDE.md/AGENTS.md"},
+                "write_cursor": {"type": "boolean", "default": False, "description": "Also write .cursor/rules/kiwi.mdc"},
+                "write_windsurf": {"type": "boolean", "default": False, "description": "Also write .windsurfrules"},
+            },
+            "required": ["path"],
+        },
+    },
     {
         "name": "kiwi_scan",
         "description": "Scan project/theme cho bug patterns. Trả violations grouped by severity. Dùng path hoặc project name (wezone-plugins, webstore-vn).",
@@ -3509,6 +3542,7 @@ def _track_call(tool_name: str, args: dict, latency_ms: int, success: bool):
 
 
 HANDLERS = {
+    "kiwi_init": _handle_init,
     "kiwi_scan": _handle_scan,
     "kiwi_query": _handle_query,
     "kiwi_lesson": _handle_lesson,

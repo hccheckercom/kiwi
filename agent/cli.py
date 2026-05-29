@@ -16,12 +16,21 @@ def main():
         description="Kiwi Agent — autonomous code quality scanner",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""Examples:
+  python -m agent.cli wezone-plugins --init                     # One-shot project onboarding
   python -m agent.cli wezone-plugins --lite                     # Zero-token scan+fix preview
   python -m agent.cli wezone-plugins --lite --apply             # Zero-token auto-fix
   python -m agent.cli wezone-plugins --mode review              # Claude-powered analysis
   python -m agent.cli D:\\projects\\wezone\\themes\\x --mode auto  # Claude-powered auto-fix""",
     )
     parser.add_argument("path", help="Project path or name from _meta.json")
+    parser.add_argument("--init", action="store_true",
+                        help="Onboard project: detect stack → mine → review → seed scan → learn → anchor + hook")
+    parser.add_argument("--no-anchor", action="store_true",
+                        help="With --init: skip writing CLAUDE.md/AGENTS.md anchor block")
+    parser.add_argument("--cursor", action="store_true",
+                        help="With --init: also write .cursor/rules/kiwi.mdc")
+    parser.add_argument("--windsurf", action="store_true",
+                        help="With --init: also write .windsurfrules")
     parser.add_argument("--lite", action="store_true", help="Lite mode: scan+fix locally, zero API tokens")
     parser.add_argument("--multi-agent", action="store_true", help="Multi-agent mode: spawn specialized agents")
     parser.add_argument("--agents", nargs="+", help="Agent types to spawn (security, performance, architecture, compliance)")
@@ -37,6 +46,23 @@ def main():
     args = parser.parse_args()
 
     resolved = _resolve_path(args.path)
+
+    if args.init:
+        from .init_pipeline import run_init, format_init_report
+
+        report = run_init(
+            project_path=resolved,
+            write_anchor=not args.no_anchor,
+            write_cursor=args.cursor,
+            write_windsurf=args.windsurf,
+            assume_yes=True,
+            verbose=args.verbose or not args.json_mode,
+        )
+        if args.json_mode:
+            print(json.dumps(report, indent=2, ensure_ascii=False))
+        else:
+            print(format_init_report(report))
+        sys.exit(0 if report.get("ok") else 1)
 
     if args.multi_agent:
         report = run_multi_agent(

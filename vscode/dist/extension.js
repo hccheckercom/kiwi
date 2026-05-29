@@ -3104,7 +3104,7 @@ var require_main = __commonJS({
     exports2.createMessageConnection = exports2.createServerSocketTransport = exports2.createClientSocketTransport = exports2.createServerPipeTransport = exports2.createClientPipeTransport = exports2.generateRandomPipeName = exports2.StreamMessageWriter = exports2.StreamMessageReader = exports2.SocketMessageWriter = exports2.SocketMessageReader = exports2.PortMessageWriter = exports2.PortMessageReader = exports2.IPCMessageWriter = exports2.IPCMessageReader = void 0;
     var ril_1 = require_ril();
     ril_1.default.install();
-    var path3 = require("path");
+    var path4 = require("path");
     var os = require("os");
     var crypto_1 = require("crypto");
     var net_1 = require("net");
@@ -3240,9 +3240,9 @@ var require_main = __commonJS({
       }
       let result;
       if (XDG_RUNTIME_DIR) {
-        result = path3.join(XDG_RUNTIME_DIR, `vscode-ipc-${randomSuffix}.sock`);
+        result = path4.join(XDG_RUNTIME_DIR, `vscode-ipc-${randomSuffix}.sock`);
       } else {
-        result = path3.join(os.tmpdir(), `vscode-${randomSuffix}.sock`);
+        result = path4.join(os.tmpdir(), `vscode-${randomSuffix}.sock`);
       }
       const limit = safeIpcPathLengths.get(process.platform);
       if (limit !== void 0 && result.length > limit) {
@@ -3413,8 +3413,8 @@ var require_main2 = __commonJS({
         }
         Position2.is = is;
       })(Position || (exports3.Position = Position = {}));
-      var Range;
-      (function(Range2) {
+      var Range2;
+      (function(Range3) {
         function create(one, two, three, four) {
           if (Is.uinteger(one) && Is.uinteger(two) && Is.uinteger(three) && Is.uinteger(four)) {
             return { start: Position.create(one, two), end: Position.create(three, four) };
@@ -3424,13 +3424,13 @@ var require_main2 = __commonJS({
             throw new Error("Range#create called with invalid arguments[".concat(one, ", ").concat(two, ", ").concat(three, ", ").concat(four, "]"));
           }
         }
-        Range2.create = create;
+        Range3.create = create;
         function is(value) {
           var candidate = value;
           return Is.objectLiteral(candidate) && Position.is(candidate.start) && Position.is(candidate.end);
         }
-        Range2.is = is;
-      })(Range || (exports3.Range = Range = {}));
+        Range3.is = is;
+      })(Range2 || (exports3.Range = Range2 = {}));
       var Location;
       (function(Location2) {
         function create(uri, range) {
@@ -3439,7 +3439,7 @@ var require_main2 = __commonJS({
         Location2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.objectLiteral(candidate) && Range.is(candidate.range) && (Is.string(candidate.uri) || Is.undefined(candidate.uri));
+          return Is.objectLiteral(candidate) && Range2.is(candidate.range) && (Is.string(candidate.uri) || Is.undefined(candidate.uri));
         }
         Location2.is = is;
       })(Location || (exports3.Location = Location = {}));
@@ -3451,7 +3451,7 @@ var require_main2 = __commonJS({
         LocationLink2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.objectLiteral(candidate) && Range.is(candidate.targetRange) && Is.string(candidate.targetUri) && Range.is(candidate.targetSelectionRange) && (Range.is(candidate.originSelectionRange) || Is.undefined(candidate.originSelectionRange));
+          return Is.objectLiteral(candidate) && Range2.is(candidate.targetRange) && Is.string(candidate.targetUri) && Range2.is(candidate.targetSelectionRange) && (Range2.is(candidate.originSelectionRange) || Is.undefined(candidate.originSelectionRange));
         }
         LocationLink2.is = is;
       })(LocationLink || (exports3.LocationLink = LocationLink = {}));
@@ -3483,7 +3483,7 @@ var require_main2 = __commonJS({
         ColorInformation2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.objectLiteral(candidate) && Range.is(candidate.range) && Color.is(candidate.color);
+          return Is.objectLiteral(candidate) && Range2.is(candidate.range) && Color.is(candidate.color);
         }
         ColorInformation2.is = is;
       })(ColorInformation || (exports3.ColorInformation = ColorInformation = {}));
@@ -3594,7 +3594,7 @@ var require_main2 = __commonJS({
         function is(value) {
           var _a;
           var candidate = value;
-          return Is.defined(candidate) && Range.is(candidate.range) && Is.string(candidate.message) && (Is.number(candidate.severity) || Is.undefined(candidate.severity)) && (Is.integer(candidate.code) || Is.string(candidate.code) || Is.undefined(candidate.code)) && (Is.undefined(candidate.codeDescription) || Is.string((_a = candidate.codeDescription) === null || _a === void 0 ? void 0 : _a.href)) && (Is.string(candidate.source) || Is.undefined(candidate.source)) && (Is.undefined(candidate.relatedInformation) || Is.typedArray(candidate.relatedInformation, DiagnosticRelatedInformation.is));
+          return Is.defined(candidate) && Range2.is(candidate.range) && Is.string(candidate.message) && (Is.number(candidate.severity) || Is.undefined(candidate.severity)) && (Is.integer(candidate.code) || Is.string(candidate.code) || Is.undefined(candidate.code)) && (Is.undefined(candidate.codeDescription) || Is.string((_a = candidate.codeDescription) === null || _a === void 0 ? void 0 : _a.href)) && (Is.string(candidate.source) || Is.undefined(candidate.source)) && (Is.undefined(candidate.relatedInformation) || Is.typedArray(candidate.relatedInformation, DiagnosticRelatedInformation.is));
         }
         Diagnostic2.is = is;
       })(Diagnostic || (exports3.Diagnostic = Diagnostic = {}));
@@ -3634,7 +3634,7 @@ var require_main2 = __commonJS({
         TextEdit2.del = del;
         function is(value) {
           var candidate = value;
-          return Is.objectLiteral(candidate) && Is.string(candidate.newText) && Range.is(candidate.range);
+          return Is.objectLiteral(candidate) && Is.string(candidate.newText) && Range2.is(candidate.range);
         }
         TextEdit2.is = is;
       })(TextEdit || (exports3.TextEdit = TextEdit = {}));
@@ -4178,7 +4178,7 @@ var require_main2 = __commonJS({
         InsertReplaceEdit2.create = create;
         function is(value) {
           var candidate = value;
-          return candidate && Is.string(candidate.newText) && Range.is(candidate.insert) && Range.is(candidate.replace);
+          return candidate && Is.string(candidate.newText) && Range2.is(candidate.insert) && Range2.is(candidate.replace);
         }
         InsertReplaceEdit2.is = is;
       })(InsertReplaceEdit || (exports3.InsertReplaceEdit = InsertReplaceEdit = {}));
@@ -4225,7 +4225,7 @@ var require_main2 = __commonJS({
       (function(Hover2) {
         function is(value) {
           var candidate = value;
-          return !!candidate && Is.objectLiteral(candidate) && (MarkupContent.is(candidate.contents) || MarkedString.is(candidate.contents) || Is.typedArray(candidate.contents, MarkedString.is)) && (value.range === void 0 || Range.is(value.range));
+          return !!candidate && Is.objectLiteral(candidate) && (MarkupContent.is(candidate.contents) || MarkedString.is(candidate.contents) || Is.typedArray(candidate.contents, MarkedString.is)) && (value.range === void 0 || Range2.is(value.range));
         }
         Hover2.is = is;
       })(Hover || (exports3.Hover = Hover = {}));
@@ -4346,7 +4346,7 @@ var require_main2 = __commonJS({
         DocumentSymbol2.create = create;
         function is(value) {
           var candidate = value;
-          return candidate && Is.string(candidate.name) && Is.number(candidate.kind) && Range.is(candidate.range) && Range.is(candidate.selectionRange) && (candidate.detail === void 0 || Is.string(candidate.detail)) && (candidate.deprecated === void 0 || Is.boolean(candidate.deprecated)) && (candidate.children === void 0 || Array.isArray(candidate.children)) && (candidate.tags === void 0 || Array.isArray(candidate.tags));
+          return candidate && Is.string(candidate.name) && Is.number(candidate.kind) && Range2.is(candidate.range) && Range2.is(candidate.selectionRange) && (candidate.detail === void 0 || Is.string(candidate.detail)) && (candidate.deprecated === void 0 || Is.boolean(candidate.deprecated)) && (candidate.children === void 0 || Array.isArray(candidate.children)) && (candidate.tags === void 0 || Array.isArray(candidate.tags));
         }
         DocumentSymbol2.is = is;
       })(DocumentSymbol || (exports3.DocumentSymbol = DocumentSymbol = {}));
@@ -4423,7 +4423,7 @@ var require_main2 = __commonJS({
         CodeLens2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.defined(candidate) && Range.is(candidate.range) && (Is.undefined(candidate.command) || Command.is(candidate.command));
+          return Is.defined(candidate) && Range2.is(candidate.range) && (Is.undefined(candidate.command) || Command.is(candidate.command));
         }
         CodeLens2.is = is;
       })(CodeLens || (exports3.CodeLens = CodeLens = {}));
@@ -4447,7 +4447,7 @@ var require_main2 = __commonJS({
         DocumentLink2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.defined(candidate) && Range.is(candidate.range) && (Is.undefined(candidate.target) || Is.string(candidate.target));
+          return Is.defined(candidate) && Range2.is(candidate.range) && (Is.undefined(candidate.target) || Is.string(candidate.target));
         }
         DocumentLink2.is = is;
       })(DocumentLink || (exports3.DocumentLink = DocumentLink = {}));
@@ -4459,7 +4459,7 @@ var require_main2 = __commonJS({
         SelectionRange2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.objectLiteral(candidate) && Range.is(candidate.range) && (candidate.parent === void 0 || SelectionRange2.is(candidate.parent));
+          return Is.objectLiteral(candidate) && Range2.is(candidate.range) && (candidate.parent === void 0 || SelectionRange2.is(candidate.parent));
         }
         SelectionRange2.is = is;
       })(SelectionRange || (exports3.SelectionRange = SelectionRange = {}));
@@ -4518,7 +4518,7 @@ var require_main2 = __commonJS({
         InlineValueText2.create = create;
         function is(value) {
           var candidate = value;
-          return candidate !== void 0 && candidate !== null && Range.is(candidate.range) && Is.string(candidate.text);
+          return candidate !== void 0 && candidate !== null && Range2.is(candidate.range) && Is.string(candidate.text);
         }
         InlineValueText2.is = is;
       })(InlineValueText || (exports3.InlineValueText = InlineValueText = {}));
@@ -4530,7 +4530,7 @@ var require_main2 = __commonJS({
         InlineValueVariableLookup2.create = create;
         function is(value) {
           var candidate = value;
-          return candidate !== void 0 && candidate !== null && Range.is(candidate.range) && Is.boolean(candidate.caseSensitiveLookup) && (Is.string(candidate.variableName) || candidate.variableName === void 0);
+          return candidate !== void 0 && candidate !== null && Range2.is(candidate.range) && Is.boolean(candidate.caseSensitiveLookup) && (Is.string(candidate.variableName) || candidate.variableName === void 0);
         }
         InlineValueVariableLookup2.is = is;
       })(InlineValueVariableLookup || (exports3.InlineValueVariableLookup = InlineValueVariableLookup = {}));
@@ -4542,7 +4542,7 @@ var require_main2 = __commonJS({
         InlineValueEvaluatableExpression2.create = create;
         function is(value) {
           var candidate = value;
-          return candidate !== void 0 && candidate !== null && Range.is(candidate.range) && (Is.string(candidate.expression) || candidate.expression === void 0);
+          return candidate !== void 0 && candidate !== null && Range2.is(candidate.range) && (Is.string(candidate.expression) || candidate.expression === void 0);
         }
         InlineValueEvaluatableExpression2.is = is;
       })(InlineValueEvaluatableExpression || (exports3.InlineValueEvaluatableExpression = InlineValueEvaluatableExpression = {}));
@@ -4554,7 +4554,7 @@ var require_main2 = __commonJS({
         InlineValueContext2.create = create;
         function is(value) {
           var candidate = value;
-          return Is.defined(candidate) && Range.is(value.stoppedLocation);
+          return Is.defined(candidate) && Range2.is(value.stoppedLocation);
         }
         InlineValueContext2.is = is;
       })(InlineValueContext || (exports3.InlineValueContext = InlineValueContext = {}));
@@ -6697,8 +6697,8 @@ var require_protocolCodeAction = __commonJS({
   "node_modules/vscode-languageclient/lib/common/protocolCodeAction.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var vscode14 = require("vscode");
-    var ProtocolCodeAction = class extends vscode14.CodeAction {
+    var vscode17 = require("vscode");
+    var ProtocolCodeAction = class extends vscode17.CodeAction {
       constructor(title, data) {
         super(title);
         this.data = data;
@@ -6714,7 +6714,7 @@ var require_protocolDiagnostic = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProtocolDiagnostic = exports2.DiagnosticCode = void 0;
-    var vscode14 = require("vscode");
+    var vscode17 = require("vscode");
     var Is = require_is();
     var DiagnosticCode;
     (function(DiagnosticCode2) {
@@ -6724,7 +6724,7 @@ var require_protocolDiagnostic = __commonJS({
       }
       DiagnosticCode2.is = is;
     })(DiagnosticCode || (exports2.DiagnosticCode = DiagnosticCode = {}));
-    var ProtocolDiagnostic = class extends vscode14.Diagnostic {
+    var ProtocolDiagnostic = class extends vscode17.Diagnostic {
       constructor(range, message, severity, data) {
         super(range, message, severity);
         this.data = data;
@@ -8433,11 +8433,11 @@ ${JSON.stringify(change, void 0, 4)}`);
         }
         return async.map(colorInformation, asColorInformation, token);
       }
-      function asColorPresentation(cp2) {
-        let presentation = new code.ColorPresentation(cp2.label);
-        presentation.additionalTextEdits = asTextEditsSync(cp2.additionalTextEdits);
-        if (cp2.textEdit) {
-          presentation.textEdit = asTextEdit(cp2.textEdit);
+      function asColorPresentation(cp3) {
+        let presentation = new code.ColorPresentation(cp3.label);
+        presentation.additionalTextEdits = asTextEditsSync(cp3.additionalTextEdits);
+        if (cp3.textEdit) {
+          presentation.textEdit = asTextEdit(cp3.textEdit);
         }
         return presentation;
       }
@@ -9437,8 +9437,8 @@ var require_minimatch = __commonJS({
       return new Minimatch(pattern, options).match(p);
     };
     module2.exports = minimatch;
-    var path3 = require_path();
-    minimatch.sep = path3.sep;
+    var path4 = require_path();
+    minimatch.sep = path4.sep;
     var GLOBSTAR = Symbol("globstar **");
     minimatch.GLOBSTAR = GLOBSTAR;
     var expand = require_brace_expansion();
@@ -10056,8 +10056,8 @@ var require_minimatch = __commonJS({
         if (f === "/" && partial)
           return true;
         const options = this.options;
-        if (path3.sep !== "/") {
-          f = f.split(path3.sep).join("/");
+        if (path4.sep !== "/") {
+          f = f.split(path4.sep).join("/");
         }
         f = f.split(slashSplit);
         this.debug(this.pattern, "split", f);
@@ -10845,7 +10845,7 @@ var require_notebook = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NotebookDocumentSyncFeature = void 0;
-    var vscode14 = require("vscode");
+    var vscode17 = require("vscode");
     var minimatch = require_minimatch();
     var proto = require_main3();
     var UUID = require_uuid();
@@ -10900,9 +10900,9 @@ var require_notebook = __commonJS({
         c2p2.asNotebookCell = asNotebookCell;
         function asNotebookCellKind(kind) {
           switch (kind) {
-            case vscode14.NotebookCellKind.Markup:
+            case vscode17.NotebookCellKind.Markup:
               return proto.NotebookCellKind.Markup;
-            case vscode14.NotebookCellKind.Code:
+            case vscode17.NotebookCellKind.Code:
               return proto.NotebookCellKind.Code;
           }
         }
@@ -11153,25 +11153,25 @@ var require_notebook = __commonJS({
         this.notebookDidOpen = /* @__PURE__ */ new Set();
         this.disposables = [];
         this.selector = client2.protocol2CodeConverter.asDocumentSelector($NotebookDocumentSyncOptions.asDocumentSelector(options));
-        vscode14.workspace.onDidOpenNotebookDocument((notebookDocument) => {
+        vscode17.workspace.onDidOpenNotebookDocument((notebookDocument) => {
           this.notebookDidOpen.add(notebookDocument.uri.toString());
           this.didOpen(notebookDocument);
         }, void 0, this.disposables);
-        for (const notebookDocument of vscode14.workspace.notebookDocuments) {
+        for (const notebookDocument of vscode17.workspace.notebookDocuments) {
           this.notebookDidOpen.add(notebookDocument.uri.toString());
           this.didOpen(notebookDocument);
         }
-        vscode14.workspace.onDidChangeNotebookDocument((event) => this.didChangeNotebookDocument(event), void 0, this.disposables);
+        vscode17.workspace.onDidChangeNotebookDocument((event) => this.didChangeNotebookDocument(event), void 0, this.disposables);
         if (this.options.save === true) {
-          vscode14.workspace.onDidSaveNotebookDocument((notebookDocument) => this.didSave(notebookDocument), void 0, this.disposables);
+          vscode17.workspace.onDidSaveNotebookDocument((notebookDocument) => this.didSave(notebookDocument), void 0, this.disposables);
         }
-        vscode14.workspace.onDidCloseNotebookDocument((notebookDocument) => {
+        vscode17.workspace.onDidCloseNotebookDocument((notebookDocument) => {
           this.didClose(notebookDocument);
           this.notebookDidOpen.delete(notebookDocument.uri.toString());
         }, void 0, this.disposables);
       }
       getState() {
-        for (const notebook of vscode14.workspace.notebookDocuments) {
+        for (const notebook of vscode17.workspace.notebookDocuments) {
           const matchingCells = this.getMatchingCells(notebook);
           if (matchingCells !== void 0) {
             return { kind: "document", id: "$internal", registrations: true, matches: true };
@@ -11183,10 +11183,10 @@ var require_notebook = __commonJS({
         return "notebook";
       }
       handles(textDocument) {
-        return vscode14.languages.match(this.selector, textDocument) > 0;
+        return vscode17.languages.match(this.selector, textDocument) > 0;
       }
       didOpenNotebookCellTextDocument(notebookDocument, cell) {
-        if (vscode14.languages.match(this.selector, cell.document) === 0) {
+        if (vscode17.languages.match(this.selector, cell.document) === 0) {
           return;
         }
         if (!this.notebookDidOpen.has(notebookDocument.uri.toString())) {
@@ -11217,7 +11217,7 @@ var require_notebook = __commonJS({
         }
       }
       didChangeNotebookCellTextDocument(notebookDocument, event) {
-        if (vscode14.languages.match(this.selector, event.document) === 0) {
+        if (vscode17.languages.match(this.selector, event.document) === 0) {
           return;
         }
         this.doSendChange({
@@ -11490,7 +11490,7 @@ var require_notebook = __commonJS({
         this.client = client2;
         this.registrations = /* @__PURE__ */ new Map();
         this.registrationType = proto.NotebookDocumentSyncRegistrationType.type;
-        vscode14.workspace.onDidOpenTextDocument((textDocument) => {
+        vscode17.workspace.onDidOpenTextDocument((textDocument) => {
           if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
             return;
           }
@@ -11504,7 +11504,7 @@ var require_notebook = __commonJS({
             }
           }
         });
-        vscode14.workspace.onDidChangeTextDocument((event) => {
+        vscode17.workspace.onDidChangeTextDocument((event) => {
           if (event.contentChanges.length === 0) {
             return;
           }
@@ -11522,7 +11522,7 @@ var require_notebook = __commonJS({
             }
           }
         });
-        vscode14.workspace.onDidCloseTextDocument((textDocument) => {
+        vscode17.workspace.onDidCloseTextDocument((textDocument) => {
           if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
             return;
           }
@@ -11587,7 +11587,7 @@ var require_notebook = __commonJS({
         if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
           return false;
         }
-        if (this.dedicatedChannel !== void 0 && vscode14.languages.match(this.dedicatedChannel, textDocument) > 0) {
+        if (this.dedicatedChannel !== void 0 && vscode17.languages.match(this.dedicatedChannel, textDocument) > 0) {
           return true;
         }
         for (const provider of this.registrations.values()) {
@@ -11607,7 +11607,7 @@ var require_notebook = __commonJS({
       }
       findNotebookDocumentAndCell(textDocument) {
         const uri = textDocument.uri.toString();
-        for (const notebookDocument of vscode14.workspace.notebookDocuments) {
+        for (const notebookDocument of vscode17.workspace.notebookDocuments) {
           for (const cell of notebookDocument.getCells()) {
             if (cell.document.uri.toString() === uri) {
               return [notebookDocument, cell];
@@ -11785,13 +11785,13 @@ var require_configuration = __commonJS({
         });
       }
       extractSettingsInformation(keys) {
-        function ensurePath(config, path3) {
+        function ensurePath(config, path4) {
           let current = config;
-          for (let i = 0; i < path3.length - 1; i++) {
-            let obj = current[path3[i]];
+          for (let i = 0; i < path4.length - 1; i++) {
+            let obj = current[path4[i]];
             if (!obj) {
               obj = /* @__PURE__ */ Object.create(null);
-              current[path3[i]] = obj;
+              current[path4[i]] = obj;
             }
             current = obj;
           }
@@ -11809,8 +11809,8 @@ var require_configuration = __commonJS({
             config = vscode_1.workspace.getConfiguration(void 0, resource).get(key);
           }
           if (config) {
-            let path3 = keys[i].split(".");
-            ensurePath(result, path3)[path3[path3.length - 1]] = toJSONObject(config);
+            let path4 = keys[i].split(".");
+            ensurePath(result, path4)[path4[path4.length - 1]] = toJSONObject(config);
           }
         }
         return result;
@@ -14123,7 +14123,7 @@ var require_semanticTokens = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SemanticTokensFeature = void 0;
-    var vscode14 = require("vscode");
+    var vscode17 = require("vscode");
     var vscode_languageserver_protocol_1 = require_main3();
     var features_1 = require_features();
     var Is = require_is();
@@ -14201,7 +14201,7 @@ var require_semanticTokens = __commonJS({
         const selector = options.documentSelector;
         const fullProvider = Is.boolean(options.full) ? options.full : options.full !== void 0;
         const hasEditProvider = options.full !== void 0 && typeof options.full !== "boolean" && options.full.delta === true;
-        const eventEmitter = new vscode14.EventEmitter();
+        const eventEmitter = new vscode17.EventEmitter();
         const documentProvider = fullProvider ? {
           onDidChangeSemanticTokens: eventEmitter.event,
           provideDocumentSemanticTokens: (document, token) => {
@@ -14273,12 +14273,12 @@ var require_semanticTokens = __commonJS({
         const legend = client2.protocol2CodeConverter.asSemanticTokensLegend(options.legend);
         const documentSelector = client2.protocol2CodeConverter.asDocumentSelector(selector);
         if (documentProvider !== void 0) {
-          disposables.push(vscode14.languages.registerDocumentSemanticTokensProvider(documentSelector, documentProvider, legend));
+          disposables.push(vscode17.languages.registerDocumentSemanticTokensProvider(documentSelector, documentProvider, legend));
         }
         if (rangeProvider !== void 0) {
-          disposables.push(vscode14.languages.registerDocumentRangeSemanticTokensProvider(documentSelector, rangeProvider, legend));
+          disposables.push(vscode17.languages.registerDocumentRangeSemanticTokensProvider(documentSelector, rangeProvider, legend));
         }
-        return [new vscode14.Disposable(() => disposables.forEach((item) => item.dispose())), { range: rangeProvider, full: documentProvider, onDidChangeSemanticTokensEmitter: eventEmitter }];
+        return [new vscode17.Disposable(() => disposables.forEach((item) => item.dispose())), { range: rangeProvider, full: documentProvider, onDidChangeSemanticTokensEmitter: eventEmitter }];
       }
     };
     exports2.SemanticTokensFeature = SemanticTokensFeature;
@@ -14377,13 +14377,13 @@ var require_fileOperations = __commonJS({
       async filter(event, prop) {
         const fileMatches = await Promise.all(event.files.map(async (item) => {
           const uri = prop(item);
-          const path3 = uri.fsPath.replace(/\\/g, "/");
+          const path4 = uri.fsPath.replace(/\\/g, "/");
           for (const filters of this._filters.values()) {
             for (const filter of filters) {
               if (filter.scheme !== void 0 && filter.scheme !== uri.scheme) {
                 continue;
               }
-              if (filter.matcher.match(path3)) {
+              if (filter.matcher.match(path4)) {
                 if (filter.kind === void 0) {
                   return true;
                 }
@@ -14397,7 +14397,7 @@ var require_fileOperations = __commonJS({
                 }
               } else if (filter.kind === proto.FileOperationPatternKind.folder) {
                 const fileType = await _FileOperationFeature.getFileType(uri);
-                if (fileType === code.FileType.Directory && filter.matcher.match(`${path3}/`)) {
+                if (fileType === code.FileType.Directory && filter.matcher.match(`${path4}/`)) {
                   return true;
                 }
               }
@@ -15001,12 +15001,12 @@ var require_client = __commonJS({
       CloseAction2[CloseAction2["DoNotRestart"] = 1] = "DoNotRestart";
       CloseAction2[CloseAction2["Restart"] = 2] = "Restart";
     })(CloseAction || (exports2.CloseAction = CloseAction = {}));
-    var State;
-    (function(State2) {
-      State2[State2["Stopped"] = 1] = "Stopped";
-      State2[State2["Starting"] = 3] = "Starting";
-      State2[State2["Running"] = 2] = "Running";
-    })(State || (exports2.State = State = {}));
+    var State2;
+    (function(State3) {
+      State3[State3["Stopped"] = 1] = "Stopped";
+      State3[State3["Starting"] = 3] = "Starting";
+      State3[State3["Running"] = 2] = "Running";
+    })(State2 || (exports2.State = State2 = {}));
     var SuspendMode;
     (function(SuspendMode2) {
       SuspendMode2["off"] = "off";
@@ -15209,11 +15209,11 @@ var require_client = __commonJS({
       getPublicState() {
         switch (this.$state) {
           case ClientState.Starting:
-            return State.Starting;
+            return State2.Starting;
           case ClientState.Running:
-            return State.Running;
+            return State2.Running;
           default:
-            return State.Stopped;
+            return State2.Stopped;
         }
       }
       get initializeResult() {
@@ -16381,7 +16381,7 @@ var require_processes = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.terminate = void 0;
-    var cp2 = require("child_process");
+    var cp3 = require("child_process");
     var path_1 = require("path");
     var isWindows = process.platform === "win32";
     var isMacintosh = process.platform === "darwin";
@@ -16395,7 +16395,7 @@ var require_processes = __commonJS({
           if (cwd) {
             options.cwd = cwd;
           }
-          cp2.execFileSync("taskkill", ["/T", "/F", "/PID", process2.pid.toString()], options);
+          cp3.execFileSync("taskkill", ["/T", "/F", "/PID", process2.pid.toString()], options);
           return true;
         } catch (err) {
           return false;
@@ -16403,7 +16403,7 @@ var require_processes = __commonJS({
       } else if (isLinux || isMacintosh) {
         try {
           var cmd = (0, path_1.join)(__dirname, "terminateProcess.sh");
-          var result = cp2.spawnSync(cmd, [process2.pid.toString()]);
+          var result = cp3.spawnSync(cmd, [process2.pid.toString()]);
           return result.error ? false : true;
         } catch (err) {
           return false;
@@ -17125,12 +17125,12 @@ var require_comparator = __commonJS({
           if (this.value === "") {
             return true;
           }
-          return new Range(comp.value, options).test(this.value);
+          return new Range2(comp.value, options).test(this.value);
         } else if (comp.operator === "") {
           if (comp.value === "") {
             return true;
           }
-          return new Range(this.value, options).test(comp.semver);
+          return new Range2(this.value, options).test(comp.semver);
         }
         options = parseOptions(options);
         if (options.includePrerelease && (this.value === "<0.0.0-0" || comp.value === "<0.0.0-0")) {
@@ -17163,7 +17163,7 @@ var require_comparator = __commonJS({
     var cmp = require_cmp();
     var debug = require_debug();
     var SemVer = require_semver();
-    var Range = require_range();
+    var Range2 = require_range();
   }
 });
 
@@ -17172,7 +17172,7 @@ var require_range = __commonJS({
   "node_modules/semver/classes/range.js"(exports2, module2) {
     "use strict";
     var SPACE_CHARACTERS = /\s+/g;
-    var Range = class _Range {
+    var Range2 = class _Range {
       constructor(range, options) {
         options = parseOptions(options);
         if (range instanceof _Range) {
@@ -17311,7 +17311,7 @@ var require_range = __commonJS({
         return false;
       }
     };
-    module2.exports = Range;
+    module2.exports = Range2;
     var LRU = require_lrucache();
     var cache = new LRU();
     var parseOptions = require_parse_options();
@@ -17551,10 +17551,10 @@ var require_range = __commonJS({
 var require_satisfies = __commonJS({
   "node_modules/semver/functions/satisfies.js"(exports2, module2) {
     "use strict";
-    var Range = require_range();
+    var Range2 = require_range();
     var satisfies = (version, range, options) => {
       try {
-        range = new Range(range, options);
+        range = new Range2(range, options);
       } catch (er) {
         return false;
       }
@@ -17629,9 +17629,9 @@ var require_main4 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SettingMonitor = exports2.LanguageClient = exports2.TransportKind = void 0;
-    var cp2 = require("child_process");
+    var cp3 = require("child_process");
     var fs = require("fs");
-    var path3 = require("path");
+    var path4 = require("path");
     var vscode_1 = require("vscode");
     var Is = require_is();
     var client_1 = require_client();
@@ -17825,16 +17825,16 @@ var require_main4 = __commonJS({
               this._isDetached = !!result.detached;
               return { reader: new node_1.StreamMessageReader(result.reader), writer: new node_1.StreamMessageWriter(result.writer) };
             } else {
-              let cp3;
+              let cp4;
               if (ChildProcessInfo.is(result)) {
-                cp3 = result.process;
+                cp4 = result.process;
                 this._isDetached = result.detached;
               } else {
-                cp3 = result;
+                cp4 = result;
                 this._isDetached = false;
               }
-              cp3.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
-              return { reader: new node_1.StreamMessageReader(cp3.stdout), writer: new node_1.StreamMessageWriter(cp3.stdin) };
+              cp4.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
+              return { reader: new node_1.StreamMessageReader(cp4.stdout), writer: new node_1.StreamMessageWriter(cp4.stdin) };
             }
           });
         }
@@ -17883,7 +17883,7 @@ var require_main4 = __commonJS({
               }
               args.push(`--clientProcessId=${process.pid.toString()}`);
               if (transport === TransportKind2.ipc || transport === TransportKind2.stdio) {
-                const serverProcess = cp2.spawn(runtime, args, execOptions);
+                const serverProcess = cp3.spawn(runtime, args, execOptions);
                 if (!serverProcess || !serverProcess.pid) {
                   return handleChildProcessStartError(serverProcess, `Launching server using runtime ${runtime} failed.`);
                 }
@@ -17897,7 +17897,7 @@ var require_main4 = __commonJS({
                 }
               } else if (transport === TransportKind2.pipe) {
                 return (0, node_1.createClientPipeTransport)(pipeName).then((transport2) => {
-                  const process2 = cp2.spawn(runtime, args, execOptions);
+                  const process2 = cp3.spawn(runtime, args, execOptions);
                   if (!process2 || !process2.pid) {
                     return handleChildProcessStartError(process2, `Launching server using runtime ${runtime} failed.`);
                   }
@@ -17910,7 +17910,7 @@ var require_main4 = __commonJS({
                 });
               } else if (Transport.isSocket(transport)) {
                 return (0, node_1.createClientSocketTransport)(transport.port).then((transport2) => {
-                  const process2 = cp2.spawn(runtime, args, execOptions);
+                  const process2 = cp3.spawn(runtime, args, execOptions);
                   if (!process2 || !process2.pid) {
                     return handleChildProcessStartError(process2, `Launching server using runtime ${runtime} failed.`);
                   }
@@ -17943,7 +17943,7 @@ var require_main4 = __commonJS({
                 options.cwd = serverWorkingDir;
                 options.silent = true;
                 if (transport === TransportKind2.ipc || transport === TransportKind2.stdio) {
-                  const sp = cp2.fork(node.module, args || [], options);
+                  const sp = cp3.fork(node.module, args || [], options);
                   assertStdio(sp);
                   this._serverProcess = sp;
                   sp.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
@@ -17955,7 +17955,7 @@ var require_main4 = __commonJS({
                   }
                 } else if (transport === TransportKind2.pipe) {
                   (0, node_1.createClientPipeTransport)(pipeName).then((transport2) => {
-                    const sp = cp2.fork(node.module, args || [], options);
+                    const sp = cp3.fork(node.module, args || [], options);
                     assertStdio(sp);
                     this._serverProcess = sp;
                     sp.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
@@ -17966,7 +17966,7 @@ var require_main4 = __commonJS({
                   }, reject);
                 } else if (Transport.isSocket(transport)) {
                   (0, node_1.createClientSocketTransport)(transport.port).then((transport2) => {
-                    const sp = cp2.fork(node.module, args || [], options);
+                    const sp = cp3.fork(node.module, args || [], options);
                     assertStdio(sp);
                     this._serverProcess = sp;
                     sp.stderr.on("data", (data) => this.outputChannel.append(Is.string(data) ? data : data.toString(encoding)));
@@ -17996,7 +17996,7 @@ var require_main4 = __commonJS({
             const options = Object.assign({}, command.options);
             options.cwd = options.cwd || serverWorkingDir;
             if (transport === void 0 || transport === TransportKind2.stdio) {
-              const serverProcess = cp2.spawn(command.command, args, options);
+              const serverProcess = cp3.spawn(command.command, args, options);
               if (!serverProcess || !serverProcess.pid) {
                 return handleChildProcessStartError(serverProcess, `Launching server using command ${command.command} failed.`);
               }
@@ -18006,7 +18006,7 @@ var require_main4 = __commonJS({
               return Promise.resolve({ reader: new node_1.StreamMessageReader(serverProcess.stdout), writer: new node_1.StreamMessageWriter(serverProcess.stdin) });
             } else if (transport === TransportKind2.pipe) {
               return (0, node_1.createClientPipeTransport)(pipeName).then((transport2) => {
-                const serverProcess = cp2.spawn(command.command, args, options);
+                const serverProcess = cp3.spawn(command.command, args, options);
                 if (!serverProcess || !serverProcess.pid) {
                   return handleChildProcessStartError(serverProcess, `Launching server using command ${command.command} failed.`);
                 }
@@ -18020,7 +18020,7 @@ var require_main4 = __commonJS({
               });
             } else if (Transport.isSocket(transport)) {
               return (0, node_1.createClientSocketTransport)(transport.port).then((transport2) => {
-                const serverProcess = cp2.spawn(command.command, args, options);
+                const serverProcess = cp3.spawn(command.command, args, options);
                 if (!serverProcess || !serverProcess.pid) {
                   return handleChildProcessStartError(serverProcess, `Launching server using command ${command.command} failed.`);
                 }
@@ -18049,18 +18049,18 @@ var require_main4 = __commonJS({
         });
       }
       _getRuntimePath(runtime, serverWorkingDirectory) {
-        if (path3.isAbsolute(runtime)) {
+        if (path4.isAbsolute(runtime)) {
           return runtime;
         }
         const mainRootPath = this._mainGetRootPath();
         if (mainRootPath !== void 0) {
-          const result = path3.join(mainRootPath, runtime);
+          const result = path4.join(mainRootPath, runtime);
           if (fs.existsSync(result)) {
             return result;
           }
         }
         if (serverWorkingDirectory !== void 0) {
-          const result = path3.join(serverWorkingDirectory, runtime);
+          const result = path4.join(serverWorkingDirectory, runtime);
           if (fs.existsSync(result)) {
             return result;
           }
@@ -18151,7 +18151,7 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode13 = __toESM(require("vscode"));
+var vscode16 = __toESM(require("vscode"));
 
 // src/client.ts
 var vscode = __toESM(require("vscode"));
@@ -18316,7 +18316,7 @@ var KiwiStatusBar = class {
 };
 
 // src/commands/index.ts
-var vscode8 = __toESM(require("vscode"));
+var vscode10 = __toESM(require("vscode"));
 
 // src/commands/viewLesson.ts
 var vscode3 = __toESM(require("vscode"));
@@ -18762,55 +18762,208 @@ function formatStep(step) {
   return step.replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 
+// src/commands/initialize.ts
+var vscode8 = __toESM(require("vscode"));
+var cp = __toESM(require("child_process"));
+var path2 = __toESM(require("path"));
+async function initializeKiwi(client2) {
+  const ws = vscode8.workspace.workspaceFolders?.[0];
+  if (!ws) {
+    vscode8.window.showWarningMessage("Open a workspace folder first.");
+    return;
+  }
+  const root = ws.uri.fsPath;
+  const choice = await vscode8.window.showInformationMessage(
+    "Initialize Kiwi for this project? This detects your stack, mines lesson candidates, runs a seed scan, and adds a Kiwi gate block to CLAUDE.md/AGENTS.md.",
+    { modal: true },
+    "Initialize"
+  );
+  if (choice !== "Initialize")
+    return;
+  const config = vscode8.workspace.getConfiguration("kiwi");
+  const pythonPath = config.get("pythonPath") || (process.platform === "win32" ? "python" : "python3");
+  const kiwiRoot = path2.join(root, ".claude", "kiwi");
+  const channel = vscode8.window.createOutputChannel("Kiwi Init");
+  channel.show(true);
+  channel.appendLine(`[Kiwi Init] onboarding ${root}`);
+  const ok = await vscode8.window.withProgress(
+    {
+      location: vscode8.ProgressLocation.Notification,
+      title: "Kiwi: Initializing project...",
+      cancellable: true
+    },
+    (progress, token) => {
+      progress.report({ message: "detect stack \u2192 mine \u2192 seed scan \u2192 anchor + hook" });
+      const args = ["-m", "agent.cli", root, "--init", "--verbose"];
+      const child = cp.spawn(pythonPath, args, {
+        cwd: kiwiRoot,
+        env: { ...process.env, PYTHONUTF8: "1" }
+      });
+      const timeout = setTimeout(() => {
+        channel.appendLine("[Kiwi Init] TIMEOUT 10min \u2014 killing");
+        child.kill();
+      }, 10 * 60 * 1e3);
+      token.onCancellationRequested(() => {
+        channel.appendLine("[Kiwi Init] cancelled by user");
+        child.kill();
+      });
+      child.stdout.on("data", (d) => channel.append(d.toString()));
+      child.stderr.on("data", (d) => channel.append(d.toString()));
+      return new Promise((resolve) => {
+        child.on("close", (code) => {
+          clearTimeout(timeout);
+          channel.appendLine(`
+[Kiwi Init] exit code ${code}`);
+          resolve(code === 0 && !token.isCancellationRequested);
+        });
+        child.on("error", (err) => {
+          clearTimeout(timeout);
+          channel.appendLine(`[Kiwi Init] spawn error: ${err.message}`);
+          vscode8.window.showErrorMessage(`Kiwi Init spawn failed: ${err.message}`);
+          resolve(false);
+        });
+      });
+    }
+  );
+  if (ok) {
+    vscode8.window.showInformationMessage("Kiwi initialized. Review mined suggestions in the Suggestions view.");
+    const lc = client2.getClient();
+    if (lc && lc.isRunning()) {
+      try {
+        await lc.sendRequest("kiwi/invalidatePatterns", {});
+      } catch {
+      }
+    }
+    await refreshInitState(client2);
+    vscode8.commands.executeCommand("kiwi.refreshSuggestions");
+  } else {
+    vscode8.window.showWarningMessage('Kiwi init did not complete. See "Kiwi Init" output for details.');
+  }
+}
+async function refreshInitState(client2) {
+  const ws = vscode8.workspace.workspaceFolders?.[0];
+  let initialized = false;
+  const lc = client2.getClient();
+  if (ws && lc && lc.isRunning()) {
+    try {
+      const resp = await lc.sendRequest("kiwi/isInitialized", {
+        path: ws.uri.fsPath
+      });
+      initialized = !!resp?.initialized;
+    } catch {
+      initialized = false;
+    }
+  }
+  await vscode8.commands.executeCommand("setContext", "kiwi.initialized", initialized);
+}
+
+// src/commands/suggestions.ts
+var vscode9 = __toESM(require("vscode"));
+async function approveSuggestion(client2, tree, node) {
+  if (!node || node.id === void 0) {
+    vscode9.window.showWarningMessage("No suggestion selected.");
+    return;
+  }
+  const lc = client2.getClient();
+  if (!lc || !lc.isRunning()) {
+    vscode9.window.showWarningMessage("Kiwi LSP server is not running.");
+    return;
+  }
+  try {
+    const resp = await lc.sendRequest(
+      "kiwi/approveSuggestion",
+      { suggestion_id: node.id, severity: node.severity, category: node.category }
+    );
+    if (resp?.success) {
+      vscode9.window.showInformationMessage(`Kiwi: approved \u2192 ${resp.lesson_id}. Run rebuild_index.py to refresh README.`);
+      tree.refresh();
+    } else {
+      vscode9.window.showErrorMessage(`Kiwi: approve failed \u2014 ${resp?.error ?? "unknown error"}`);
+    }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    vscode9.window.showErrorMessage(`Kiwi: approve failed \u2014 ${msg}`);
+  }
+}
+async function rejectSuggestion(client2, tree, node) {
+  if (!node || node.id === void 0) {
+    vscode9.window.showWarningMessage("No suggestion selected.");
+    return;
+  }
+  const lc = client2.getClient();
+  if (!lc || !lc.isRunning()) {
+    vscode9.window.showWarningMessage("Kiwi LSP server is not running.");
+    return;
+  }
+  try {
+    const resp = await lc.sendRequest(
+      "kiwi/rejectSuggestion",
+      { suggestion_id: node.id }
+    );
+    if (resp?.success) {
+      tree.refresh();
+    } else {
+      vscode9.window.showErrorMessage(`Kiwi: reject failed \u2014 ${resp?.error ?? "unknown error"}`);
+    }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    vscode9.window.showErrorMessage(`Kiwi: reject failed \u2014 ${msg}`);
+  }
+}
+
 // src/commands/index.ts
-function registerCommands(context, client2, violationsTree, dashboard) {
+function registerCommands(context, client2, violationsTree, suggestionsTree, dashboard) {
   const lc = client2.getClient();
   if (lc)
     setLspClient(lc);
   context.subscriptions.push(
-    vscode8.commands.registerCommand("kiwi.restart", async () => {
+    vscode10.commands.registerCommand("kiwi.restart", async () => {
       await client2.restart();
       setLspClient(client2.getClient());
     }),
-    vscode8.commands.registerCommand("kiwi.scanProject", () => scanProject(client2)),
-    vscode8.commands.registerCommand("kiwi.viewLesson", (lessonId) => viewLesson(lessonId)),
-    vscode8.commands.registerCommand("kiwi.dismissFile", () => dismissViolation(client2, "file")),
-    vscode8.commands.registerCommand("kiwi.dismissProject", () => dismissViolation(client2, "project")),
-    vscode8.commands.registerCommand("kiwi.refreshViolations", () => violationsTree.refresh()),
-    vscode8.commands.registerCommand("kiwi.openDashboard", () => dashboard.openDashboard()),
-    vscode8.commands.registerCommand("kiwi.scanUncommitted", () => scanUncommitted(client2)),
-    vscode8.commands.registerCommand("kiwi.editorGuide", (editor) => showEditorGuide(editor))
+    vscode10.commands.registerCommand("kiwi.scanProject", () => scanProject(client2)),
+    vscode10.commands.registerCommand("kiwi.viewLesson", (lessonId) => viewLesson(lessonId)),
+    vscode10.commands.registerCommand("kiwi.dismissFile", () => dismissViolation(client2, "file")),
+    vscode10.commands.registerCommand("kiwi.dismissProject", () => dismissViolation(client2, "project")),
+    vscode10.commands.registerCommand("kiwi.refreshViolations", () => violationsTree.refresh()),
+    vscode10.commands.registerCommand("kiwi.openDashboard", () => dashboard.openDashboard()),
+    vscode10.commands.registerCommand("kiwi.scanUncommitted", () => scanUncommitted(client2)),
+    vscode10.commands.registerCommand("kiwi.editorGuide", (editor) => showEditorGuide(editor)),
+    vscode10.commands.registerCommand("kiwi.initialize", () => initializeKiwi(client2)),
+    vscode10.commands.registerCommand("kiwi.refreshSuggestions", () => suggestionsTree.refresh()),
+    vscode10.commands.registerCommand("kiwi.approveSuggestion", (node) => approveSuggestion(client2, suggestionsTree, node)),
+    vscode10.commands.registerCommand("kiwi.rejectSuggestion", (node) => rejectSuggestion(client2, suggestionsTree, node))
   );
 }
 
 // src/providers/fileDecorations.ts
-var vscode9 = __toESM(require("vscode"));
+var vscode11 = __toESM(require("vscode"));
 var FileDecorationProvider = class {
-  _onDidChangeFileDecorations = new vscode9.EventEmitter();
+  _onDidChangeFileDecorations = new vscode11.EventEmitter();
   onDidChangeFileDecorations = this._onDidChangeFileDecorations.event;
   disposables = [];
   registration;
   constructor() {
-    this.registration = vscode9.window.registerFileDecorationProvider(this);
+    this.registration = vscode11.window.registerFileDecorationProvider(this);
     this.disposables.push(
       this.registration,
-      vscode9.languages.onDidChangeDiagnostics((e) => {
+      vscode11.languages.onDidChangeDiagnostics((e) => {
         this._onDidChangeFileDecorations.fire(e.uris);
       })
     );
   }
   provideFileDecoration(uri) {
-    const diagnostics = vscode9.languages.getDiagnostics(uri);
+    const diagnostics = vscode11.languages.getDiagnostics(uri);
     const kiwiDiags = diagnostics.filter((d) => d.source === "kiwi");
     if (kiwiDiags.length === 0)
       return void 0;
-    const hasCritical = kiwiDiags.some((d) => d.severity === vscode9.DiagnosticSeverity.Error);
-    const hasHigh = kiwiDiags.some((d) => d.severity === vscode9.DiagnosticSeverity.Warning);
+    const hasCritical = kiwiDiags.some((d) => d.severity === vscode11.DiagnosticSeverity.Error);
+    const hasHigh = kiwiDiags.some((d) => d.severity === vscode11.DiagnosticSeverity.Warning);
     if (hasCritical) {
       return {
         badge: `${kiwiDiags.length}`,
         tooltip: `Kiwi: ${kiwiDiags.length} violation(s) \u2014 CRITICAL`,
-        color: new vscode9.ThemeColor("errorForeground"),
+        color: new vscode11.ThemeColor("errorForeground"),
         propagate: true
       };
     }
@@ -18818,7 +18971,7 @@ var FileDecorationProvider = class {
       return {
         badge: `${kiwiDiags.length}`,
         tooltip: `Kiwi: ${kiwiDiags.length} violation(s)`,
-        color: new vscode9.ThemeColor("editorWarning.foreground"),
+        color: new vscode11.ThemeColor("editorWarning.foreground"),
         propagate: false
       };
     }
@@ -18835,41 +18988,41 @@ var FileDecorationProvider = class {
 };
 
 // src/providers/gutterDecorations.ts
-var vscode10 = __toESM(require("vscode"));
-var criticalDecoration = vscode10.window.createTextEditorDecorationType({
+var vscode12 = __toESM(require("vscode"));
+var criticalDecoration = vscode12.window.createTextEditorDecorationType({
   gutterIconPath: void 0,
   gutterIconSize: "contain",
-  overviewRulerColor: new vscode10.ThemeColor("editorError.foreground"),
-  overviewRulerLane: vscode10.OverviewRulerLane.Left,
+  overviewRulerColor: new vscode12.ThemeColor("editorError.foreground"),
+  overviewRulerLane: vscode12.OverviewRulerLane.Left,
   before: {
     contentText: "",
-    color: new vscode10.ThemeColor("editorError.foreground"),
+    color: new vscode12.ThemeColor("editorError.foreground"),
     margin: "0 4px 0 0"
   },
-  backgroundColor: new vscode10.ThemeColor("diffEditor.removedTextBackground"),
+  backgroundColor: new vscode12.ThemeColor("diffEditor.removedTextBackground"),
   isWholeLine: true
 });
-var highDecoration = vscode10.window.createTextEditorDecorationType({
-  overviewRulerColor: new vscode10.ThemeColor("editorWarning.foreground"),
-  overviewRulerLane: vscode10.OverviewRulerLane.Left,
-  backgroundColor: new vscode10.ThemeColor("diffEditor.removedTextBackground"),
+var highDecoration = vscode12.window.createTextEditorDecorationType({
+  overviewRulerColor: new vscode12.ThemeColor("editorWarning.foreground"),
+  overviewRulerLane: vscode12.OverviewRulerLane.Left,
+  backgroundColor: new vscode12.ThemeColor("diffEditor.removedTextBackground"),
   isWholeLine: true,
   opacity: "0.6"
 });
-var suggestDecoration = vscode10.window.createTextEditorDecorationType({
-  overviewRulerColor: new vscode10.ThemeColor("editorInfo.foreground"),
-  overviewRulerLane: vscode10.OverviewRulerLane.Left
+var suggestDecoration = vscode12.window.createTextEditorDecorationType({
+  overviewRulerColor: new vscode12.ThemeColor("editorInfo.foreground"),
+  overviewRulerLane: vscode12.OverviewRulerLane.Left
 });
 var GutterDecorationProvider = class {
   disposables = [];
   constructor() {
     this.disposables.push(
-      vscode10.window.onDidChangeActiveTextEditor((editor) => {
+      vscode12.window.onDidChangeActiveTextEditor((editor) => {
         if (editor)
           this.updateDecorations(editor);
       }),
-      vscode10.languages.onDidChangeDiagnostics((e) => {
-        const editor = vscode10.window.activeTextEditor;
+      vscode12.languages.onDidChangeDiagnostics((e) => {
+        const editor = vscode12.window.activeTextEditor;
         if (!editor)
           return;
         const affected = e.uris.some((uri) => uri.toString() === editor.document.uri.toString());
@@ -18877,12 +19030,12 @@ var GutterDecorationProvider = class {
           this.updateDecorations(editor);
       })
     );
-    if (vscode10.window.activeTextEditor) {
-      this.updateDecorations(vscode10.window.activeTextEditor);
+    if (vscode12.window.activeTextEditor) {
+      this.updateDecorations(vscode12.window.activeTextEditor);
     }
   }
   updateDecorations(editor) {
-    const diagnostics = vscode10.languages.getDiagnostics(editor.document.uri);
+    const diagnostics = vscode12.languages.getDiagnostics(editor.document.uri);
     const kiwiDiags = diagnostics.filter((d) => d.source === "kiwi");
     const critical = [];
     const high = [];
@@ -18890,11 +19043,11 @@ var GutterDecorationProvider = class {
     for (const diag of kiwiDiags) {
       const option = {
         range: diag.range,
-        hoverMessage: new vscode10.MarkdownString(diag.message)
+        hoverMessage: new vscode12.MarkdownString(diag.message)
       };
-      if (diag.severity === vscode10.DiagnosticSeverity.Error) {
+      if (diag.severity === vscode12.DiagnosticSeverity.Error) {
         critical.push(option);
-      } else if (diag.severity === vscode10.DiagnosticSeverity.Warning) {
+      } else if (diag.severity === vscode12.DiagnosticSeverity.Warning) {
         high.push(option);
       } else {
         suggest.push(option);
@@ -18913,32 +19066,32 @@ var GutterDecorationProvider = class {
 };
 
 // src/providers/violationsTree.ts
-var vscode11 = __toESM(require("vscode"));
+var vscode13 = __toESM(require("vscode"));
 var ViolationsTreeProvider = class {
-  _onDidChangeTreeData = new vscode11.EventEmitter();
+  _onDidChangeTreeData = new vscode13.EventEmitter();
   onDidChangeTreeData = this._onDidChangeTreeData.event;
   disposables = [];
   constructor() {
     this.disposables.push(
-      vscode11.languages.onDidChangeDiagnostics(() => this._onDidChangeTreeData.fire(void 0))
+      vscode13.languages.onDidChangeDiagnostics(() => this._onDidChangeTreeData.fire(void 0))
     );
   }
   refresh() {
     this._onDidChangeTreeData.fire(void 0);
   }
   getTreeItem(element) {
-    const item = new vscode11.TreeItem(element.label);
+    const item = new vscode13.TreeItem(element.label);
     if (element.type === "severity") {
-      item.collapsibleState = vscode11.TreeItemCollapsibleState.Expanded;
+      item.collapsibleState = vscode13.TreeItemCollapsibleState.Expanded;
       item.description = `${element.count}`;
-      item.iconPath = element.severity === "CRITICAL" ? new vscode11.ThemeIcon("error", new vscode11.ThemeColor("errorForeground")) : element.severity === "HIGH" ? new vscode11.ThemeIcon("warning", new vscode11.ThemeColor("editorWarning.foreground")) : new vscode11.ThemeIcon("info", new vscode11.ThemeColor("editorInfo.foreground"));
+      item.iconPath = element.severity === "CRITICAL" ? new vscode13.ThemeIcon("error", new vscode13.ThemeColor("errorForeground")) : element.severity === "HIGH" ? new vscode13.ThemeIcon("warning", new vscode13.ThemeColor("editorWarning.foreground")) : new vscode13.ThemeIcon("info", new vscode13.ThemeColor("editorInfo.foreground"));
     } else if (element.type === "file") {
-      item.collapsibleState = vscode11.TreeItemCollapsibleState.Collapsed;
+      item.collapsibleState = vscode13.TreeItemCollapsibleState.Collapsed;
       item.resourceUri = element.uri;
       item.description = `${element.count}`;
-      item.iconPath = vscode11.ThemeIcon.File;
+      item.iconPath = vscode13.ThemeIcon.File;
     } else if (element.type === "violation") {
-      item.collapsibleState = vscode11.TreeItemCollapsibleState.None;
+      item.collapsibleState = vscode13.TreeItemCollapsibleState.None;
       item.description = element.lessonId;
       item.tooltip = element.label;
       if (element.uri && element.range) {
@@ -18958,7 +19111,7 @@ var ViolationsTreeProvider = class {
     return element.children || [];
   }
   getRootItems() {
-    const allDiags = vscode11.languages.getDiagnostics();
+    const allDiags = vscode13.languages.getDiagnostics();
     const bySeverity = {
       CRITICAL: /* @__PURE__ */ new Map(),
       HIGH: /* @__PURE__ */ new Map(),
@@ -18968,7 +19121,7 @@ var ViolationsTreeProvider = class {
       for (const diag of diags) {
         if (diag.source !== "kiwi")
           continue;
-        const severity = diag.severity === vscode11.DiagnosticSeverity.Error ? "CRITICAL" : diag.severity === vscode11.DiagnosticSeverity.Warning ? "HIGH" : "SUGGEST";
+        const severity = diag.severity === vscode13.DiagnosticSeverity.Error ? "CRITICAL" : diag.severity === vscode13.DiagnosticSeverity.Warning ? "HIGH" : "SUGGEST";
         const filePath = uri.fsPath;
         const fileName = filePath.split(/[/\\]/).pop() || filePath;
         if (!bySeverity[severity].has(filePath)) {
@@ -19016,10 +19169,125 @@ var ViolationsTreeProvider = class {
   }
 };
 
+// src/providers/suggestionsTree.ts
+var vscode14 = __toESM(require("vscode"));
+var import_node2 = __toESM(require_node3());
+var SEVERITY_ICON = {
+  CRITICAL: ["error", "errorForeground"],
+  HIGH: ["warning", "editorWarning.foreground"],
+  SUGGEST: ["info", "editorInfo.foreground"]
+};
+var SuggestionsTreeProvider = class {
+  constructor(client2) {
+    this.client = client2;
+  }
+  _onDidChangeTreeData = new vscode14.EventEmitter();
+  onDidChangeTreeData = this._onDidChangeTreeData.event;
+  suggestions = [];
+  loaded = false;
+  refresh() {
+    this.loaded = false;
+    this.suggestions = [];
+    this._onDidChangeTreeData.fire(void 0);
+  }
+  /** Number of pending suggestions — used to surface a badge on the view. */
+  get count() {
+    return this.suggestions.length;
+  }
+  getTreeItem(s) {
+    const title = this.shortTitle(s);
+    const item = new vscode14.TreeItem(title, vscode14.TreeItemCollapsibleState.None);
+    item.description = s.category ? `${s.category} \xB7 #${s.id}` : `#${s.id}`;
+    const sev = (s.severity || "SUGGEST").toUpperCase();
+    const [icon, color] = SEVERITY_ICON[sev] ?? SEVERITY_ICON.SUGGEST;
+    item.iconPath = new vscode14.ThemeIcon(icon, new vscode14.ThemeColor(color));
+    item.contextValue = "kiwiSuggestion";
+    item.tooltip = this.buildTooltip(s);
+    if (s.example_file) {
+      const uri = vscode14.Uri.file(s.example_file);
+      const line = Math.max(0, (s.example_line ?? 1) - 1);
+      item.command = {
+        command: "vscode.open",
+        title: "Open example",
+        arguments: [uri, { selection: new vscode14.Range(line, 0, line, 0) }]
+      };
+    }
+    return item;
+  }
+  async getChildren(element) {
+    if (element)
+      return [];
+    await this.ensureLoaded();
+    return this.suggestions;
+  }
+  async ensureLoaded() {
+    if (this.loaded)
+      return;
+    const lc = this.client.getClient();
+    if (!lc || lc.state !== import_node2.State.Running)
+      return;
+    try {
+      const resp = await lc.sendRequest(
+        "kiwi/listSuggestions",
+        { status: "pending" }
+      );
+      if (resp?.success && resp.suggestions) {
+        this.suggestions = resp.suggestions;
+      } else {
+        this.suggestions = [];
+      }
+      this.loaded = true;
+    } catch (err) {
+      console.error("[Kiwi] listSuggestions failed:", err);
+      this.suggestions = [];
+    }
+  }
+  shortTitle(s) {
+    const pat = (s.pattern || "").trim().replace(/\s+/g, " ");
+    if (pat.length <= 60)
+      return pat || `Suggestion #${s.id}`;
+    return pat.slice(0, 57) + "\u2026";
+  }
+  buildTooltip(s) {
+    const md = new vscode14.MarkdownString();
+    md.appendMarkdown(`**Suggested lesson #${s.id}**  
+`);
+    if (s.severity)
+      md.appendMarkdown(`Severity: \`${s.severity}\`  
+`);
+    if (s.category)
+      md.appendMarkdown(`Category: ${s.category}  
+`);
+    if (s.scope)
+      md.appendMarkdown(`Scope: \`${s.scope}\`  
+`);
+    if (s.example_file) {
+      const loc = s.example_line ? `${s.example_file}:${s.example_line}` : s.example_file;
+      md.appendMarkdown(`Example: ${loc}  
+`);
+    }
+    md.appendMarkdown(`
+Pattern:
+`);
+    md.appendCodeblock(s.pattern || "", "text");
+    if (s.example_code) {
+      md.appendMarkdown(`
+Example code:
+`);
+      md.appendCodeblock(s.example_code, "php");
+    }
+    return md;
+  }
+  dispose() {
+    this._onDidChangeTreeData.dispose();
+    this.suggestions = [];
+  }
+};
+
 // src/providers/dashboard.ts
-var vscode12 = __toESM(require("vscode"));
-var cp = __toESM(require("child_process"));
-var path2 = __toESM(require("path"));
+var vscode15 = __toESM(require("vscode"));
+var cp2 = __toESM(require("child_process"));
+var path3 = __toESM(require("path"));
 var dashboardPanel;
 var SAVINGS_PER_SEVERITY = {
   CRITICAL: 4,
@@ -19038,10 +19306,10 @@ var DashboardProvider = class {
     if (dashboardPanel) {
       dashboardPanel.reveal();
     } else {
-      dashboardPanel = vscode12.window.createWebviewPanel(
+      dashboardPanel = vscode15.window.createWebviewPanel(
         "kiwiDashboard",
         "Kiwi Dashboard",
-        vscode12.ViewColumn.One,
+        vscode15.ViewColumn.One,
         { enableScripts: true }
       );
       dashboardPanel.onDidDispose(() => {
@@ -19101,15 +19369,15 @@ var DashboardProvider = class {
   async fetchLearningHealth() {
     return await new Promise((resolve) => {
       try {
-        const folders = vscode12.workspace.workspaceFolders;
+        const folders = vscode15.workspace.workspaceFolders;
         if (!folders || folders.length === 0) {
           resolve(null);
           return;
         }
         const root = folders[0].uri.fsPath;
-        const script = path2.join(root, ".claude", "kiwi", "tools", "learning_health.py");
-        const proc = cp.spawn("python", [script], {
-          cwd: path2.join(root, ".claude", "kiwi"),
+        const script = path3.join(root, ".claude", "kiwi", "tools", "learning_health.py");
+        const proc = cp2.spawn("python", [script], {
+          cwd: path3.join(root, ".claude", "kiwi"),
           env: { ...process.env, PYTHONUTF8: "1" }
         });
         let stdout = "";
@@ -19312,27 +19580,35 @@ var DashboardProvider = class {
 var client;
 var statusBar;
 async function activate(context) {
-  const outputChannel = vscode13.window.createOutputChannel("Kiwi LSP");
+  const outputChannel = vscode16.window.createOutputChannel("Kiwi LSP");
   statusBar = new KiwiStatusBar();
   client = new KiwiClient(context, outputChannel, statusBar);
   const fileDecorations = new FileDecorationProvider();
   const gutterDecorations = new GutterDecorationProvider();
   const violationsTree = new ViolationsTreeProvider();
+  const suggestionsTree = new SuggestionsTreeProvider(client);
   const dashboard = new DashboardProvider(context, () => client.getClient());
-  vscode13.window.createTreeView("kiwiViolations", {
+  vscode16.window.createTreeView("kiwiViolations", {
     treeDataProvider: violationsTree,
     showCollapseAll: true
   });
-  registerCommands(context, client, violationsTree, dashboard);
+  vscode16.window.createTreeView("kiwiSuggestions", {
+    treeDataProvider: suggestionsTree
+  });
+  registerCommands(context, client, violationsTree, suggestionsTree, dashboard);
   context.subscriptions.push(
     statusBar,
     outputChannel,
     fileDecorations,
     gutterDecorations,
     violationsTree,
+    suggestionsTree,
     dashboard
   );
+  await vscode16.commands.executeCommand("setContext", "kiwi.initialized", false);
   await client.start();
+  await refreshInitState(client);
+  suggestionsTree.refresh();
 }
 function deactivate() {
   return client?.stop();

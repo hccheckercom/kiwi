@@ -20,6 +20,7 @@ from lsprotocol.types import (
     InitializeParams,
     InitializeResult,
     Position,
+    PublishDiagnosticsParams,
     ServerCapabilities,
     TextDocumentSyncKind,
     CodeActionOptions,
@@ -148,7 +149,9 @@ def create_server() -> KiwiLanguageServer:
                     uri = _path_to_uri(file_path)
                     diagnostics = violations_to_diagnostics(violations)
                     server._diagnostics_cache[uri] = diagnostics
-                    server.publish_diagnostics(uri, diagnostics)
+                    server.text_document_publish_diagnostics(
+                        PublishDiagnosticsParams(uri=uri, diagnostics=diagnostics)
+                    )
                     total_violations += len(violations)
                 files_scanned += 1
 
@@ -210,7 +213,9 @@ def create_server() -> KiwiLanguageServer:
                 uri = _path_to_uri(str(full_path))
                 diagnostics = violations_to_diagnostics(violations)
                 server._diagnostics_cache[uri] = diagnostics
-                server.publish_diagnostics(uri, diagnostics)
+                server.text_document_publish_diagnostics(
+                    PublishDiagnosticsParams(uri=uri, diagnostics=diagnostics)
+                )
                 total_violations += len(violations)
                 scanned_files.append(rel_path)
 
@@ -298,11 +303,107 @@ def create_server() -> KiwiLanguageServer:
                 cached = server._diagnostics_cache.get(uri, [])
                 filtered = [d for d in cached if not (d.data and d.data.get("lesson_id") == lesson_id)]
                 server._diagnostics_cache[uri] = filtered
-                server.publish_diagnostics(uri, filtered)
+                server.text_document_publish_diagnostics(
+                    PublishDiagnosticsParams(uri=uri, diagnostics=filtered)
+                )
 
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": str(e)}
+
+    @server.feature("kiwi/lessonConfidence")
+    def on_lesson_confidence(params):
+        """Stub: returns null. Older clients may still request this; respond gracefully."""
+        return None
+
+    @server.feature("kiwi/listSuggestions")
+    def on_list_suggestions(params):
+        """List mined lesson suggestions for the Suggestions tree (Fix 6)."""
+        status = params.get("status", "pending") if isinstance(params, dict) else "pending"
+        try:
+            from memory.db import get_suggested_lessons
+            suggestions = get_suggested_lessons(status)
+            return {"success": True, "suggestions": suggestions}
+        except Exception as e:
+            return {"success": False, "error": str(e), "suggestions": []}
+
+    @server.feature("kiwi/approveSuggestion")
+    def on_approve_suggestion(params):
+        """Approve a suggestion → generate a lesson, then invalidate pattern cache."""
+        if not isinstance(params, dict):
+            return {"success": False, "error": "Invalid params"}
+        suggestion_id = params.get("suggestion_id")
+        if suggestion_id is None:
+            return {"success": False, "error": "suggestion_id required"}
+        try:
+            from learning.generator import generate_lesson
+            lesson_id = generate_lesson(
+                suggestion_id,
+                params.get("severity"),
+                params.get("category"),
+            )
+            if not lesson_id:
+                return {"success": False, "error": f"Failed to generate lesson from {suggestion_id}"}
+            server.bridge.invalidate_patterns()
+            return {"success": True, "lesson_id": lesson_id}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @server.feature("kiwi/rejectSuggestion")
+    def on_reject_suggestion(params):
+        """Reject a suggestion so it stops surfacing in the tree."""
+        if not isinstance(params, dict):
+            return {"success": False, "error": "Invalid params"}
+        suggestion_id = params.get("suggestion_id")
+        if suggestion_id is None:
+            return {"success": False, "error": "suggestion_id required"}
+        try:
+            from memory.db import update_suggested_lesson_status
+            update_suggested_lesson_status(suggestion_id, "rejected")
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @server.feature("kiwi/invalidatePatterns")
+    def on_invalidate_patterns(params):
+        """Drop the bridge's cached pattern set so freshly-approved/seeded lessons load."""
+        try:
+            server.bridge.invalidate_patterns()
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @server.feature("kiwi/isInitialized")
+    def on_is_initialized(params):
+        """Tell the welcome view whether this project has been onboarded.
+
+        Initialized = the project has a Kiwi gate anchor written into CLAUDE.md
+        or AGENTS.md (the durable, in-repo signal run_init produces). Falls back
+        to checking for a registered PreToolUse hook in .claude/settings.json.
+        """
+        path = params.get("path", "") if isinstance(params, dict) else ""
+        if not path:
+            return {"initialized": False}
+        try:
+            root = Path(path)
+            for name in ("CLAUDE.md", "AGENTS.md"):
+                f = root / name
+                if f.exists():
+                    try:
+                        if "KIWI:BEGIN" in f.read_text(encoding="utf-8", errors="replace"):
+                            return {"initialized": True}
+                    except OSError:
+                        pass
+            settings = root / ".claude" / "settings.json"
+            if settings.exists():
+                try:
+                    if "pre_edit.py" in settings.read_text(encoding="utf-8", errors="replace"):
+                        return {"initialized": True}
+                except OSError:
+                    pass
+            return {"initialized": False}
+        except Exception:
+            return {"initialized": False}
 
     return server
 
@@ -334,7 +435,9 @@ def _publish_diagnostics(
     violations = server.bridge.scan_file(file_path, content)
     diagnostics = violations_to_diagnostics(violations)
     server._diagnostics_cache[uri] = diagnostics
-    server.publish_diagnostics(uri, diagnostics)
+    server.text_document_publish_diagnostics(
+        PublishDiagnosticsParams(uri=uri, diagnostics=diagnostics)
+    )
 
 
 def main(args=None):
@@ -348,3 +451,7 @@ def main(args=None):
         server.start_tcp("127.0.0.1", port)
     else:
         server.start_io()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

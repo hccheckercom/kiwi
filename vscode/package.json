@@ -57,6 +57,26 @@
       {
         "command": "kiwi.editorGuide",
         "title": "Kiwi: Editor Setup Guide"
+      },
+      {
+        "command": "kiwi.initialize",
+        "title": "Kiwi: Initialize Project",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "kiwi.refreshSuggestions",
+        "title": "Kiwi: Refresh Suggestions",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "kiwi.approveSuggestion",
+        "title": "Approve Suggestion",
+        "icon": "$(check)"
+      },
+      {
+        "command": "kiwi.rejectSuggestion",
+        "title": "Reject Suggestion",
+        "icon": "$(close)"
       }
     ],
     "viewsContainers": {
@@ -73,6 +93,10 @@
         {
           "id": "kiwiViolations",
           "name": "Violations"
+        },
+        {
+          "id": "kiwiSuggestions",
+          "name": "Suggestions"
         }
       ]
     },
@@ -86,9 +110,42 @@
         {
           "command": "kiwi.scanProject",
           "when": "view == kiwiViolations"
+        },
+        {
+          "command": "kiwi.refreshSuggestions",
+          "when": "view == kiwiSuggestions",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "kiwi.approveSuggestion",
+          "when": "view == kiwiSuggestions && viewItem == kiwiSuggestion",
+          "group": "inline@1"
+        },
+        {
+          "command": "kiwi.rejectSuggestion",
+          "when": "view == kiwiSuggestions && viewItem == kiwiSuggestion",
+          "group": "inline@2"
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "kiwiViolations",
+        "when": "!kiwi.initialized",
+        "contents": "Welcome to Kiwi.\n\nInitialize this project to detect your stack, mine lesson candidates, run a seed scan, and warm up project-specific ranking.\n[Initialize Kiwi](command:kiwi.initialize)\n\nYou can still scan without initializing.\n[Scan Project](command:kiwi.scanProject)"
+      },
+      {
+        "view": "kiwiViolations",
+        "when": "kiwi.initialized",
+        "contents": "No violations yet.\n\nRun a scan to populate this view.\n[Scan Project](command:kiwi.scanProject)\n[Scan Uncommitted Changes](command:kiwi.scanUncommitted)\n[Open Dashboard](command:kiwi.openDashboard)\n\nIf the server isn't running, restart it.\n[Restart Server](command:kiwi.restart)"
+      },
+      {
+        "view": "kiwiSuggestions",
+        "contents": "No pending suggestions.\n\nSuggestions are mined lesson candidates from your codebase. Run Initialize or Learn to populate this view.\n[Initialize Kiwi](command:kiwi.initialize)"
+      }
+    ],
     "configuration": {
       "title": "Kiwi",
       "properties": {

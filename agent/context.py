@@ -590,6 +590,27 @@ def _get_project_profile(project_path: str) -> dict:
     return profile
 
 
+def _is_cold_start(effective_project: str, db_scores: dict,
+                   learned_conventions: dict) -> bool:
+    """True when we know which project this is but have no accumulated
+    project-specific signal yet (no violation history, no learned conventions).
+
+    Distinct from `degraded` (a subsystem errored): cold-start is the NORMAL
+    pre-onboarding state, fixed by running `kiwi init`, not a fault. Returns
+    False when there is no project context at all (a generic task-only query is
+    not "cold" — there is simply nothing to onboard).
+    """
+    if not effective_project:
+        return False
+    has_history = any(
+        isinstance(v, dict) and v.get("history", 0)
+        for v in (db_scores or {}).values()
+    )
+    lc = learned_conventions or {}
+    has_conventions = bool(lc.get("styles") or lc.get("bindings"))
+    return not has_history and not has_conventions
+
+
 def build_context(
     task: str = "",
     scope_type: str = "plugin",
@@ -700,6 +721,8 @@ def build_context(
     theme_slug = _infer_theme_slug(target_file, effective_project)
     learned_conventions = _get_learned_conventions(theme_slug, health=health) if theme_slug else {"styles": [], "bindings": []}
 
+    cold_start = _is_cold_start(effective_project, db_scores, learned_conventions)
+
     pre_max = min(max_rules, 8) if compact is True else max_rules
     rules = _get_rules(
         scope_type, platform, files, pre_max,
@@ -745,6 +768,7 @@ def build_context(
         "theme_slug": theme_slug,
         "learned_conventions": learned_conventions,
         "degraded": health.report(),
+        "cold_start": cold_start,
     }
 
 
@@ -763,6 +787,12 @@ def _format_compact(ctx: dict) -> str:
         lines.append("⚠️ **Kiwi chạy chế độ giảm** — một số tín hiệu không khả dụng:")
         for d in ctx["degraded"]:
             lines.append(f"  - {d['name']}: {d['status']} ({d.get('reason','')})")
+        lines.append("")
+
+    if ctx.get("cold_start"):
+        lines.append("ℹ️ Cold start: chưa có lịch sử vi phạm / convention dự án. "
+                     "Đang xếp theo category + severity + semantic. "
+                     "Chạy `kiwi_init` để nạp đủ → tăng độ chính xác.")
         lines.append("")
 
     if ctx.get("task_categories"):
@@ -802,6 +832,13 @@ def _format_full(ctx: dict) -> str:
         lines.append("⚠️ **Kiwi chạy chế độ giảm** — một số tín hiệu không khả dụng:")
         for d in ctx["degraded"]:
             lines.append(f"- **{d['name']}**: {d['status']} ({d.get('reason','')})")
+        lines.append("")
+
+    if ctx.get("cold_start"):
+        lines.append("ℹ️ **Kiwi cold start** — chưa có lịch sử vi phạm / convention dự án.")
+        lines.append("Đang xếp hạng theo: category + severity + semantic.")
+        lines.append("Chạy `kiwi_init` (MCP) hoặc `python -m agent.cli <project> --init` "
+                     "để nạp đủ → tăng độ chính xác.")
         lines.append("")
 
     if ctx.get("task_categories"):
