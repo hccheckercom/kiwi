@@ -500,15 +500,29 @@ def _infer_project_path(target_file: str) -> str:
 
 
 def _infer_theme_slug(target_file: str, project_path: str) -> str:
-    """Extract theme slug from path like '.../themes/{slug}/...'."""
+    """Extract theme slug from path like '.../themes/{slug}/...'.
+
+    Fallback: when no path hint, return the theme with the most learned
+    bindings in reasoning.db so `kiwi_context` still surfaces conventions
+    when called without target_file (the common case for "before-code" flow).
+    """
     path = target_file or project_path or ""
-    if not path:
+    if path:
+        parts = Path(path).parts
+        for i, p in enumerate(parts):
+            if p == "themes" and i + 1 < len(parts):
+                return parts[i + 1]
+    try:
+        from agent.reasoning.session_logger import _get_conn
+        conn = _get_conn()
+        row = conn.execute(
+            "SELECT theme FROM binding_knowledge "
+            "WHERE theme IS NOT NULL AND theme != '' "
+            "GROUP BY theme ORDER BY SUM(times_seen) DESC LIMIT 1"
+        ).fetchone()
+        return row[0] if row else ""
+    except Exception:
         return ""
-    parts = Path(path).parts
-    for i, p in enumerate(parts):
-        if p == "themes" and i + 1 < len(parts):
-            return parts[i + 1]
-    return ""
 
 
 def _get_learned_conventions(theme_slug: str, max_styles: int = 8, max_bindings: int = 10, health=None) -> dict:
