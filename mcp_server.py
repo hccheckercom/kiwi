@@ -334,6 +334,22 @@ def _handle_fix(args: dict) -> str:
         )
         result = apply_fix(violation, fix_config, dry_run=not apply)
 
+        # Close the contextual-learning loop: a successfully APPLIED fix is a
+        # confirmed before→after, so feed it to the AST learner. This is the
+        # only producer of `contextual_lessons`; without it that table stays
+        # empty and kiwi_context reports "contextual_rules: degraded" forever.
+        if apply and result.success and file_path:
+            try:
+                from learning.context_learner import (
+                    learn_from_fix_context,
+                    save_contextual_lesson,
+                )
+                lesson = learn_from_fix_context(file_path, line, result.diff or "")
+                if lesson and lesson.confidence >= 0.7:
+                    save_contextual_lesson(lesson)
+            except Exception:
+                pass  # Learning is best-effort; never block a fix on it.
+
         if result.success:
             action = "Applied" if apply else "Preview"
             lines = [f"{action} fix for {lesson_id} ({result.fix_type}):"]

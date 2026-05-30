@@ -163,10 +163,20 @@ def _infer_class_pattern(class_name: str) -> str:
 
 
 def _analyze_fix_diff(fix_diff: str) -> Optional[str]:
-    """Analyze fix diff to determine fix type"""
-    if 'wp_verify_nonce' in fix_diff:
+    """Analyze fix diff to determine fix type.
+
+    Recognition vocabulary MUST stay aligned with the hardening markers the
+    post-edit hook triggers on (_HARDENING_MARKERS in hooks/post_edit_learn.py):
+    if the hook fires but this returns None, the edit is examined and discarded,
+    producing zero learning. check_ajax_referer is the nonce idiom this codebase
+    actually uses (see LES-064), so it must map to add_nonce_check exactly like
+    wp_verify_nonce.
+    """
+    if 'wp_verify_nonce' in fix_diff or 'check_ajax_referer' in fix_diff:
         return 'add_nonce_check'
-    elif 'sanitize_text_field' in fix_diff or 'esc_html' in fix_diff:
+    elif any(fn in fix_diff for fn in (
+        'sanitize_text_field', 'esc_html', 'esc_attr', 'esc_url', 'wp_unslash'
+    )):
         return 'add_sanitization'
     elif 'is_wp_error' in fix_diff:
         return 'add_error_handling'
@@ -258,7 +268,7 @@ def save_contextual_lesson(lesson: ContextualLesson) -> bool:
                 lesson.violation_pattern,
                 lesson.fix_pattern,
                 lesson.confidence,
-                str(lesson.examples)
+                json.dumps(lesson.examples)
             ))
             conn.commit()
         finally:
@@ -289,12 +299,27 @@ def get_contextual_lessons(min_confidence: float = 0.7) -> List[ContextualLesson
 
         lessons = []
         for row in rows:
+            examples = []
+            raw = row[4]
+            if raw:
+                # Writer now emits json.dumps; older rows were saved with str()
+                # (Python repr, single quotes) which json.loads rejects. Parse
+                # per-row and fall back to literal_eval so ONE legacy/bad row
+                # can't blank the entire result set for the consumer.
+                try:
+                    examples = json.loads(raw)
+                except (json.JSONDecodeError, TypeError):
+                    try:
+                        import ast
+                        examples = ast.literal_eval(raw)
+                    except (ValueError, SyntaxError):
+                        examples = []
             lessons.append(ContextualLesson(
                 context_pattern=row[0],
                 violation_pattern=row[1],
                 fix_pattern=row[2],
                 confidence=row[3],
-                examples=json.loads(row[4]) if row[4] else []
+                examples=examples,
             ))
 
         return lessons

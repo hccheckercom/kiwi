@@ -139,8 +139,24 @@ def _safe_truncate_then_escape(raw: str, max_raw: int = 60) -> str:
     return pattern
 
 
+def _sanitize_text(text: str) -> str:
+    """Strip lone surrogates that break sqlite3 UTF-8 encoding.
+
+    A previous edit carried a byte that decoded to a lone surrogate (\\udc90);
+    sqlite3 then raised UnicodeEncodeError on INSERT and the candidate was lost.
+    Round-tripping through utf-8 with errors='replace' drops the bad code points.
+    """
+    if not isinstance(text, str):
+        return text
+    return text.encode("utf-8", errors="replace").decode("utf-8")
+
+
 def _infer_category(bad_lines: list, file_path: str) -> str:
-    bad_text = "\n".join(bad_lines).lower()
+    # Inspect ONLY the first bad line — the stored `pattern` is derived from
+    # bad_lines[0], so inferring the category from the whole hunk mislabels
+    # benign first lines (e.g. a load_theme_textdomain() call) as security just
+    # because some other removed line in the same hunk touched $_GET.
+    bad_text = (bad_lines[0] if bad_lines else "").lower()
     if any(k in bad_text for k in ["$_get", "$_post", "$_request", "eval(", "base64_decode"]):
         return "security"
     if any(k in bad_text for k in ["select ", "insert ", "update ", "delete "]):
@@ -189,8 +205,8 @@ def extract_lesson_candidate(
     if not bad_lines or not good_lines:
         return None
 
-    bad_code = "\n".join(bad_lines).strip()
-    good_code = "\n".join(good_lines).strip()
+    bad_code = _sanitize_text("\n".join(bad_lines).strip())
+    good_code = _sanitize_text("\n".join(good_lines).strip())
 
     if len(bad_code) < 5 or len(good_code) < 5:
         return None

@@ -53,28 +53,35 @@ def _ensure_promotion_unique_index(conn):
         _log_err("ensure_unique_index", e)
 
 
-def auto_promote_check() -> list[dict]:
-    """Check for promotable patterns and create lesson suggestions. Max 2 per call."""
+def auto_promote_check(use_llm_validation: bool = True) -> list[dict]:
+    """Check for promotable patterns and create lesson suggestions. Max 2 per call.
+
+    use_llm_validation: when True, run the Haiku `novel_validation` think pass to
+    filter low-value patterns. The post-edit hook calls this with False to keep
+    the edit path 0-token and fast — suggestions are pending-review anyway, so a
+    human filters them at the dashboard.
+    """
     promotable = get_promotable_patterns(min_occurrences=3)
     if not promotable:
         return []
 
     created = []
     for pattern in promotable[:MAX_PROMOTIONS_PER_SESSION]:
-        try:
-            from .thinker import think
-            ctx = {
-                'pattern': pattern.get('pattern', ''),
-                'pattern_type': pattern.get('type', ''),
-                'task_type': pattern.get('task_type', 'generic'),
-                'theme': pattern.get('theme', ''),
-                'times_seen': pattern.get('times_seen', 0),
-            }
-            result = think('novel_validation', ctx)
-            if result and result.confidence >= 0.7 and result.decision == 'skip':
-                continue
-        except Exception as e:
-            _log_err("think_validation", e)
+        if use_llm_validation:
+            try:
+                from .thinker import think
+                ctx = {
+                    'pattern': pattern.get('pattern', ''),
+                    'pattern_type': pattern.get('type', ''),
+                    'task_type': pattern.get('task_type', 'generic'),
+                    'theme': pattern.get('theme', ''),
+                    'times_seen': pattern.get('times_seen', 0),
+                }
+                result = think('novel_validation', ctx)
+                if result and result.confidence >= 0.7 and result.decision == 'skip':
+                    continue
+            except Exception as e:
+                _log_err("think_validation", e)
 
         suggestion = _create_suggestion(pattern)
         if suggestion:
@@ -133,6 +140,41 @@ def _create_suggestion(pattern: dict) -> dict | None:
         return None
 
 
+def auto_bless_mature(min_seen: int = 10) -> int:
+    """Auto-bless conventions a developer has repeated enough to be intentional.
+
+    The manual approve path (`approve_suggestion`) blesses one convention at a
+    time and requires a human at the dashboard — which never happened, so
+    `total_blessed_conventions` sat at 0 despite bindings seen 36x. A binding
+    used >= min_seen times in real theme work IS the project's convention by
+    definition; we promote it automatically so kiwi_context/kiwi_reason inject
+    it as enforced knowledge. Excludes the 'unknown' theme (scratch work).
+
+    Returns the number of bindings + styles newly blessed.
+    """
+    conn = _get_conn()
+    if not conn:
+        return 0
+    try:
+        b = conn.execute(
+            "UPDATE binding_knowledge SET blessed = 1 "
+            "WHERE times_seen >= ? AND blessed = 0 "
+            "AND theme IS NOT NULL AND theme NOT IN ('', 'unknown')",
+            (min_seen,),
+        )
+        s = conn.execute(
+            "UPDATE style_knowledge SET blessed = 1 "
+            "WHERE times_seen >= ? AND blessed = 0 "
+            "AND theme IS NOT NULL AND theme NOT IN ('', 'unknown')",
+            (min_seen,),
+        )
+        conn.commit()
+        return (b.rowcount or 0) + (s.rowcount or 0)
+    except Exception as e:
+        _log_err("auto_bless_mature", e)
+        return 0
+
+
 def get_pending_suggestions(limit: int = 10) -> list[dict]:
     """Get pending promotion suggestions for review."""
     conn = _get_conn()
@@ -159,19 +201,65 @@ def get_pending_suggestions(limit: int = 10) -> list[dict]:
 
 
 def approve_suggestion(suggestion_id: int) -> bool:
+    """Approve a suggestion = BLESS its underlying convention.
+
+    A human reviewer confirming a suggestion means "this pattern is a real
+    convention for the project." We deliberately do NOT generate a scannable
+    lesson from it: a binding like ``wp:wp_insert_post`` is correct usage, not a
+    bug — turning it into a presence-scan rule would flag every correct call as a
+    violation (a false-positive generator). Instead we set ``blessed = 1`` on the
+    matching binding_knowledge / style_knowledge row so kiwi_context ALWAYS
+    injects it, regardless of times_seen. We also stamp approved_at so health
+    reporting reflects when a human actually acted (BUG: created_at = suggested,
+    not approved).
+    """
     conn = _get_conn()
     if not conn:
         return False
     try:
-        conn.execute(
-            "UPDATE promotion_suggestions SET status = 'approved' WHERE id = ?",
+        row = conn.execute(
+            "SELECT pattern, pattern_type, theme, task_type "
+            "FROM promotion_suggestions WHERE id = ?",
             (suggestion_id,),
+        ).fetchone()
+        conn.execute(
+            "UPDATE promotion_suggestions SET status = 'approved', approved_at = ? WHERE id = ?",
+            (time.time(), suggestion_id),
         )
+        if row:
+            _bless_convention(conn, row[0], row[1], row[2], row[3])
         conn.commit()
         return True
     except Exception as e:
         _log_err("approve_suggestion", e)
         return False
+
+
+def _bless_convention(conn, pattern, pattern_type, theme, task_type) -> None:
+    """Pin a learned convention so kiwi_context always injects it.
+
+    Best-effort: a missing matching row (e.g. theme recorded as 'unknown' on the
+    suggestion but concrete in binding_knowledge) just blesses nothing — the
+    status flip already recorded the human decision, so this never raises.
+    """
+    if pattern_type in ("binding", "hook"):
+        cur = conn.execute(
+            "UPDATE binding_knowledge SET blessed = 1 "
+            "WHERE binding = ? AND task_type = ? AND theme = ?",
+            (pattern, task_type, theme),
+        )
+        if cur.rowcount == 0:
+            # Theme didn't match (e.g. 'unknown'); bless the convention task-wide.
+            conn.execute(
+                "UPDATE binding_knowledge SET blessed = 1 "
+                "WHERE binding = ? AND task_type = ?",
+                (pattern, task_type),
+            )
+    elif pattern_type == "style":
+        conn.execute(
+            "UPDATE style_knowledge SET blessed = 1 WHERE theme = ? AND pattern_key = ?",
+            (theme, pattern),
+        )
 
 
 def reject_suggestion(suggestion_id: int) -> bool:

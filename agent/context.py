@@ -520,20 +520,20 @@ def _get_learned_conventions(theme_slug: str, max_styles: int = 8, max_bindings:
         from agent.reasoning.session_logger import _get_conn
         conn = _get_conn()
         styles = conn.execute(
-            "SELECT pattern_key, value, times_seen FROM style_knowledge "
-            "WHERE theme = ? ORDER BY times_seen DESC LIMIT ?",
+            "SELECT pattern_key, value, times_seen, blessed FROM style_knowledge "
+            "WHERE theme = ? ORDER BY blessed DESC, times_seen DESC LIMIT ?",
             (theme_slug, max_styles)
         ).fetchall()
         result["styles"] = [
-            {"key": r[0], "value": r[1], "count": r[2]} for r in styles
+            {"key": r[0], "value": r[1], "count": r[2], "blessed": bool(r[3])} for r in styles
         ]
         bindings = conn.execute(
-            "SELECT task_type, binding, times_seen FROM binding_knowledge "
-            "WHERE theme = ? ORDER BY times_seen DESC LIMIT ?",
+            "SELECT task_type, binding, times_seen, blessed FROM binding_knowledge "
+            "WHERE theme = ? ORDER BY blessed DESC, times_seen DESC LIMIT ?",
             (theme_slug, max_bindings)
         ).fetchall()
         result["bindings"] = [
-            {"task_type": r[0], "binding": r[1], "count": r[2]} for r in bindings
+            {"task_type": r[0], "binding": r[1], "count": r[2], "blessed": bool(r[3])} for r in bindings
         ]
         if health:
             if not result["styles"] and not result["bindings"]:
@@ -856,7 +856,9 @@ def _format_full(ctx: dict) -> str:
     if ctx["anti_patterns"]:
         lines.append("## Anti-Patterns (DO NOT)")
         for a in ctx["anti_patterns"]:
-            lines.append(f"- **{a['id']}**: {a['title']}")
+            sev = a.get("severity", "")
+            sev_tag = f"[{sev}] " if sev else ""
+            lines.append(f"- **{a['id']}** {sev_tag}{a['title']}")
             if a.get("bad_example"):
                 lines.append(f"  ```\n  {a['bad_example']}\n  ```")
         lines.append("")
@@ -890,13 +892,26 @@ def _format_full(ctx: dict) -> str:
     if lc.get("styles") or lc.get("bindings"):
         slug = ctx.get("theme_slug", "")
         lines.append(f"## Theme conventions Kiwi đã học ({slug})")
-        if lc.get("styles"):
-            lines.append("**Style preferences:**")
-            for s in lc["styles"]:
+
+        blessed_styles = [s for s in lc.get("styles", []) if s.get("blessed")]
+        obs_styles = [s for s in lc.get("styles", []) if not s.get("blessed")]
+        blessed_binds = [b for b in lc.get("bindings", []) if b.get("blessed")]
+        obs_binds = [b for b in lc.get("bindings", []) if not b.get("blessed")]
+
+        if blessed_binds or blessed_styles:
+            lines.append("**✓ Blessed conventions (ENFORCE — dùng đúng như đã học):**")
+            for b in blessed_binds:
+                lines.append(f"- `{b['binding']}` ({b['task_type']}, seen {b['count']}x) ✓")
+            for s in blessed_styles:
+                lines.append(f"- `{s['key']}` = `{s['value']}` (seen {s['count']}x) ✓")
+
+        if obs_styles:
+            lines.append("**Style preferences (observed):**")
+            for s in obs_styles:
                 lines.append(f"- `{s['key']}` = `{s['value']}` (seen {s['count']}x)")
-        if lc.get("bindings"):
-            lines.append("**Common bindings:**")
-            for b in lc["bindings"]:
+        if obs_binds:
+            lines.append("**Common bindings (observed):**")
+            for b in obs_binds:
                 lines.append(f"- `{b['binding']}` ({b['task_type']}, seen {b['count']}x)")
         lines.append("")
 
@@ -985,17 +1000,18 @@ def _get_rules(
 
 
 def _get_anti_patterns(scope_type: str, platform: str, max_count: int, relevant_ids: set = None, project_path: str = None) -> list:
-    """Get anti-patterns with bad code examples from CRITICAL lessons."""
+    """Get anti-patterns with bad code examples from CRITICAL and HIGH lessons."""
     from scanner.loader import load_patterns, get_lesson_frontmatter
 
     patterns = load_patterns(str(KIWI_DIR / "lessons"), platform=platform, scope_type=scope_type, project_path=project_path)
-    critical = [p for p in patterns if p["severity"] == "CRITICAL"]
+    # CRITICAL + HIGH both represent "DO NOT" anti-patterns worth surfacing
+    relevant = [p for p in patterns if p["severity"] in ("CRITICAL", "HIGH")]
 
     if relevant_ids:
-        critical = [p for p in critical if p["id"] in relevant_ids]
+        relevant = [p for p in relevant if p["id"] in relevant_ids]
 
     results = []
-    for p in critical:
+    for p in relevant:
         fm, body = get_lesson_frontmatter(p["id"], str(KIWI_DIR / "lessons"))
         if not fm or not body:
             continue
@@ -1007,11 +1023,14 @@ def _get_anti_patterns(scope_type: str, platform: str, max_count: int, relevant_
 
         results.append({
             "id": p["id"],
+            "severity": p["severity"],
             "title": p.get("description", ""),
             "bad_example": bad_example,
         })
 
-    results.sort(key=lambda r: r["id"])
+    # CRITICAL before HIGH so the cap never drops a CRITICAL in favor of a HIGH
+    _sev_order = {"CRITICAL": 0, "HIGH": 1}
+    results.sort(key=lambda r: (_sev_order.get(r["severity"], 2), r["id"]))
     return results[:max_count]
 
 

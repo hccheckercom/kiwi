@@ -377,16 +377,24 @@ def _query_learned_styles(theme: str) -> dict:
 
 
 def _query_learned_bindings(task_type: str, theme: str) -> list:
-    """Query binding_knowledge for bindings seen >= 2 times."""
+    """Query binding_knowledge for bindings seen >= 2 times.
+
+    Filters by THEME only — not task_type. The stored task_type vocabulary
+    (e.g. 'header_component', 'dashboard_page') does not match what
+    infer_task_type() emits (e.g. 'layout_component'), so a task_type filter
+    made this query return [] for almost every real task, leaving
+    kiwi_reason's data_bindings permanently empty while kiwi_context (which
+    filters by theme only) worked. Blessed conventions sort first.
+    """
     conn = _get_reasoning_conn()
     if not conn:
         return []
     try:
         rows = conn.execute(
             "SELECT binding FROM binding_knowledge "
-            "WHERE task_type = ? AND theme = ? AND times_seen >= 2 "
-            "ORDER BY times_seen DESC LIMIT 20",
-            (task_type, theme),
+            "WHERE theme = ? AND times_seen >= 2 "
+            "ORDER BY blessed DESC, times_seen DESC LIMIT 30",
+            (theme,),
         ).fetchall()
         return [r[0] for r in rows]
     except sqlite3.Error:

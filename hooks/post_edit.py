@@ -126,6 +126,21 @@ def _try_auto_learn():
             (sid,),
         )
         conn.commit()
+
+        # Close the learning loop: turn promotable novel patterns into pending
+        # lesson suggestions. Without this, learn_from_session populates
+        # novel_patterns but nothing ever reaches promotion_suggestions, so the
+        # "Kiwi learns" loop never completes. use_llm_validation=False keeps the
+        # edit path 0-token; suggestions are human-reviewed at the dashboard.
+        try:
+            from agent.reasoning.auto_promoter import auto_promote_check, auto_bless_mature
+            auto_promote_check(use_llm_validation=False)
+            # Auto-bless conventions repeated enough to be intentional, so
+            # kiwi_context/kiwi_reason inject them as enforced knowledge without
+            # waiting for a human to approve each one at the dashboard.
+            auto_bless_mature(min_seen=10)
+        except Exception as e:
+            _log_learning_error("auto_promote", e)
     except Exception as e:
         _log_learning_error("auto_learn", e)
 

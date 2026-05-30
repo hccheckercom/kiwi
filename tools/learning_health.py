@@ -12,6 +12,34 @@ from pathlib import Path
 
 KIWI_DIR = Path(__file__).resolve().parent.parent
 DB_PATH = KIWI_DIR / "memory" / "reasoning.db"
+KIWI_DB_PATH = KIWI_DIR / "kiwi.db"
+
+
+def _kiwi_db_counts() -> dict:
+    """Counts from kiwi.db/suggested_lessons (the bug-pattern suggestion table).
+
+    Health historically read only reasoning.db/promotion_suggestions, so it
+    reported total_suggestions_promoted=0 even when suggested_lessons had real
+    approved lessons (LES-545…). Surfacing both tables removes that blind spot.
+    """
+    out = {
+        "lesson_suggestions_pending": 0,
+        "lesson_suggestions_approved": 0,
+        "lesson_suggestions_auto_approved": 0,
+    }
+    if not KIWI_DB_PATH.exists():
+        return out
+    try:
+        kconn = sqlite3.connect(str(KIWI_DB_PATH))
+        try:
+            out["lesson_suggestions_pending"] = _count(kconn, "suggested_lessons", "status='pending'")
+            out["lesson_suggestions_approved"] = _count(kconn, "suggested_lessons", "status='approved'")
+            out["lesson_suggestions_auto_approved"] = _count(kconn, "suggested_lessons", "status='auto_approved'")
+        finally:
+            kconn.close()
+    except sqlite3.Error:
+        pass
+    return out
 
 
 def _count(conn: sqlite3.Connection, table: str, where: str = "") -> int:
@@ -66,17 +94,32 @@ def get_health() -> dict:
             "total_context_patterns": _count(conn, "context_patterns"),
             "total_suggestions_pending": _count(conn, "promotion_suggestions", "status='pending'"),
             "total_suggestions_promoted": _count(conn, "promotion_suggestions", "status='approved'"),
+            "total_blessed_conventions": (
+                _count(conn, "binding_knowledge", "blessed=1")
+                + _count(conn, "style_knowledge", "blessed=1")
+            ),
             "last_session_at": _last_ts(conn, "sessions", "started_at"),
             "last_promotion_at": _last_ts(
-                conn, "promotion_suggestions", "created_at", "status='approved'"
+                conn, "promotion_suggestions", "approved_at", "status='approved'"
             ),
         }
+        # Surface the OTHER suggestion table (kiwi.db/suggested_lessons) so the
+        # snapshot isn't blind to lessons that were actually promoted there.
+        stats.update(_kiwi_db_counts())
 
         fail_counts: dict[str, int] = {}
         try:
+            # fail_count is monotonic (never reset), so a counter whose last
+            # failure is >7 days old is almost always a bug that's since been
+            # fixed — reporting it as a live failure is misleading. Filter it
+            # out of the snapshot (read-only; we never mutate here).
+            stale_cutoff = time.time() - 86400 * 7
             for row in conn.execute(
-                "SELECT stage, fail_count FROM learning_health"
+                "SELECT stage, fail_count, last_failure_at FROM learning_health"
             ):
+                last_at = row["last_failure_at"]
+                if last_at and last_at < stale_cutoff:
+                    continue
                 fail_counts[row["stage"]] = row["fail_count"]
         except sqlite3.Error:
             pass
